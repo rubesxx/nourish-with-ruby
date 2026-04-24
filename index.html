@@ -246,6 +246,52 @@
       line-height: 1.75;
     }
 
+    /* ── AS FEATURED IN ── */
+    .press-strip {
+      background: white;
+      padding: 36px 5%;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .press-label {
+      text-align: center;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-bottom: 24px;
+    }
+    .press-logos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px 4px;
+    }
+    .press-item {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 20px;
+      border-radius: 100px;
+      border: 1.5px solid var(--border);
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    .press-item:hover {
+      border-color: var(--sage-pale);
+      background: var(--sage-faint);
+    }
+    .press-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--text-mid);
+      white-space: nowrap;
+    }
+    .press-item:hover .press-name { color: var(--sage-dark); }
+
     /* ── ABOUT ── */
     #about {
       background: white;
@@ -1044,6 +1090,34 @@
       </div>
     </div>
   </section>
+
+  <!-- AS FEATURED IN -->
+  <div class="press-strip">
+    <div class="press-label">As featured in</div>
+    <div class="press-logos">
+      <a class="press-item" href="https://www.goodhousekeeping.com/uk/health/a70975352/nutritionist-sleep-tips/" target="_blank" rel="noopener">
+        <span class="press-name">Good Housekeeping</span>
+      </a>
+      <a class="press-item" href="https://www.womenshealthmag.com/uk/food/a65114354/supplements-nutritionists-take/" target="_blank" rel="noopener">
+        <span class="press-name">Women's Health</span>
+      </a>
+      <a class="press-item" href="https://www.gq-magazine.co.uk/article/functional-mushrooms-benefits" target="_blank" rel="noopener">
+        <span class="press-name">GQ</span>
+      </a>
+      <a class="press-item" href="https://www.dailymail.co.uk/lifestyle/food-drink/article-15604471/cant-afford-fat-jabs-anymore-went-expert-approved-diet.html" target="_blank" rel="noopener">
+        <span class="press-name">Daily Mail</span>
+      </a>
+      <a class="press-item" href="https://www.womanandhome.com/health-wellbeing/healthy-foods-that-have-died-out-for-good-reason/" target="_blank" rel="noopener">
+        <span class="press-name">Woman &amp; Home</span>
+      </a>
+      <a class="press-item" href="https://detoxkitchen.co.uk/health/a-sustainable-holistic-approach-to-weight-loss-according-to-a-nutritionist" target="_blank" rel="noopener">
+        <span class="press-name">Detox Kitchen</span>
+      </a>
+      <a class="press-item" href="https://www.gq.com/story/what-mushroom-supplements-can-do-for-stress-and-energy-according-to-experts" target="_blank" rel="noopener">
+        <span class="press-name">GQ US</span>
+      </a>
+    </div>
+  </div>
 
   <!-- ABOUT -->
   <section id="about">
