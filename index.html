@@ -248,49 +248,77 @@
 
     /* ── AS FEATURED IN ── */
     .press-strip {
-      background: white;
-      padding: 36px 5%;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
+      background: var(--sage-dark);
+      padding: 28px 0;
+      overflow: hidden;
+      position: relative;
     }
     .press-label {
       text-align: center;
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       font-weight: 500;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: var(--text-light);
-      margin-bottom: 24px;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 18px;
     }
-    .press-logos {
+    .press-track-wrap {
+      overflow: hidden;
+      position: relative;
+    }
+    .press-track-wrap::before,
+    .press-track-wrap::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 80px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .press-track-wrap::before {
+      left: 0;
+      background: linear-gradient(to right, var(--sage-dark), transparent);
+    }
+    .press-track-wrap::after {
+      right: 0;
+      background: linear-gradient(to left, var(--sage-dark), transparent);
+    }
+    .press-track {
       display: flex;
       align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 6px 4px;
+      gap: 0;
+      width: max-content;
+      animation: marquee 28s linear infinite;
+    }
+    .press-track:hover { animation-play-state: paused; }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
     }
     .press-item {
       display: inline-flex;
       align-items: center;
-      padding: 10px 20px;
-      border-radius: 100px;
-      border: 1.5px solid var(--border);
+      gap: 14px;
+      padding: 0 36px;
       text-decoration: none;
-      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      white-space: nowrap;
+      transition: opacity 0.2s;
     }
-    .press-item:hover {
-      border-color: var(--sage-pale);
-      background: var(--sage-faint);
+    .press-item:hover { opacity: 0.7; }
+    .press-item-sep {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      flex-shrink: 0;
     }
     .press-name {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.05rem;
-      font-weight: 500;
-      letter-spacing: 0.02em;
-      color: var(--text-mid);
-      white-space: nowrap;
+      font-size: 1.4rem;
+      font-weight: 400;
+      font-style: italic;
+      letter-spacing: 0.01em;
+      color: rgba(255,255,255,0.85);
     }
-    .press-item:hover .press-name { color: var(--sage-dark); }
 
     /* ── ABOUT ── */
     #about {
@@ -1094,28 +1122,39 @@
   <!-- AS FEATURED IN -->
   <div class="press-strip">
     <div class="press-label">As featured in</div>
-    <div class="press-logos">
-      <a class="press-item" href="https://www.goodhousekeeping.com/uk/health/a70975352/nutritionist-sleep-tips/" target="_blank" rel="noopener">
-        <span class="press-name">Good Housekeeping</span>
-      </a>
-      <a class="press-item" href="https://www.womenshealthmag.com/uk/food/a65114354/supplements-nutritionists-take/" target="_blank" rel="noopener">
-        <span class="press-name">Women's Health</span>
-      </a>
-      <a class="press-item" href="https://www.gq-magazine.co.uk/article/functional-mushrooms-benefits" target="_blank" rel="noopener">
-        <span class="press-name">GQ</span>
-      </a>
-      <a class="press-item" href="https://www.dailymail.co.uk/lifestyle/food-drink/article-15604471/cant-afford-fat-jabs-anymore-went-expert-approved-diet.html" target="_blank" rel="noopener">
-        <span class="press-name">Daily Mail</span>
-      </a>
-      <a class="press-item" href="https://www.womanandhome.com/health-wellbeing/healthy-foods-that-have-died-out-for-good-reason/" target="_blank" rel="noopener">
-        <span class="press-name">Woman &amp; Home</span>
-      </a>
-      <a class="press-item" href="https://detoxkitchen.co.uk/health/a-sustainable-holistic-approach-to-weight-loss-according-to-a-nutritionist" target="_blank" rel="noopener">
-        <span class="press-name">Detox Kitchen</span>
-      </a>
-      <a class="press-item" href="https://www.gq.com/story/what-mushroom-supplements-can-do-for-stress-and-energy-according-to-experts" target="_blank" rel="noopener">
-        <span class="press-name">GQ US</span>
-      </a>
+    <div class="press-track-wrap">
+      <div class="press-track">
+        <!-- Set 1 -->
+        <a class="press-item" href="https://www.goodhousekeeping.com/uk/health/a70975352/nutritionist-sleep-tips/" target="_blank" rel="noopener"><span class="press-name">Good Housekeeping</span></a>
+        <span class="press-item-sep"></span>
+        <a class="press-item" href="https://www.womenshealthmag.com/uk/food/a65114354/supplements-nutritionists-take/" target="_blank" rel="noopener"><span class="press-name">Women's Health</span></a>
+        <span class="press-item-sep"></span>
+        <a class="press-item" href="https://www.gq-magazine.co.uk/article/functional-mushrooms-benefits" target="_blank" rel="noopener"><span class="press-name">GQ</span></a>
+        <span class="press-item-sep"></span>
+        <a class="press-item" href="https://www.dailymail.co.uk/lifestyle/food-drink/article-15604471/cant-afford-fat-jabs-anymore-went-expert-approved-diet.html" target="_blank" rel="noopener"><span class="press-name">Daily Mail</span></a>
+        <span class="press-item-sep"></span>
+        <a class="press-item" href="https://www.womanandhome.com/health-wellbeing/healthy-foods-that-have-died-out-for-good-reason/" target="_blank" rel="noopener"><span class="press-name">Woman &amp; Home</span></a>
+        <span class="press-item-sep"></span>
+        <a class="press-item" href="https://detoxkitchen.co.uk/health/a-sustainable-holistic-approach-to-weight-loss-according-to-a-nutritionist" target="_blank" rel="noopener"><span class="press-name">Detox Kitchen</span></a>
+        <span class="press-item-sep"></span>
+        <a class="press-item" href="https://www.gq.com/story/what-mushroom-supplements-can-do-for-stress-and-energy-according-to-experts" target="_blank" rel="noopener"><span class="press-name">GQ US</span></a>
+        <span class="press-item-sep"></span>
+        <!-- Set 2 — duplicate for seamless loop -->
+        <a class="press-item" href="https://www.goodhousekeeping.com/uk/health/a70975352/nutritionist-sleep-tips/" target="_blank" rel="noopener"><span class="press-name">Good Housekeeping</span></a>
+        <span class="press-item-sep"></span>
+        <a class="press-item" href="https://www.womenshealthmag.com/uk/food/a65114354/supplements-nutritionists-take/" target="_blank" rel="noopener"><span class="press-name">Women's Health</span></a>
+        <span class="press-item-sep"></span>
+        <a class="press-item" href="https://www.gq-magazine.co.uk/article/functional-mushrooms-benefits" target="_blank" rel="noopener"><span class="press-name">GQ</span></a>
+        <span class="press-item-sep"></span>
+        <a class="press-item" href="https://www.dailymail.co.uk/lifestyle/food-drink/article-15604471/cant-afford-fat-jabs-anymore-went-expert-approved-diet.html" target="_blank" rel="noopener"><span class="press-name">Daily Mail</span></a>
+        <span class="press-item-sep"></span>
+        <a class="press-item" href="https://www.womanandhome.com/health-wellbeing/healthy-foods-that-have-died-out-for-good-reason/" target="_blank" rel="noopener"><span class="press-name">Woman &amp; Home</span></a>
+        <span class="press-item-sep"></span>
+        <a class="press-item" href="https://detoxkitchen.co.uk/health/a-sustainable-holistic-approach-to-weight-loss-according-to-a-nutritionist" target="_blank" rel="noopener"><span class="press-name">Detox Kitchen</span></a>
+        <span class="press-item-sep"></span>
+        <a class="press-item" href="https://www.gq.com/story/what-mushroom-supplements-can-do-for-stress-and-energy-according-to-experts" target="_blank" rel="noopener"><span class="press-name">GQ US</span></a>
+        <span class="press-item-sep"></span>
+      </div>
     </div>
   </div>
 
