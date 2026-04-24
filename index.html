@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nourish with Ruby | Personalised Nutrition Consultations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --sage:        #7a9e7e;
+      --sage-dark:   #4f7055;
+      --sage-pale:   #c8dbc9;
+      --sage-faint:  #eef4ee;
+      --clay:        #c17f5a;
+      --clay-light:  #e8b894;
+      --cream:       #faf8f3;
+      --warm-white:  #ffffff;
+      --text:        #2c2c2c;
+      --text-mid:    #5a5a5a;
+      --text-light:  #8a8a8a;
+      --border:      #e2ddd6;
+      --radius-sm:   8px;
+      --radius:      16px;
+      --radius-lg:   28px;
+      --shadow:      0 4px 32px rgba(79,112,85,0.10);
+      --shadow-lg:   0 12px 60px rgba(79,112,85,0.15);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 400;
+      line-height: 1.2;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    img { display: block; max-width: 100%; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%;
+      height: 70px;
+      background: rgba(250,248,243,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(226,221,214,0.6);
+      transition: box-shadow 0.3s;
+    }
+    nav.scrolled { box-shadow: 0 2px 20px rgba(79,112,85,0.08); }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      color: var(--sage-dark);
+    }
+    .nav-logo span { color: var(--clay); }
+
+    .nav-links {
+      display: flex; gap: 6px; align-items: center;
+    }
+    .nav-links a {
+      padding: 8px 16px;
+      font-size: 0.875rem;
+      font-weight: 400;
+      color: var(--text-mid);
+      border-radius: var(--radius-sm);
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav-links a:hover { color: var(--sage-dark); background: var(--sage-faint); }
+    .nav-links .btn-nav {
+      background: var(--sage-dark);
+      color: white;
+      padding: 9px 22px;
+      border-radius: 100px;
+      font-weight: 500;
+    }
+    .nav-links .btn-nav:hover { background: var(--sage); color: white; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 100px 5% 60px;
+      gap: 60px;
+      background: linear-gradient(135deg, var(--cream) 60%, var(--sage-faint) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(122,158,126,0.12) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -100px; left: -100px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(193,127,90,0.08) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-text { max-width: 560px; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 24px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      width: 28px; height: 1.5px;
+      background: var(--clay);
+    }
+    .hero h1 {
+      font-size: clamp(2.8rem, 5vw, 4.2rem);
+      font-weight: 300;
+      color: var(--sage-dark);
+      margin-bottom: 20px;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--clay);
+    }
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--text-mid);
+      margin-bottom: 40px;
+      max-width: 440px;
+      line-height: 1.75;
+    }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--sage-dark);
+      color: white;
+      padding: 14px 32px;
+      border-radius: 100px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--sage); transform: translateY(-1px); }
+    .btn-outline {
+      border: 1.5px solid var(--sage-dark);
+      color: var(--sage-dark);
+      padding: 13px 28px;
+      border-radius: 100px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: background 0.2s, color 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-outline:hover { background: var(--sage-dark); color: white; transform: translateY(-1px); }
+
+    .hero-image {
+      position: relative;
+      display: flex; justify-content: center; align-items: center;
+    }
+    .hero-photo-wrap {
+      width: 420px; height: 520px;
+      border-radius: 200px 200px 160px 160px;
+      overflow: hidden;
+      background: linear-gradient(160deg, var(--sage-pale) 0%, var(--sage-faint) 100%);
+      position: relative;
+      box-shadow: var(--shadow-lg);
+    }
+    /* Botanical illustration placeholder */
+    .hero-photo-wrap svg {
+      width: 100%; height: 100%;
+      opacity: 0.55;
+    }
+    .hero-badge {
+      position: absolute;
+      bottom: 40px; left: -20px;
+      background: white;
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      box-shadow: var(--shadow);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .hero-badge-icon {
+      width: 42px; height: 42px;
+      background: var(--sage-faint);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+    }
+    .hero-badge p { font-size: 0.78rem; color: var(--text-light); }
+    .hero-badge strong { display: block; font-size: 0.9rem; color: var(--text); font-weight: 500; }
+
+    /* ── SECTION SHARED ── */
+    section { padding: 96px 5%; }
+    .section-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 16px;
+    }
+    .section-label::before {
+      content: '';
+      width: 24px; height: 1.5px;
+      background: var(--clay);
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 400;
+      color: var(--sage-dark);
+      margin-bottom: 16px;
+    }
+    .section-lead {
+      font-size: 1.02rem;
+      color: var(--text-mid);
+      max-width: 560px;
+      line-height: 1.75;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: white;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .about-image-wrap {
+      position: relative;
+    }
+    .about-card {
+      background: linear-gradient(145deg, var(--sage-faint), var(--sage-pale));
+      border-radius: var(--radius-lg);
+      height: 480px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .about-card-deco {
+      position: absolute;
+      font-size: 10rem;
+      opacity: 0.12;
+      top: 20px; right: -10px;
+      line-height: 1;
+      transform: rotate(15deg);
+    }
+    .about-card-deco2 {
+      position: absolute;
+      font-size: 7rem;
+      opacity: 0.09;
+      bottom: 30px; left: 10px;
+      line-height: 1;
+      transform: rotate(-10deg);
+    }
+    .about-inner-text {
+      text-align: center;
+      padding: 40px;
+      position: relative;
+      z-index: 1;
+    }
+    .about-inner-text blockquote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-style: italic;
+      color: var(--sage-dark);
+      line-height: 1.5;
+      font-weight: 300;
+    }
+    .about-stat-strip {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-top: 20px;
+    }
+    .about-stat {
+      background: white;
+      padding: 20px;
+      text-align: center;
+    }
+    .about-stat strong {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 500;
+      color: var(--sage-dark);
+    }
+    .about-stat span { font-size: 0.78rem; color: var(--text-light); }
+
+    .about-text p {
+      color: var(--text-mid);
+      margin-bottom: 20px;
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+    .about-text p:last-of-type { margin-bottom: 32px; }
+    .about-pillars {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      margin-bottom: 32px;
+    }
+    .pillar-tag {
+      background: var(--sage-faint);
+      color: var(--sage-dark);
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      border: 1px solid var(--sage-pale);
+    }
+
+    /* ── SERVICES ── */
+    #services {
+      background: var(--sage-faint);
+    }
+    .services-header { max-width: 600px; margin-bottom: 52px; }
+    .services-subhead {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--sage-dark);
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .services-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+    .concession-callout {
+      background: white;
+      border: 1.5px solid var(--sage-pale);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 56px;
+    }
+    .concession-icon {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .concession-callout p {
+      font-size: 0.85rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+    }
+    .concession-callout strong { color: var(--sage-dark); }
+    .talks-card {
+      background: var(--sage-dark);
+      border-radius: var(--radius-lg);
+      padding: 48px 52px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 40px;
+      align-items: center;
+    }
+    .talks-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      color: white;
+      margin-bottom: 10px;
+    }
+    .talks-card .talks-sub {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--clay-light);
+      margin-bottom: 12px;
+    }
+    .talks-card p {
+      font-size: 0.92rem;
+      color: rgba(255,255,255,0.72);
+      line-height: 1.75;
+      max-width: 520px;
+    }
+    .talks-topics {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-top: 18px;
+    }
+    .talks-topic {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 100px;
+      padding: 5px 14px;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.8);
+    }
+    .talks-cta { flex-shrink: 0; }
+    .btn-talks {
+      display: inline-block;
+      background: white;
+      color: var(--sage-dark);
+      padding: 14px 28px;
+      border-radius: 100px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: background 0.2s, color 0.2s;
+      white-space: nowrap;
+    }
+    .btn-talks:hover { background: var(--clay-light); color: var(--sage-dark); }
+    .service-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      border: 1px solid var(--border);
+      transition: transform 0.25s, box-shadow 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--sage), var(--sage-pale));
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+    .service-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .service-card:hover::before { opacity: 1; }
+    .service-card.featured {
+      background: var(--sage-dark);
+      color: white;
+    }
+    .service-card.featured .service-desc { color: rgba(255,255,255,0.75); }
+    .service-card.featured .service-price { color: var(--clay-light); }
+    .service-card.featured .service-includes li { color: rgba(255,255,255,0.8); }
+    .service-card.featured .service-includes li::before { color: var(--sage-pale); }
+    .service-card.featured::before { opacity: 1; background: linear-gradient(90deg, var(--clay), var(--clay-light)); }
+    .service-icon {
+      width: 52px; height: 52px;
+      background: var(--sage-faint);
+      border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 22px;
+    }
+    .service-card.featured .service-icon { background: rgba(255,255,255,0.15); }
+    .service-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin-bottom: 10px;
+      color: inherit;
+    }
+    .service-desc {
+      font-size: 0.9rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+      margin-bottom: 22px;
+    }
+    .service-duration {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.78rem;
+      color: var(--text-light);
+      margin-bottom: 20px;
+    }
+    .service-duration svg { width: 13px; height: 13px; opacity: 0.5; }
+    .service-includes {
+      list-style: none;
+      margin-bottom: 28px;
+    }
+    .service-includes li {
+      font-size: 0.85rem;
+      color: var(--text-mid);
+      padding: 5px 0;
+      display: flex; align-items: flex-start; gap: 8px;
+    }
+    .service-includes li::before { content: '✦'; color: var(--sage); font-size: 0.65rem; margin-top: 3px; flex-shrink: 0; }
+    .service-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 500;
+      color: var(--sage-dark);
+      margin-bottom: 20px;
+    }
+    .service-price sub { font-size: 1rem; font-weight: 400; }
+    .btn-service {
+      width: 100%;
+      display: block;
+      text-align: center;
+      padding: 12px;
+      border-radius: 100px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      background: var(--sage-faint);
+      color: var(--sage-dark);
+      border: 1.5px solid var(--sage-pale);
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-service:hover { background: var(--sage-dark); color: white; border-color: var(--sage-dark); }
+    .service-card.featured .btn-service {
+      background: white;
+      color: var(--sage-dark);
+      border-color: transparent;
+    }
+    .service-card.featured .btn-service:hover { background: var(--clay); color: white; }
+
+    /* ── APPROACH / PILLARS ── */
+    #approach {
+      background: white;
+    }
+    .approach-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .approach-sticky { position: sticky; top: 100px; }
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .pillar-card {
+      background: var(--cream);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      border: 1px solid var(--border);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .pillar-card:hover { border-color: var(--sage-pale); box-shadow: var(--shadow); }
+    .pillar-emoji { font-size: 1.8rem; margin-bottom: 14px; }
+    .pillar-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: var(--sage-dark);
+      margin-bottom: 8px;
+    }
+    .pillar-desc { font-size: 0.85rem; color: var(--text-light); line-height: 1.65; }
+
+    /* ── EXPLORE (Blog & Recipes) ── */
+    #explore {
+      background: var(--cream);
+    }
+    .explore-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      margin-top: 52px;
+    }
+    .explore-card {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      position: relative;
+      display: flex; flex-direction: column;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .explore-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+    .explore-card-visual {
+      height: 260px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .explore-card.blog .explore-card-visual {
+      background: linear-gradient(135deg, #e8f0e9 0%, #c8dbc9 100%);
+    }
+    .explore-card.recipes .explore-card-visual {
+      background: linear-gradient(135deg, #fdf0e5 0%, #f0d5b5 100%);
+    }
+    .explore-card-body {
+      background: white;
+      padding: 32px;
+      flex: 1;
+      display: flex; flex-direction: column;
+    }
+    .explore-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 12px;
+    }
+    .explore-card h3 {
+      font-size: 1.75rem;
+      font-weight: 400;
+      color: var(--sage-dark);
+      margin-bottom: 12px;
+    }
+    .explore-card p {
+      font-size: 0.9rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+      margin-bottom: 24px;
+      flex: 1;
+    }
+    .btn-explore {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--sage-dark);
+      border-bottom: 1.5px solid var(--sage-pale);
+      padding-bottom: 2px;
+      transition: border-color 0.2s, gap 0.2s;
+      width: fit-content;
+    }
+    .btn-explore:hover { border-color: var(--sage-dark); gap: 12px; }
+
+    /* ── TESTIMONIALS ── */
+    #testimonials {
+      background: var(--sage-dark);
+      color: white;
+    }
+    .testimonials-header .section-title { color: white; }
+    .testimonials-header .section-label { color: var(--clay-light); }
+    .testimonials-header .section-label::before { background: var(--clay-light); }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      margin-top: 52px;
+    }
+    .testimonial-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      transition: background 0.2s;
+    }
+    .testimonial-card:hover { background: rgba(255,255,255,0.11); }
+    .testimonial-stars { color: var(--clay-light); font-size: 0.9rem; margin-bottom: 16px; letter-spacing: 2px; }
+    .testimonial-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 22px;
+    }
+    .testimonial-author {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .testimonial-avatar {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: white;
+    }
+    .testimonial-name { font-size: 0.88rem; font-weight: 500; color: white; }
+    .testimonial-detail { font-size: 0.78rem; color: rgba(255,255,255,0.5); }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--cream);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    #contact .section-lead { margin-bottom: 36px; }
+    .contact-perks {
+      list-style: none;
+      margin-bottom: 36px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .contact-perks li {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 0.92rem;
+      color: var(--text-mid);
+    }
+    .perk-dot {
+      width: 28px; height: 28px;
+      background: var(--sage-faint);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+    .contact-form-wrap {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 44px 40px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+    .form-row { margin-bottom: 20px; }
+    .form-row label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-mid);
+      margin-bottom: 7px;
+      letter-spacing: 0.03em;
+    }
+    .form-row input,
+    .form-row select,
+    .form-row textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text);
+      background: var(--cream);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      appearance: none;
+    }
+    .form-row input:focus,
+    .form-row select:focus,
+    .form-row textarea:focus {
+      border-color: var(--sage);
+      box-shadow: 0 0 0 3px rgba(122,158,126,0.12);
+      background: white;
+    }
+    .form-row textarea { resize: vertical; min-height: 110px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .btn-submit {
+      width: 100%;
+      padding: 15px;
+      background: var(--sage-dark);
+      color: white;
+      border: none;
+      border-radius: 100px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-submit:hover { background: var(--sage); transform: translateY(-1px); }
+    .form-note { font-size: 0.78rem; color: var(--text-light); text-align: center; margin-top: 12px; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--sage-dark);
+      color: rgba(255,255,255,0.65);
+      padding: 52px 5%;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      gap: 48px;
+    }
+    .footer-brand p {
+      font-size: 0.85rem;
+      line-height: 1.75;
+      margin-top: 12px;
+      max-width: 260px;
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      color: white;
+      font-weight: 500;
+    }
+    .footer-logo span { color: var(--clay-light); }
+    .footer-col h4 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: white;
+      margin-bottom: 16px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col ul a {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.55);
+      transition: color 0.2s;
+    }
+    .footer-col ul a:hover { color: white; }
+    .footer-bottom {
+      background: rgba(0,0,0,0.15);
+      padding: 18px 5%;
+      text-align: center;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.35);
+    }
+
+    /* ── MOBILE ── */
+    /* ── HERO SPECIALISMS STRIP ── */
+    .hero-specialisms {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      margin-top: 32px;
+      padding-top: 28px;
+      border-top: 1px solid var(--border);
+    }
+    .specialism-chip {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: white;
+      border: 1.5px solid var(--border);
+      border-radius: 100px;
+      padding: 7px 14px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-mid);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .specialism-chip:hover { border-color: var(--sage); color: var(--sage-dark); }
+    .specialism-chip-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--sage);
+      flex-shrink: 0;
+    }
+
+    /* ── SPECIALISATIONS SECTION ── */
+    #specialisations {
+      background: white;
+      padding: 96px 5%;
+    }
+    .spec-intro {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: end;
+      margin-bottom: 60px;
+    }
+    .spec-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .spec-card {
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      border: 1.5px solid var(--border);
+      background: var(--cream);
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+    }
+    .spec-card:hover { border-color: var(--sage-pale); transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    .spec-card-accent {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+    }
+    .spec-card:nth-child(1) .spec-card-accent { background: linear-gradient(90deg, #e07a7a, #e8a0a0); }
+    .spec-card:nth-child(2) .spec-card-accent { background: linear-gradient(90deg, #c17f5a, #e8b894); }
+    .spec-card:nth-child(3) .spec-card-accent { background: linear-gradient(90deg, #7a9e7e, #c8dbc9); }
+    .spec-card:nth-child(4) .spec-card-accent { background: linear-gradient(90deg, #7a8e9e, #b0c8dc); }
+    .spec-icon {
+      font-size: 2rem;
+      margin-bottom: 18px;
+      display: block;
+    }
+    .spec-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--sage-dark);
+      margin-bottom: 6px;
+    }
+    .spec-subtitle {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 14px;
+    }
+    .spec-body {
+      font-size: 0.9rem;
+      color: var(--text-mid);
+      line-height: 1.75;
+      margin-bottom: 22px;
+    }
+    .spec-tags {
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .spec-tag {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 4px 12px;
+      font-size: 0.75rem;
+      color: var(--text-mid);
+    }
+
+    /* ── EVIDENCE BANNER ── */
+    .evidence-banner {
+      background: linear-gradient(135deg, var(--sage-dark) 0%, #3a5e42 100%);
+      border-radius: var(--radius-lg);
+      padding: 52px 56px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 40px;
+      align-items: center;
+      margin: 0 5% 0;
+    }
+    .evidence-banner h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      color: white;
+      margin-bottom: 14px;
+    }
+    .evidence-banner p {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.75;
+      max-width: 560px;
+    }
+    .evidence-pillars {
+      display: flex; flex-direction: column; gap: 10px;
+      min-width: 220px;
+    }
+    .evidence-pill {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 100px;
+      padding: 9px 16px;
+      font-size: 0.82rem;
+      color: white;
+    }
+    .evidence-pill span { font-size: 1rem; }
+
+    @media (max-width: 900px) {
+      nav { padding: 0 20px; }
+      .nav-links a:not(.btn-nav):not(:last-child) { display: none; }
+
+      .hero { grid-template-columns: 1fr; padding: 100px 6% 60px; text-align: center; }
+      .hero-text { max-width: 100%; }
+      .hero-sub { margin: 0 auto 36px; }
+      .hero-actions { justify-content: center; }
+      .hero-image { order: -1; }
+      .hero-photo-wrap { width: 280px; height: 360px; }
+
+      #about, #contact { grid-template-columns: 1fr; gap: 48px; padding: 72px 6%; }
+      .spec-grid { grid-template-columns: 1fr; }
+      .spec-intro { grid-template-columns: 1fr; gap: 16px; }
+      #specialisations { padding: 72px 6%; }
+      .evidence-banner { grid-template-columns: 1fr; padding: 36px 28px; margin: 0 6%; }
+      .evidence-pillars { flex-direction: row; flex-wrap: wrap; }
+      .services-grid, .services-grid-2 { grid-template-columns: 1fr; padding: 0; }
+      #services { padding: 72px 6%; }
+      .talks-card { grid-template-columns: 1fr; padding: 36px 28px; gap: 24px; }
+      .testimonials-grid { grid-template-columns: 1fr; padding: 72px 6%; }
+      #testimonials { padding: 72px 6%; }
+      .explore-grid { grid-template-columns: 1fr; }
+      #explore { padding: 72px 6%; }
+      #approach { padding: 72px 6%; }
+      .approach-wrap { grid-template-columns: 1fr; gap: 48px; }
+      .approach-sticky { position: static; }
+      .pillars-grid { grid-template-columns: 1fr 1fr; }
+      footer { grid-template-columns: 1fr 1fr; padding: 48px 6%; }
+      .about-stat-strip { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 2.4rem; }
+      .pillars-grid { grid-template-columns: 1fr; }
+      footer { grid-template-columns: 1fr; }
+      .contact-form-wrap { padding: 28px 22px; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="#" class="nav-logo">Nourish with <span>Ruby</span></a>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#specialisations">Specialisms</a>
+      <a href="#services">Consultations</a>
+      <a href="#explore">Blog &amp; Recipes</a>
+      <a href="#contact" class="btn-nav">Book a Call</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-text">
+      <div class="hero-eyebrow">Personalised Nutrition</div>
+      <h1>Eat well,<br><em>feel alive</em></h1>
+      <p class="hero-sub">I take a personalised, holistic approach to helping you become your healthiest and happiest self, with the energy to squeeze every last bit of enjoyment out of life.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Book a Consultation</a>
+        <a href="#specialisations" class="btn-outline">My Specialisms</a>
+      </div>
+      <div class="hero-specialisms">
+        <span class="specialism-chip"><span class="specialism-chip-dot"></span>RED-S &amp; Female Fuelling</span>
+        <span class="specialism-chip"><span class="specialism-chip-dot"></span>Menopause Support</span>
+        <span class="specialism-chip"><span class="specialism-chip-dot"></span>Energy &amp; Circadian Health</span>
+        <span class="specialism-chip"><span class="specialism-chip-dot"></span>Gut Health</span>
+      </div>
+    </div>
+    <div class="hero-image">
+      <div class="hero-photo-wrap">
+        <img src="ruby.jpg" alt="Ruby Chauhan — Nutritionist" style="width:100%; height:100%; object-fit:cover; object-position: center top;" />
+      </div>
+      <div class="hero-badge">
+        <div class="hero-badge-icon">🌿</div>
+        <div>
+          <strong>Evidence-Based</strong>
+          <p>Holistic &amp; Practical Approach</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-image-wrap">
+      <div class="about-card">
+        <div class="about-card-deco">🌱</div>
+        <div class="about-card-deco2">🍃</div>
+        <div class="about-inner-text">
+          <blockquote>"Health doesn't need to be complicated. With the right support, it can feel simple, empowering, and sustainable."</blockquote>
+        </div>
+      </div>
+      <div class="about-stat-strip">
+        <div class="about-stat"><strong>100%</strong><span>Personalised Plans</span></div>
+        <div class="about-stat"><strong>Holistic</strong><span>Whole-Body Approach</span></div>
+        <div class="about-stat"><strong>Evidence</strong><span>Based Practice</span></div>
+      </div>
+    </div>
+    <div class="about-text">
+      <div class="section-label">About Me</div>
+      <h2 class="section-title">Your health, your way</h2>
+      <p>My approach considers the bigger picture. Together, we'll build a deeper understanding of your body and how to nourish it in a way that works for <em>you</em>. There is no one-size-fits-all when it comes to nutrition; your plan is tailored to your lifestyle, preferences, and goals.</p>
+      <p>I specialise in the areas where women are most underserved: <strong>RED-S and energy availability</strong>, <strong>menopause transition</strong>, <strong>circadian-aligned eating for sustained daily energy</strong>, and <strong>gut health</strong>. I stay at the frontier of emerging research so that what I give you is genuinely current, not recycled conventional wisdom.</p>
+      <p>Alongside nutrition science, I weave in <strong>herbal medicine</strong>, breathwork, movement, and conscious rest. Real wellbeing lives at the intersection of all of these. With so much conflicting information online, I help you cut through the noise and find what actually works for your body.</p>
+      <div class="about-pillars">
+        <span class="pillar-tag">🌿 Herbal Remedies</span>
+        <span class="pillar-tag">🕐 Circadian Rhythms</span>
+        <span class="pillar-tag">🔬 Emerging Science</span>
+        <span class="pillar-tag">🌬 Breathwork</span>
+        <span class="pillar-tag">😴 Conscious Rest</span>
+        <span class="pillar-tag">🥦 Gut Microbiome</span>
+      </div>
+      <a href="#contact" class="btn-primary">Work With Me</a>
+    </div>
+  </section>
+
+  <!-- SPECIALISATIONS -->
+  <section id="specialisations">
+    <div class="spec-intro">
+      <div>
+        <div class="section-label">Areas of Expertise</div>
+        <h2 class="section-title">Where I specialise</h2>
+      </div>
+      <p class="section-lead">These are the areas I go deepest on, drawing on the latest research, clinical practice, and a holistic lens to give you support that's genuinely ahead of the curve.</p>
+    </div>
+    <div class="spec-grid">
+
+      <div class="spec-card">
+        <div class="spec-card-accent"></div>
+        <span class="spec-icon">🏃‍♀️</span>
+        <div class="spec-subtitle">RED-S · Female Athlete Nutrition</div>
+        <div class="spec-name">Energy Availability &amp; RED-S</div>
+        <p class="spec-body">Relative Energy Deficiency in Sport (RED-S) is widely misunderstood and chronically under-diagnosed, even in active women who don't consider themselves athletes. When energy intake doesn't match your output, the consequences ripple across hormones, bone health, immunity, mood, and performance. I help you identify the signs, rebuild adequate fuelling, and restore your body's trust without fear or restriction.</p>
+        <div class="spec-tags">
+          <span class="spec-tag">Hormonal health</span>
+          <span class="spec-tag">Bone density</span>
+          <span class="spec-tag">Performance fuelling</span>
+          <span class="spec-tag">Menstrual recovery</span>
+          <span class="spec-tag">Active women</span>
+        </div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-card-accent"></div>
+        <span class="spec-icon">🌸</span>
+        <div class="spec-subtitle">Perimenopause · Menopause · Post-menopause</div>
+        <div class="spec-name">Menopause Support</div>
+        <p class="spec-body">The menopause transition is one of the most profound nutritional windows in a woman's life, and one of the least supported. Shifting oestrogen and progesterone affect everything from metabolism and gut health to sleep, mood, and cardiovascular risk. I combine nutritional strategy, targeted herbal remedies, and lifestyle tools to help you navigate this transition with clarity, energy, and confidence rather than just riding it out.</p>
+        <div class="spec-tags">
+          <span class="spec-tag">Hormonal balance</span>
+          <span class="spec-tag">Metabolism</span>
+          <span class="spec-tag">Sleep quality</span>
+          <span class="spec-tag">Herbal support</span>
+          <span class="spec-tag">Bone health</span>
+        </div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-card-accent"></div>
+        <span class="spec-icon">☀️</span>
+        <div class="spec-subtitle">Circadian Nutrition · Sustained Vitality</div>
+        <div class="spec-name">Energy &amp; Circadian Rhythms</div>
+        <p class="spec-body">Your body has an internal clock, and <em>when</em> you eat matters as much as <em>what</em> you eat. Circadian-aligned nutrition is one of the most exciting emerging fields, with mounting evidence that meal timing, light exposure, and daily rhythm all shape energy, metabolic health, and sleep. I translate this cutting-edge science into simple, practical patterns that keep you energised from morning to evening without relying on caffeine or willpower.</p>
+        <div class="spec-tags">
+          <span class="spec-tag">Meal timing</span>
+          <span class="spec-tag">Adrenal health</span>
+          <span class="spec-tag">Blood sugar stability</span>
+          <span class="spec-tag">Cortisol rhythm</span>
+          <span class="spec-tag">Fatigue recovery</span>
+        </div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-card-accent"></div>
+        <span class="spec-icon">🦠</span>
+        <div class="spec-subtitle">Microbiome · Digestive Health</div>
+        <div class="spec-name">Gut Health</div>
+        <p class="spec-body">The gut is the cornerstone of almost everything: immunity, mood, hormones, skin, energy, and inflammation all trace back here. Whether you're navigating IBS, bloating, irregular digestion, or simply want to build a more resilient microbiome, I use the latest evidence on diversity, prebiotic and probiotic foods, the gut-brain axis, and targeted herbal support to restore balance from the inside out.</p>
+        <div class="spec-tags">
+          <span class="spec-tag">Microbiome diversity</span>
+          <span class="spec-tag">IBS &amp; bloating</span>
+          <span class="spec-tag">Gut-brain axis</span>
+          <span class="spec-tag">Fermented foods</span>
+          <span class="spec-tag">Herbal bitters</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EVIDENCE BANNER -->
+  <div class="evidence-banner">
+    <div>
+      <h3>Always grounded in the latest evidence</h3>
+      <p>The nutrition and health landscape moves fast. I stay current with emerging research across chrono-nutrition, the gut microbiome, female physiology, and herbal medicine, so you benefit from guidance that's genuinely up to date, not recycled outdated advice.</p>
+    </div>
+    <div class="evidence-pillars">
+      <div class="evidence-pill"><span>🌿</span> Herbal &amp; Botanical Medicine</div>
+      <div class="evidence-pill"><span>🕐</span> Chrono-nutrition</div>
+      <div class="evidence-pill"><span>🔬</span> Emerging Research</div>
+      <div class="evidence-pill"><span>🧬</span> Female Physiology</div>
+      <div class="evidence-pill"><span>🫁</span> Gut Microbiome Science</div>
+    </div>
+  </div>
+  <div style="padding-bottom: 80px; background: white;"></div>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="services-header">
+      <div class="section-label">Work With Me</div>
+      <h2 class="section-title">Services &amp; rates</h2>
+      <p class="section-lead">Every session is built around you. All pricing is transparent and concession rates are available (see below).</p>
+    </div>
+
+    <div class="services-subhead">1:1 Consultations</div>
+
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">🌱</div>
+        <div class="service-name">Discovery Call</div>
+        <div class="service-duration">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          15 minutes · Free
+        </div>
+        <p class="service-desc">A relaxed, no-pressure chat to explore your health goals, ask questions, and see if we're a good fit before committing to anything.</p>
+        <div class="service-price" style="margin-top: auto;">Free</div>
+        <a href="#contact" class="btn-service">Book Free Call</a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📋</div>
+        <div class="service-name">Nutrition Audit</div>
+        <div class="service-duration">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          Async food diary review
+        </div>
+        <p class="service-desc">Submit a food diary and receive a written review with personalised observations, pattern analysis, and actionable suggestions. No live session needed.</p>
+        <ul class="service-includes">
+          <li>Written feedback within 5 days</li>
+          <li>Key patterns &amp; gaps identified</li>
+          <li>Practical, prioritised suggestions</li>
+        </ul>
+        <div class="service-price">£20</div>
+        <a href="#contact" class="btn-service">Get Started</a>
+      </div>
+      <div class="service-card featured">
+        <div class="service-icon">🌿</div>
+        <div class="service-name">Initial Consultation</div>
+        <div class="service-duration">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          60–75 minutes
+        </div>
+        <p class="service-desc">A thorough deep dive into your health history, diet, lifestyle, and goals. You leave with a written, fully personalised nutrition plan you can start using straight away.</p>
+        <ul class="service-includes">
+          <li>Full health, diet &amp; lifestyle assessment</li>
+          <li>Written personalised nutrition plan</li>
+          <li>Meal timing &amp; food-first recommendations</li>
+          <li>Supplement guidance where relevant</li>
+          <li>Herbal medicine considerations</li>
+          <li>Practical strategies tailored to your routine</li>
+          <li>Follow-up reading &amp; resources</li>
+        </ul>
+        <div class="service-price">£85 <span style="font-size:1rem; opacity:0.7;">/ £60 concession</span></div>
+        <a href="#contact" class="btn-service">Book Now</a>
+      </div>
+    </div>
+
+    <div class="services-grid-2">
+      <div class="service-card">
+        <div class="service-icon">🔄</div>
+        <div class="service-name">Follow-up Session</div>
+        <div class="service-duration">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          45–60 minutes
+        </div>
+        <p class="service-desc">Review what's working, adjust your plan based on progress, and tackle any new symptoms or challenges. Your plan evolves as you do.</p>
+        <ul class="service-includes">
+          <li>Progress &amp; symptom review</li>
+          <li>Updated written nutrition recommendations</li>
+          <li>Plan adapted to new goals or results</li>
+          <li>Supplement &amp; herbal protocol review</li>
+          <li>Ongoing resources &amp; reading</li>
+        </ul>
+        <div class="service-price">£60 <span style="font-size:1rem; opacity:0.7;">/ £45 concession</span></div>
+        <a href="#contact" class="btn-service">Book a Follow-up</a>
+      </div>
+      <div class="service-card featured">
+        <div class="service-icon">🌾</div>
+        <div class="service-name">3-Month Package</div>
+        <div class="service-duration">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          Initial + 2 follow-ups
+        </div>
+        <p class="service-desc">The most effective way to work together. Three months gives your body time to respond, and gives us space to keep refining until the changes really stick.</p>
+        <ul class="service-includes">
+          <li>Initial consultation with full written plan</li>
+          <li>Two follow-up sessions with updated plans</li>
+          <li>Dietary analysis at each stage</li>
+          <li>Continued plan adaptations based on results</li>
+          <li>Between-session email support</li>
+          <li>Payment plan available (3 × £100/month)</li>
+        </ul>
+        <div class="service-price">£300</div>
+        <a href="#contact" class="btn-service">Get Started</a>
+      </div>
+    </div>
+
+    <div class="concession-callout">
+      <div class="concession-icon">💚</div>
+      <p><strong>Concession pricing</strong> is self-selected and available to students, unwaged individuals, and NHS workers. When enquiring, simply include a short honesty declaration in your message. No proof required.</p>
+    </div>
+
+    <div class="services-subhead">Wellness Talks</div>
+    <div class="services-subhead" style="margin-top: 40px;">Content</div>
+    <div class="talks-card" style="background: var(--cream); border: 1.5px solid var(--border);">
+      <div>
+        <div class="talks-sub" style="color: var(--clay);">Copywriting · Articles · Brand Content</div>
+        <h3 style="color: var(--sage-dark);">Words that work as hard as you do</h3>
+        <p style="color: var(--text-mid);">Need content that's accurate, engaging and actually sounds human? I write nutrition and wellness copy for brands, publications, and practitioners — from long-form articles to website copy and social content. Everything is evidence-based and written with a clear, warm voice.</p>
+        <div class="talks-topics">
+          <span class="talks-topic" style="background: var(--sage-faint); border-color: var(--sage-pale); color: var(--sage-dark);">Articles &amp; editorials</span>
+          <span class="talks-topic" style="background: var(--sage-faint); border-color: var(--sage-pale); color: var(--sage-dark);">Website copywriting</span>
+          <span class="talks-topic" style="background: var(--sage-faint); border-color: var(--sage-pale); color: var(--sage-dark);">Brand content</span>
+          <span class="talks-topic" style="background: var(--sage-faint); border-color: var(--sage-pale); color: var(--sage-dark);">Social captions</span>
+        </div>
+      </div>
+      <div class="talks-cta" style="text-align: center;">
+        <div style="font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 500; color: var(--sage-dark); margin-bottom: 6px;">from £60</div>
+        <div style="font-size: 0.78rem; color: var(--text-light); margin-bottom: 16px;">Email for pricing</div>
+        <a href="#contact" class="btn-talks" style="background: var(--sage-dark); color: white;">Get in Touch</a>
+      </div>
+    </div>
+
+    <div style="margin-top: 40px;"></div>
+    <div class="services-subhead">Wellness Talks</div>
+    <div class="talks-card">
+      <div>
+        <div class="talks-sub">Corporates · Community Groups · Events</div>
+        <h3>Bringing nutrition to life</h3>
+        <p>Engaging, evidence-based talks for workplaces, community groups, and events. Topics are tailored to your audience and can range from practical everyday nutrition to specialist areas like gut health, hormones, and eating for energy. Get in touch to discuss your event and I'll put together something that genuinely resonates.</p>
+        <div class="talks-topics">
+          <span class="talks-topic">Gut health</span>
+          <span class="talks-topic">Eating for energy</span>
+          <span class="talks-topic">Nutrition myths</span>
+          <span class="talks-topic">Hormonal health</span>
+          <span class="talks-topic">Menopause &amp; nutrition</span>
+          <span class="talks-topic">Herbal medicine</span>
+        </div>
+      </div>
+      <div class="talks-cta">
+        <a href="#contact" class="btn-talks">Enquire About a Talk</a>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- APPROACH -->
+  <section id="approach">
+    <div class="approach-wrap">
+      <div class="approach-sticky">
+        <div class="section-label">My Approach</div>
+        <h2 class="section-title">Whole-person health, not just food</h2>
+        <p class="section-lead" style="margin-bottom: 28px;">I weave together nutrition science and lifestyle practices to give you a well-rounded, practical toolkit to support your health.</p>
+        <p style="font-size: 0.9rem; color: var(--text-light); line-height: 1.8;">I stay at the frontier of evidence across circadian nutrition, the gut microbiome, herbal medicine, and female physiology, weaving science and nature together into a practical toolkit that fits your real life.</p>
+      </div>
+      <div class="pillars-grid">
+        <div class="pillar-card">
+          <div class="pillar-emoji">🌿</div>
+          <div class="pillar-name">Herbal Remedies</div>
+          <p class="pillar-desc">Plants offer powerful, gentle support. I integrate herbal medicine (adaptogens, digestive bitters, nervines) alongside nutrition for a truly holistic plan.</p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-emoji">🕐</div>
+          <div class="pillar-name">Circadian Rhythms</div>
+          <p class="pillar-desc">When you eat shapes your energy, metabolism and sleep as much as what you eat. I use chrono-nutrition to align your meals with your body's natural clock.</p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-emoji">🔬</div>
+          <div class="pillar-name">Emerging Science</div>
+          <p class="pillar-desc">I stay current with the latest research so you're never stuck with outdated advice. Expect guidance that reflects where the science actually is right now.</p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-emoji">🧬</div>
+          <div class="pillar-name">Female Physiology</div>
+          <p class="pillar-desc">Women's bodies are not small men's bodies. I work with your hormonal cycle, life stage and physiology, not against it.</p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-emoji">🫁</div>
+          <div class="pillar-name">Gut Microbiome</div>
+          <p class="pillar-desc">A thriving gut underlies immunity, mood, hormones and energy. I use the latest microbiome science to build lasting gut resilience.</p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-emoji">🌬</div>
+          <div class="pillar-name">Nervous System &amp; Rest</div>
+          <p class="pillar-desc">Breathwork, conscious rest and stress regulation are as important as food. I weave nervous system tools into every plan for whole-body balance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPLORE: Blog & Recipes -->
+  <section id="explore">
+    <div class="section-label">Explore</div>
+    <h2 class="section-title">Words, wisdom &amp; recipes</h2>
+    <div class="explore-grid">
+      <a href="/blog" class="explore-card blog">
+        <div class="explore-card-visual">📖</div>
+        <div class="explore-card-body">
+          <div class="explore-tag">✦ &nbsp;The Blog</div>
+          <h3>Cutting through the noise</h3>
+          <p>Evidence-based articles, opinion pieces, and practical guides on nutrition, gut health, hormones, movement, and living well. No fads, no fear. Just clear, trustworthy information you can actually use.</p>
+          <span class="btn-explore">Read the blog &rarr;</span>
+        </div>
+      </a>
+      <a href="/recipes.html" class="explore-card recipes">
+        <div class="explore-card-visual">🥗</div>
+        <div class="explore-card-body">
+          <div class="explore-tag">✦ &nbsp;Recipes</div>
+          <h3>Fall in love with food</h3>
+          <p>Food has always been at the heart of my life. Growing up with an Indian dad, a grandma who made everything from scratch, and a mum completely obsessed with making vegetables taste extraordinary, I was lucky to inherit a love of flavour and a proper set of kitchen skills.</p>
+          <p style="margin-top: 12px; font-size: 0.9rem; color: var(--text-mid); line-height: 1.7;">Bringing people together around the table is my craft. Every recipe here is tried and tested, most of them regulars at dinner parties or cooked simply as an act of love. Each one celebrates the functional properties of its ingredients while proving, hopefully convincingly, that vegetables can be genuinely indulgent.</p>
+          <span class="btn-explore">Browse recipes &rarr;</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials">
+    <div class="testimonials-header">
+      <div class="section-label">Kind Words</div>
+      <h2 class="section-title">What clients say</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-quote">"Working with her completely changed my relationship with food. For the first time I feel like I understand my body and actually enjoy eating well."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">SL</div>
+          <div>
+            <div class="testimonial-name">Sarah L.</div>
+            <div class="testimonial-detail">Gut health &amp; energy support</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-quote">"I'd tried every diet going and nothing stuck. She gave me practical strategies that fit my actual life. No more overwhelm."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">JM</div>
+          <div>
+            <div class="testimonial-name">James M.</div>
+            <div class="testimonial-detail">Weight management &amp; performance</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-quote">"My energy levels are completely transformed. I sleep better, feel more like myself, and I actually look forward to cooking now!"</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">EP</div>
+          <div>
+            <div class="testimonial-name">Emma P.</div>
+            <div class="testimonial-detail">Hormonal health &amp; sleep</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div>
+      <div class="section-label">Get in Touch</div>
+      <h2 class="section-title">Ready to start feeling your best?</h2>
+      <p class="section-lead">Book a free 30-minute discovery call to explore how I can support you. No commitment, no pressure. Just a conversation.</p>
+      <ul class="contact-perks">
+        <li><span class="perk-dot">✓</span> Free initial discovery call</li>
+        <li><span class="perk-dot">✓</span> Fully personalised to you</li>
+        <li><span class="perk-dot">✓</span> Online consultations available</li>
+        <li><span class="perk-dot">✓</span> Ongoing support between sessions</li>
+        <li><span class="perk-dot">✓</span> Evidence-based, practical advice</li>
+      </ul>
+    </div>
+    <div class="contact-form-wrap">
+      <form>
+        <div class="form-grid">
+          <div class="form-row">
+            <label for="fname">First Name</label>
+            <input type="text" id="fname" placeholder="Emma" />
+          </div>
+          <div class="form-row">
+            <label for="lname">Last Name</label>
+            <input type="text" id="lname" placeholder="Smith" />
+          </div>
+        </div>
+        <div class="form-row">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="emma@example.com" />
+        </div>
+        <div class="form-row">
+          <label for="interest">I'm interested in</label>
+          <select id="interest">
+            <option value="">Select an option...</option>
+            <optgroup label="Specialisms">
+              <option>RED-S &amp; Female Fuelling</option>
+              <option>Menopause Support</option>
+              <option>Energy &amp; Circadian Health</option>
+              <option>Gut Health</option>
+            </optgroup>
+            <optgroup label="Consultations">
+              <option>Free Discovery Call (15 min)</option>
+              <option>Nutrition Audit (£20)</option>
+              <option>Initial Consultation (£85 / £60 concession)</option>
+              <option>Follow-up Session (£60 / £45 concession)</option>
+              <option>3-Month Package (£300)</option>
+            </optgroup>
+            <optgroup label="Other">
+              <option>Wellness Talk Enquiry</option>
+              <option>Content &amp; Copywriting</option>
+            </optgroup>
+            <option>General Enquiry</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="message">Tell me a little about your goals</label>
+          <textarea id="message" placeholder="What are you hoping to achieve? Any health concerns you'd like to address?"></textarea>
+        </div>
+        <button type="submit" class="btn-submit">Send Message</button>
+        <p class="form-note">I'll reply within 1–2 working days 🌿</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">
+      <div class="footer-logo">Nourish with <span>Ruby</span></div>
+      <p>Personalised, holistic nutrition consultations helping you become your healthiest and happiest self.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Pages</h4>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Consultations</a></li>
+        <li><a href="#approach">My Approach</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="/blog">Blog</a></li>
+        <li><a href="/recipes">Recipes</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Follow Along</h4>
+      <ul>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Pinterest</a></li>
+      </ul>
+    </div>
+  </footer>
+  <div class="footer-bottom">
+    &copy; 2026 Nourish with Ruby. All rights reserved.
+  </div>
+
+  <script>
+    // Sticky nav shadow
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    // Form submit feedback
+    document.querySelector('form').addEventListener('submit', e => {
+      e.preventDefault();
+      const btn = e.target.querySelector('.btn-submit');
+      btn.textContent = 'Message sent! 🌿';
+      btn.style.background = '#4f7055';
+      btn.disabled = true;
+    });
+  </script>
+
+</body>
+</html>

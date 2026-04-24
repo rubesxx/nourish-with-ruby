@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recipes | Nourish with Ruby</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --sage:        #7a9e7e;
+      --sage-dark:   #4f7055;
+      --sage-pale:   #c8dbc9;
+      --sage-faint:  #eef4ee;
+      --clay:        #c17f5a;
+      --clay-light:  #e8b894;
+      --amber:       #d4a04a;
+      --amber-faint: #fdf3e3;
+      --cream:       #faf8f3;
+      --text:        #2c2c2c;
+      --text-mid:    #5a5a5a;
+      --text-light:  #8a8a8a;
+      --border:      #e2ddd6;
+      --radius-sm:   8px;
+      --radius:      16px;
+      --radius-lg:   28px;
+      --shadow:      0 4px 32px rgba(79,112,85,0.10);
+      --shadow-lg:   0 12px 60px rgba(79,112,85,0.15);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 400;
+      line-height: 1.2;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%;
+      height: 70px;
+      background: rgba(250,248,243,0.94);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(226,221,214,0.6);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      color: var(--sage-dark);
+    }
+    .nav-logo span { color: var(--clay); }
+    .nav-links { display: flex; gap: 6px; align-items: center; }
+    .nav-links a {
+      padding: 8px 16px;
+      font-size: 0.875rem;
+      color: var(--text-mid);
+      border-radius: var(--radius-sm);
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav-links a:hover { color: var(--sage-dark); background: var(--sage-faint); }
+    .nav-links .btn-nav {
+      background: var(--sage-dark); color: white;
+      padding: 9px 22px; border-radius: 100px; font-weight: 500;
+    }
+    .nav-links .btn-nav:hover { background: var(--sage); color: white; }
+
+    /* ── HERO ── */
+    .recipes-hero {
+      padding: 120px 5% 72px;
+      background: linear-gradient(135deg, var(--amber-faint) 0%, var(--cream) 60%);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .recipes-hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.78rem; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--clay); margin-bottom: 18px;
+    }
+    .recipes-hero-eyebrow::before {
+      content: ''; width: 24px; height: 1.5px; background: var(--clay);
+    }
+    .recipes-hero h1 {
+      font-size: clamp(2.6rem, 4.5vw, 3.8rem);
+      font-weight: 300;
+      color: var(--sage-dark);
+      margin-bottom: 22px;
+    }
+    .recipes-hero h1 em { font-style: italic; color: var(--clay); }
+    .recipes-hero-bio { font-size: 0.95rem; color: var(--text-mid); line-height: 1.8; }
+    .recipes-hero-bio p + p { margin-top: 14px; }
+    .hero-stats {
+      display: flex; gap: 28px; margin-top: 28px; padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+    .hero-stat strong {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem; font-weight: 500; color: var(--sage-dark);
+    }
+    .hero-stat span { font-size: 0.78rem; color: var(--text-light); }
+    .hero-visual {
+      display: flex; justify-content: center; align-items: center;
+    }
+    .hero-mosaic {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      max-width: 360px;
+    }
+    .mosaic-tile {
+      border-radius: var(--radius);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 24px 20px;
+      text-align: center;
+      font-size: 2rem;
+      gap: 8px;
+    }
+    .mosaic-tile span {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--sage-dark);
+      font-family: 'DM Sans', sans-serif;
+    }
+    .mosaic-tile:nth-child(1) { background: #e8f0e9; }
+    .mosaic-tile:nth-child(2) { background: var(--amber-faint); grid-row: span 2; justify-content: flex-start; padding-top: 36px; }
+    .mosaic-tile:nth-child(3) { background: #fce8e0; }
+
+    /* ── BATCH COOK NOTE ── */
+    .batch-note {
+      margin: 0 5% 0;
+      background: var(--sage-dark);
+      border-radius: var(--radius);
+      padding: 20px 28px;
+      display: flex; align-items: flex-start; gap: 14px;
+      color: white;
+    }
+    .batch-note p { font-size: 0.88rem; line-height: 1.7; color: rgba(255,255,255,0.82); }
+    .batch-note strong { color: white; }
+
+    /* ── FILTER TABS ── */
+    .filter-wrap {
+      padding: 52px 5% 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px;
+    }
+    .filter-tabs {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .filter-tab {
+      padding: 9px 20px;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border: 1.5px solid var(--border);
+      background: white;
+      color: var(--text-mid);
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .filter-tab:hover { border-color: var(--sage); color: var(--sage-dark); }
+    .filter-tab.active {
+      background: var(--sage-dark); color: white;
+      border-color: var(--sage-dark);
+    }
+    .filter-count {
+      font-size: 0.7rem;
+      background: rgba(255,255,255,0.25);
+      border-radius: 100px;
+      padding: 1px 7px;
+    }
+    .filter-tab:not(.active) .filter-count {
+      background: var(--sage-faint);
+      color: var(--sage-dark);
+    }
+
+    /* ── RECIPE GRID ── */
+    .recipes-main { padding: 0 5% 96px; }
+    .category-group { margin-bottom: 60px; }
+    .category-group[data-hidden] { display: none; }
+    .category-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--sage-dark);
+      margin-bottom: 24px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .recipes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+    .recipe-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1.5px solid var(--border);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.22s, box-shadow 0.22s, border-color 0.22s;
+    }
+    .recipe-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); border-color: var(--sage-pale); }
+    .recipe-card[data-hidden] { display: none; }
+    .card-thumb {
+      height: 140px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .card-thumb-bg {
+      position: absolute; inset: 0;
+    }
+    .card-thumb-emoji { position: relative; z-index: 1; }
+    .cat-breakfast .card-thumb-bg { background: linear-gradient(135deg, #fdf3e3, #f5ddb0); }
+    .cat-mains .card-thumb-bg { background: linear-gradient(135deg, #e8f0e9, #c8dbc9); }
+    .cat-lighter .card-thumb-bg { background: linear-gradient(135deg, #fce8e0, #f0cfc0); }
+    .card-body { padding: 22px 22px 24px; }
+    .card-cat-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 100px;
+      padding: 3px 11px;
+      margin-bottom: 10px;
+    }
+    .cat-breakfast .card-cat-tag { background: var(--amber-faint); color: #a0602a; }
+    .cat-mains .card-cat-tag { background: var(--sage-faint); color: var(--sage-dark); }
+    .cat-lighter .card-cat-tag { background: #fce8e0; color: #a04030; }
+    .card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: var(--sage-dark);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+    .card-desc { font-size: 0.84rem; color: var(--text-mid); line-height: 1.65; margin-bottom: 16px; }
+    .card-meta {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .card-time {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 0.78rem; color: var(--text-light);
+    }
+    .card-time svg { width: 12px; height: 12px; opacity: 0.5; }
+    .card-btn {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--sage-dark);
+      border-bottom: 1.5px solid var(--sage-pale);
+      padding-bottom: 1px;
+      transition: border-color 0.2s;
+    }
+    .recipe-card:hover .card-btn { border-color: var(--sage-dark); }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(44, 44, 44, 0.55);
+      backdrop-filter: blur(6px);
+      display: flex; align-items: flex-start; justify-content: center;
+      padding: 60px 20px 40px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s;
+      overflow-y: auto;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: white;
+      border-radius: var(--radius-lg);
+      width: 100%; max-width: 720px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.2);
+      overflow: hidden;
+      transform: translateY(20px);
+      transition: transform 0.3s;
+      position: relative;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-header {
+      height: 200px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 5rem;
+      position: relative;
+    }
+    .modal-header-bg { position: absolute; inset: 0; }
+    .modal-header-emoji { position: relative; z-index: 1; }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px; z-index: 2;
+      width: 36px; height: 36px;
+      background: rgba(255,255,255,0.9);
+      border: none; border-radius: 50%;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      color: var(--text-mid);
+      transition: background 0.2s;
+    }
+    .modal-close:hover { background: white; color: var(--text); }
+    .modal-body { padding: 36px 40px 48px; }
+    .modal-cat-tag {
+      display: inline-block;
+      font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      border-radius: 100px; padding: 3px 11px;
+      margin-bottom: 10px;
+    }
+    .modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem; font-weight: 400;
+      color: var(--sage-dark);
+      margin-bottom: 10px;
+    }
+    .modal-subtitle {
+      font-size: 0.9rem; font-style: italic;
+      color: var(--text-mid); margin-bottom: 28px;
+      line-height: 1.6;
+    }
+    .modal-meta-row {
+      display: flex; gap: 20px; margin-bottom: 32px; flex-wrap: wrap;
+    }
+    .modal-meta-item {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 0.82rem; color: var(--text-light);
+    }
+    .modal-meta-item svg { width: 14px; height: 14px; opacity: 0.5; }
+    .recipe-section { margin-bottom: 28px; }
+    .recipe-section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem; font-weight: 500;
+      color: var(--sage-dark);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .ingredients-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .ingredients-list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 0.9rem; color: var(--text-mid); line-height: 1.5;
+    }
+    .ingredients-list li::before {
+      content: '·';
+      color: var(--sage);
+      font-size: 1.3rem;
+      line-height: 1;
+      margin-top: 1px;
+      flex-shrink: 0;
+    }
+    .method-text {
+      font-size: 0.9rem;
+      color: var(--text-mid);
+      line-height: 1.8;
+    }
+    .method-text p + p { margin-top: 12px; }
+    .recipe-tip {
+      background: var(--sage-faint);
+      border-left: 3px solid var(--sage);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 14px 18px;
+      margin-top: 20px;
+    }
+    .recipe-tip p {
+      font-size: 0.87rem;
+      color: var(--sage-dark);
+      line-height: 1.65;
+    }
+    .recipe-tip strong { font-weight: 600; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--sage-dark);
+      color: rgba(255,255,255,0.65);
+      padding: 40px 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; color: white; font-weight: 500;
+    }
+    .footer-logo span { color: var(--clay-light); }
+    footer p { font-size: 0.82rem; }
+    footer a { color: rgba(255,255,255,0.6); transition: color 0.2s; }
+    footer a:hover { color: white; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .recipes-hero { grid-template-columns: 1fr; padding: 100px 6% 56px; }
+      .hero-visual { display: none; }
+      .recipes-grid { grid-template-columns: repeat(2, 1fr); }
+      .modal-body { padding: 24px 24px 36px; }
+      .filter-wrap { padding: 40px 6% 24px; }
+      .recipes-main { padding: 0 6% 72px; }
+      .batch-note { margin: 0 6%; }
+    }
+    @media (max-width: 600px) {
+      .recipes-grid { grid-template-columns: 1fr; }
+      nav { padding: 0 5%; }
+      .nav-links a:not(.btn-nav) { display: none; }
+      .modal-overlay { padding: 50px 12px 30px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="/" class="nav-logo">Nourish with <span>Ruby</span></a>
+    <div class="nav-links">
+      <a href="/#about">About</a>
+      <a href="/#specialisations">Specialisms</a>
+      <a href="/#services">Consultations</a>
+      <a href="/#contact" class="btn-nav">Book a Call</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="recipes-hero">
+    <div>
+      <div class="recipes-hero-eyebrow">The Recipe Collection</div>
+      <h1>Fall in love<br>with <em>food</em></h1>
+      <div class="recipes-hero-bio">
+        <p>Food has always been at the heart of my life. Growing up with an Indian dad, a grandma who made everything from scratch, and a mum completely obsessed with making vegetables taste extraordinary, I was lucky to inherit a love of flavour and a proper set of kitchen skills.</p>
+        <p>Bringing people together around the table is my craft. Every recipe here is tried and tested, most of them regulars at dinner parties or cooked simply as an act of love. Each one celebrates the functional properties of its ingredients while proving, hopefully convincingly, that vegetables can be genuinely indulgent.</p>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><strong>12</strong><span>recipes</span></div>
+        <div class="hero-stat"><strong>Plant-based</strong><span>ingredients</span></div>
+        <div class="hero-stat"><strong>&lt;30 min</strong><span>most dishes</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-mosaic">
+        <div class="mosaic-tile" style="background: #e8f0e9;">🫘<span>Bean mains</span></div>
+        <div class="mosaic-tile" style="background: var(--amber-faint); grid-row: span 2; font-size: 3.5rem; justify-content: center;">🌿<span style="margin-top: 12px; font-size: 0.85rem; color: var(--clay); font-weight: 500;">Holistic<br>ingredients</span></div>
+        <div class="mosaic-tile" style="background: #fce8e0;">🥗<span>Lighter plates</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BATCH COOK NOTE -->
+  <div class="batch-note" style="margin-top: 48px;">
+    <span style="font-size: 1.2rem; flex-shrink: 0; margin-top: 1px;">💡</span>
+    <p><strong>Batch cooking tip:</strong> All of the bean sauces freeze beautifully. Double the sauce, portion into freezer bags and you have a quick meal on hand whenever you need it. The crispy toppings (kale, aubergine, seeds) are always best made fresh. The overnight oats keep in the fridge for up to 3 days — ideal for prepping at the start of the week.</p>
+  </div>
+
+  <!-- FILTER TABS -->
+  <div class="filter-wrap">
+    <div class="filter-tabs">
+      <button class="filter-tab active" data-filter="all">All recipes <span class="filter-count">12</span></button>
+      <button class="filter-tab" data-filter="breakfast">🌅 Breakfast <span class="filter-count">4</span></button>
+      <button class="filter-tab" data-filter="mains">🫘 Bean Mains <span class="filter-count">5</span></button>
+      <button class="filter-tab" data-filter="lighter">🥗 Lighter Plates <span class="filter-count">3</span></button>
+    </div>
+  </div>
+
+  <!-- RECIPE GRID -->
+  <main class="recipes-main">
+
+    <!-- BREAKFAST -->
+    <div class="category-group" data-category="breakfast">
+      <div class="category-label">🌅 Overnight Oats Series <span style="font-size:0.85rem; font-family:'DM Sans'; color:var(--text-light); font-weight:400;">Prep the night before, grab and go</span></div>
+      <div class="recipes-grid">
+
+        <div class="recipe-card cat-breakfast" data-category="breakfast" data-recipe="lemon-blueberry">
+          <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🫐</div></div>
+          <div class="card-body">
+            <div class="card-cat-tag">Breakfast</div>
+            <div class="card-title">Lemon Blueberry Overnight Oats</div>
+            <p class="card-desc">Smashed blueberries act as a natural sweetener, soaking into the oats overnight. Bright, fresh and no added sugar needed.</p>
+            <div class="card-meta">
+              <span class="card-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 5 min prep</span>
+              <span class="card-btn">View recipe</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="recipe-card cat-breakfast" data-category="breakfast" data-recipe="matcha-raspberry">
+          <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🍵</div></div>
+          <div class="card-body">
+            <div class="card-cat-tag">Breakfast</div>
+            <div class="card-title">Matcha, Raspberry & Cacao Overnight Oats</div>
+            <p class="card-desc">Earthy matcha, tart raspberries and bitter cacao nibs — a breakfast with real depth and a gentle energy lift.</p>
+            <div class="card-meta">
+              <span class="card-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 5 min prep</span>
+              <span class="card-btn">View recipe</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="recipe-card cat-breakfast" data-category="breakfast" data-recipe="almond-croissant">
+          <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🥐</div></div>
+          <div class="card-body">
+            <div class="card-cat-tag">Breakfast</div>
+            <div class="card-title">Almond Croissant Overnight Oats</div>
+            <p class="card-desc">All the cosy warmth of an almond croissant, none of the pastry. Almond butter, almond essence and toasted flaked almonds on top.</p>
+            <div class="card-meta">
+              <span class="card-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 5 min prep</span>
+              <span class="card-btn">View recipe</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="recipe-card cat-breakfast" data-category="breakfast" data-recipe="sticky-date">
+          <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🍯</div></div>
+          <div class="card-body">
+            <div class="card-cat-tag">Breakfast</div>
+            <div class="card-title">Sticky Date & Pecan Overnight Oats</div>
+            <p class="card-desc">Maple syrup, pecans, cinnamon and a pinch of Maldon salt. Rich, caramel-forward and genuinely satisfying.</p>
+            <div class="card-meta">
+              <span class="card-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 5 min prep</span>
+              <span class="card-btn">View recipe</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MAINS -->
+    <div class="category-group" data-category="mains">
+      <div class="category-label">🫘 Bean & Legume Mains <span style="font-size:0.85rem; font-family:'DM Sans'; color:var(--text-light); font-weight:400;">Bold, layered flavours built around legumes</span></div>
+      <div class="recipes-grid">
+
+        <div class="recipe-card cat-mains" data-category="mains" data-recipe="smoky-black-beans">
+          <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🫘</div></div>
+          <div class="card-body">
+            <div class="card-cat-tag">Bean Main</div>
+            <div class="card-title">Smoky Black Beans</div>
+            <p class="card-desc">Coconut milk and smoked paprika transform everyday black beans into something deeply comforting. Finished with a cashew herb relish.</p>
+            <div class="card-meta">
+              <span class="card-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 25 min</span>
+              <span class="card-btn">View recipe</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="recipe-card cat-mains" data-category="mains" data-recipe="chimichurri-butter-beans">
+          <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🌶️</div></div>
+          <div class="card-body">
+            <div class="card-cat-tag">Bean Main</div>
+            <div class="card-title">Chimichurri Butter Beans with Sumac Aubergine</div>
+            <p class="card-desc">A roasted red pepper and cashew sauce with butter beans, topped with cornflour-crispy aubergine and a vibrant chimichurri.</p>
+            <div class="card-meta">
+              <span class="card-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 35 min</span>
+              <span class="card-btn">View recipe</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="recipe-card cat-mains" data-category="mains" data-recipe="wild-garlic-pesto">
+          <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🌿</div></div>
+          <div class="card-body">
+            <div class="card-cat-tag">Bean Main</div>
+            <div class="card-title">Wild Garlic Pesto Beans with Roasted Greens</div>
+            <p class="card-desc">Light and vibrant. Homemade wild garlic pesto coats tender butter and cannellini beans with roasted broccoli and charred courgette.</p>
+            <div class="card-meta">
+              <span class="card-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 30 min</span>
+              <span class="card-btn">View recipe</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="recipe-card cat-mains" data-category="mains" data-recipe="tahini-sesame-beans">
+          <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🍋</div></div>
+          <div class="card-body">
+            <div class="card-cat-tag">Bean Main</div>
+            <div class="card-title">Tahini Sesame Beans with Roasted Aubergine</div>
+            <p class="card-desc">Rich, umami-laden tahini sauce blended from fried aromatics. Topped with pomegranate, coriander and lime-pickled red cabbage.</p>
+            <div class="card-meta">
+              <span class="card-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 30 min</span>
+              <span class="card-btn">View recipe</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="recipe-card cat-mains" data-category="mains" data-recipe="red-pepper-butter-beans">
+          <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🫑</div></div>
+          <div class="card-body">
+            <div class="card-cat-tag">Bean Main</div>
+            <div class="card-title">Red Pepper Butter Beans & Crispy Aubergine</div>
+            <p class="card-desc">A deeply flavoured red pepper and cashew sauce with butter beans, chimichurri, crispy kale and sumac-dusted aubergine.</p>
+            <div class="card-meta">
+              <span class="card-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 35 min</span>
+              <span class="card-btn">View recipe</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- LIGHTER PLATES -->
+    <div class="category-group" data-category="lighter">
+      <div class="category-label">🥗 Lighter Plates & Sides <span style="font-size:0.85rem; font-family:'DM Sans'; color:var(--text-light); font-weight:400;">Big flavour, lighter touch</span></div>
+      <div class="recipes-grid">
+
+        <div class="recipe-card cat-lighter" data-category="lighter" data-recipe="smashed-cucumber">
+          <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🥒</div></div>
+          <div class="card-body">
+            <div class="card-cat-tag">Side / Lighter</div>
+            <div class="card-title">Smashed Cucumber with Peanut Satay</div>
+            <p class="card-desc">Cracked cucumber absorbs the satay dressing like nothing else. Ready in minutes, somehow always impressive on the table.</p>
+            <div class="card-meta">
+              <span class="card-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 15 min</span>
+              <span class="card-btn">View recipe</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="recipe-card cat-lighter" data-category="lighter" data-recipe="harissa-carrots">
+          <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🥕</div></div>
+          <div class="card-body">
+            <div class="card-cat-tag">Side / Lighter</div>
+            <div class="card-title">Harissa Carrots on Tahini Whip</div>
+            <p class="card-desc">Caramelised harissa carrots on a cloud of whipped tahini yoghurt, finished with crushed almonds, crispy sage and chilli oil.</p>
+            <div class="card-meta">
+              <span class="card-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 40 min</span>
+              <span class="card-btn">View recipe</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="recipe-card cat-lighter" data-category="lighter" data-recipe="potato-fritters">
+          <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🧆</div></div>
+          <div class="card-body">
+            <div class="card-cat-tag">Side / Lighter</div>
+            <div class="card-title">Potato & Herb Fritters</div>
+            <p class="card-desc">One big, deeply golden fritter served with a vibrant coriander-tamarind chutney and a crunchy fennel and cabbage slaw.</p>
+            <div class="card-meta">
+              <span class="card-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 30 min</span>
+              <span class="card-btn">View recipe</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal" id="modal">
+      <div class="modal-header" id="modal-header">
+        <div class="modal-header-bg" id="modal-header-bg"></div>
+        <div class="modal-header-emoji" id="modal-emoji"></div>
+        <button class="modal-close" id="modal-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="modal-cat-tag" class="modal-cat-tag"></div>
+        <h2 class="modal-title" id="modal-title"></h2>
+        <p class="modal-subtitle" id="modal-subtitle"></p>
+        <div class="modal-meta-row" id="modal-meta"></div>
+        <div id="modal-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Nourish with <span>Ruby</span></div>
+<a href="/">← Back to main site</a>
+  </footer>
+
+  <script>
+    // ── RECIPE DATA ──
+    const recipes = {
+      'lemon-blueberry': {
+        emoji: '🫐', cat: 'Breakfast', time: '5 min prep + overnight',
+        subtitle: 'The smashed blueberries act as a natural sweetener and soak into the oats overnight — no added sugar needed.',
+        bgClass: 'cat-breakfast',
+        sections: [
+          { title: 'Ingredients', type: 'list', items: [
+            '¼ cup rolled oats', '½ cup almond milk', '3 tbsp Greek yoghurt',
+            '1 tbsp chia seeds', '1 tbsp desiccated coconut', 'Zest of ½ lemon',
+            '1 tsp vanilla essence', 'A handful of blueberries', 'Pinch of Maldon salt'
+          ]},
+          { title: 'Method', type: 'text', text: 'Smash the blueberries in the bottom of a jar or bowl. Add all remaining ingredients and stir well. Seal and refrigerate overnight. In the morning, give it a stir and add a splash more milk if needed. Top with fresh blueberries and extra coconut.' },
+          { title: 'Tip', type: 'tip', text: 'The smashed blueberries act as a natural sweetener and soak into the oats overnight. No added sugar needed. Pair with Greek yoghurt for a protein hit that keeps you full until lunch.' }
+        ]
+      },
+      'matcha-raspberry': {
+        emoji: '🍵', cat: 'Breakfast', time: '5 min prep + overnight',
+        subtitle: 'Earthy matcha, tart raspberries and bitter cacao nibs — a breakfast with real depth and complexity.',
+        bgClass: 'cat-breakfast',
+        sections: [
+          { title: 'Ingredients', type: 'list', items: [
+            '¼ cup rolled oats', '½ cup milk of choice', '3 tbsp Greek yoghurt',
+            '1 tbsp chia seeds', '1 tsp matcha powder', 'Zest of ½ lemon',
+            'Handful of fresh or frozen raspberries', '1 tbsp cacao nibs'
+          ]},
+          { title: 'Method', type: 'text', text: 'Whisk the matcha into the milk until dissolved. Combine with oats, yoghurt, chia seeds and lemon zest. Fold in the raspberries gently. Refrigerate overnight. Top with cacao nibs before eating.' },
+          { title: 'Tip', type: 'tip', text: 'Cacao nibs add crunch and a bitter chocolate note that balances the tartness of the raspberries beautifully.' }
+        ]
+      },
+      'almond-croissant': {
+        emoji: '🥐', cat: 'Breakfast', time: '5 min prep + overnight',
+        subtitle: 'All the cosy warmth of an almond croissant, none of the pastry. Deeply almond-forward and satisfying.',
+        bgClass: 'cat-breakfast',
+        sections: [
+          { title: 'Ingredients', type: 'list', items: [
+            '¼ cup rolled oats', '½ cup almond milk', '2 tbsp ground almonds',
+            '1 tbsp chia seeds', '1 tbsp almond butter', '1 tsp almond essence',
+            '½ tsp cinnamon', 'Flaked almonds to top'
+          ]},
+          { title: 'Method', type: 'text', text: 'Mix all ingredients except the flaked almonds. Stir until the almond butter is well combined. Refrigerate overnight. Top with flaked almonds in the morning — toast them in a dry pan for extra flavour.' }
+        ]
+      },
+      'sticky-date': {
+        emoji: '🍯', cat: 'Breakfast', time: '5 min prep + overnight',
+        subtitle: 'Rich, caramel-forward and genuinely satisfying. The Maldon salt is not optional.',
+        bgClass: 'cat-breakfast',
+        sections: [
+          { title: 'Ingredients', type: 'list', items: [
+            '¼ cup rolled oats', '½ cup milk of choice', '1 tbsp chia seeds',
+            '1 tbsp maple syrup', '2 tbsp pecans, roughly chopped',
+            '1 tsp vanilla essence', '½ tsp cinnamon', 'Pinch of Maldon salt'
+          ]},
+          { title: 'Method', type: 'text', text: 'Combine all ingredients, ensuring the maple syrup is evenly mixed through. Refrigerate overnight. In the morning, top with extra pecans and an extra drizzle of maple if desired.' },
+          { title: 'Tip', type: 'tip', text: 'The pinch of Maldon salt is essential here. It brings out the caramel notes of the maple and balances the sweetness in a way nothing else does.' }
+        ]
+      },
+      'smoky-black-beans': {
+        emoji: '🫘', cat: 'Bean Main', time: '25 min · serves 2–3',
+        subtitle: 'Coconut milk and smoked paprika transform everyday black beans into something deeply comforting. The cashew herb relish ties everything together.',
+        bgClass: 'cat-mains',
+        sections: [
+          { title: 'Beans', type: 'list', items: [
+            '2 tins black beans, drained', '1 tin coconut milk + a splash of stock',
+            '2 tomatoes, blistered in a hot pan', '2 mixed peppers, sliced',
+            '1 onion, diced', '4 garlic cloves', '1 tsp smoked paprika',
+            'A handful of coriander stems', 'Lime juice, salt'
+          ]},
+          { title: 'Toppings', type: 'list', items: [
+            'Crispy kale (tossed in oil, baked 10 mins)', 'Toasted seeds',
+            'Pickled red onion', 'Sour cream or yoghurt', 'Feta, crumbled'
+          ]},
+          { title: 'Cashew Herb Relish', type: 'list', items: [
+            'A handful each of coriander and parsley',
+            '¼ cup raw cashews, soaked 1 hour',
+            '1 tbsp jalapeño brine', 'Juice of 1 lime', 'Glug of olive oil'
+          ]},
+          { title: 'Method', type: 'text', text: 'Blister the tomatoes in a dry pan until charred. In the same pan, fry the onion, garlic and coriander stems until soft. Add smoked paprika, then the peppers. Add the blistered tomatoes, beans, coconut milk and stock. Simmer 15 minutes until saucy. Season with lime juice and salt.\n\nBlend all relish ingredients until smooth. Loosen with water if needed.\n\nServe beans topped with crispy kale, seeds, pickled onion, a spoon of sour cream, crumbled feta and a generous drizzle of relish.' }
+        ]
+      },
+      'chimichurri-butter-beans': {
+        emoji: '🌶️', cat: 'Bean Main', time: '35 min · serves 2–3',
+        subtitle: 'A roasted pepper and cashew sauce with butter beans, topped with cornflour-crispy aubergine and a fresh chimichurri.',
+        bgClass: 'cat-mains',
+        sections: [
+          { title: 'Red Pepper Sauce', type: 'list', items: [
+            '2 red peppers, roasted (keep a few raw chunks)',
+            'A few sun-dried tomatoes', '¼ cup cashews, soaked',
+            '1 tsp smoked paprika + pinch of chipotle flakes',
+            '2 garlic cloves', 'Good glug of olive oil'
+          ]},
+          { title: 'Beans', type: 'list', items: [
+            '2 tins butter beans, drained', '2 red onions, finely sliced',
+            'Glug of almond milk'
+          ]},
+          { title: 'Chimichurri', type: 'list', items: [
+            'Handful each of flat-leaf parsley and coriander',
+            '1 tsp dried oregano', '2 tbsp red wine vinegar',
+            'Juice of 1 lime', '3 garlic cloves', '1 small red onion',
+            'Good glug of olive oil', 'Fresh chilli to taste'
+          ]},
+          { title: 'Crispy Aubergine', type: 'list', items: [
+            '1 large aubergine, cubed', '2 tbsp cornflour', '1 tsp sumac', 'Salt'
+          ]},
+          { title: 'Method', type: 'text', text: 'Blend all sauce ingredients until smooth. Sauté the red onions, add sauce and almond milk, then add butter beans. Simmer 10 minutes.\n\nSalt the aubergine cubes and leave 10 minutes. Pat dry, toss in cornflour and sumac, and air-fry or bake at 220°C for 20 minutes until golden.\n\nBlend all chimichurri ingredients by hand-chopping or blending roughly — it should have some texture.\n\nServe beans topped with crispy aubergine, chimichurri and crumbled feta.' }
+        ]
+      },
+      'wild-garlic-pesto': {
+        emoji: '🌿', cat: 'Bean Main', time: '30 min · serves 2–3',
+        subtitle: 'Light and vibrant — pesto coats tender butter beans and chunky roasted greens for a spring-feel plate.',
+        bgClass: 'cat-mains',
+        sections: [
+          { title: 'Ingredients', type: 'list', items: [
+            '1 tin each cannellini and butter beans', '1 onion, diced',
+            '½ cup vegetable stock', '2 courgettes, cut into chunky pieces',
+            '200g frozen or fresh peas', '1 head broccoli, broken into florets'
+          ]},
+          { title: 'Wild Garlic Pesto', type: 'list', items: [
+            'A large handful of wild garlic (or sub basil + 1 garlic clove)',
+            'A handful of basil', '3 tbsp nuts (pine nuts, walnuts or cashews)',
+            '3 tbsp olive oil', '30g Parmesan or nutritional yeast',
+            'Juice of 1 lemon'
+          ]},
+          { title: 'Method', type: 'text', text: 'Roast the broccoli at 200°C for 20 minutes with oil and salt until charred at the edges.\n\nBlend all pesto ingredients until smooth. Adjust seasoning and lemon.\n\nSauté onion in stock until soft. Add beans and peas and warm through. Stir through pesto off the heat.\n\nServe with roasted broccoli, courgette, toasted nuts, crumbled feta and pickled fennel.' }
+        ]
+      },
+      'tahini-sesame-beans': {
+        emoji: '🍋', cat: 'Bean Main', time: '30 min · serves 2–3',
+        subtitle: 'A rich, umami-laden sauce blended from tahini and fried aromatics, with jewel-bright toppings.',
+        bgClass: 'cat-mains',
+        sections: [
+          { title: 'Tahini Sauce', type: 'list', items: [
+            '3 tbsp tahini', '1 tsp sesame oil', 'Juice of 1 lime',
+            '1 thumb ginger, grated', '3 spring onions', '3 garlic cloves',
+            '1 red chilli', '½ tin beans (blended in)', 'Stock to loosen'
+          ]},
+          { title: 'Base & Toppings', type: 'list', items: [
+            '2 tins butter beans', '1 large aubergine, roasted',
+            'Pomegranate seeds', 'Fresh coriander', 'Lime-pickled red cabbage'
+          ]},
+          { title: 'Method', type: 'text', text: 'Fry ginger, spring onion, garlic and chilli in a little oil until golden. Blend with tahini, sesame oil, lime juice and half a tin of beans plus stock until smooth and silky.\n\nRoast aubergine at 200°C in chunks until golden. Warm remaining beans in the sauce.\n\nServe topped with roasted aubergine, pomegranate seeds, coriander and lime-drenched pickled cabbage.' },
+          { title: 'Tip', type: 'tip', text: 'Blending beans into the sauce adds protein and gives it a luscious, creamy body without any dairy.' }
+        ]
+      },
+      'red-pepper-butter-beans': {
+        emoji: '🫑', cat: 'Bean Main', time: '35 min · serves 2–3',
+        subtitle: 'A deeply flavoured red pepper and cashew sauce with butter beans, chimichurri and crispy sumac aubergine.',
+        bgClass: 'cat-mains',
+        sections: [
+          { title: 'Sauce', type: 'list', items: [
+            '2 red peppers, roasted', 'A few sun-dried tomatoes',
+            '¼ cup cashews, soaked', '1 tsp smoked paprika + pinch chipotle',
+            '2 garlic cloves', 'Olive oil'
+          ]},
+          { title: 'Method', type: 'text', text: 'Blend all sauce ingredients until smooth. Sauté 2 red onions, add sauce with a glug of almond milk, then add 2 tins butter beans. Simmer 12 minutes.\n\nMake chimichurri as per the Chimichurri Butter Beans recipe. Prepare crispy aubergine: salt, dry, coat in cornflour and sumac, air-fry or bake at 220°C.\n\nServe beans with crispy aubergine, chimichurri, crispy kale and roasted pumpkin seeds.' }
+        ]
+      },
+      'smashed-cucumber': {
+        emoji: '🥒', cat: 'Lighter Plate', time: '15 min',
+        subtitle: 'Cracked cucumber absorbs the satay dressing like nothing else. Ready in minutes, somehow always impressive on the table.',
+        bgClass: 'cat-lighter',
+        sections: [
+          { title: 'Ingredients', type: 'list', items: [
+            '2 cucumbers', '3 spring onions, thinly sliced', '2 tbsp sesame seeds'
+          ]},
+          { title: 'Satay Sauce', type: 'list', items: [
+            '3 tbsp peanut butter', '1 tbsp soy sauce', '1 tsp sesame oil',
+            'Juice of 1 lime', '1 tsp maple syrup', '1 garlic clove, grated',
+            'Water to loosen'
+          ]},
+          { title: 'Method', type: 'text', text: 'Use a rolling pin to smash the cucumbers until cracked, then tear into pieces. Salt and leave 10 minutes, then pat dry. Whisk satay sauce ingredients together. Toss cucumbers with satay and spring onions, top with sesame seeds.' }
+        ]
+      },
+      'harissa-carrots': {
+        emoji: '🥕', cat: 'Lighter Plate', time: '40 min',
+        subtitle: 'Caramelised harissa carrots on a cloud of whipped tahini yoghurt. Finished with crushed almonds, crispy sage and chilli oil.',
+        bgClass: 'cat-lighter',
+        sections: [
+          { title: 'Carrots', type: 'list', items: [
+            '500g carrots (or butternut squash), halved lengthways',
+            '2 tbsp harissa paste', 'Olive oil, salt'
+          ]},
+          { title: 'Tahini Whip', type: 'list', items: [
+            '4 tbsp tahini', '4 tbsp Greek yoghurt',
+            'Juice of 1 lemon', '1 tsp honey', 'Salt, water to loosen'
+          ]},
+          { title: 'To Finish', type: 'list', items: [
+            'Crushed almonds (or toasted pumpkin seeds)',
+            'Crispy sage leaves', 'Chilli oil drizzle'
+          ]},
+          { title: 'Method', type: 'text', text: 'Toss carrots in harissa and oil, roast at 200°C for 30–35 minutes until caramelised. Whip tahini ingredients until smooth and spreadable. Spread tahini on a plate, lay over roasted carrots, top with crushed almonds, crispy sage and a drizzle of chilli oil.' }
+        ]
+      },
+      'potato-fritters': {
+        emoji: '🧆', cat: 'Lighter Plate', time: '30 min',
+        subtitle: 'One big, satisfying fritter served with a vibrant coriander-tamarind chutney and a crunchy salad.',
+        bgClass: 'cat-lighter',
+        sections: [
+          { title: 'Fritters', type: 'list', items: [
+            '3 medium potatoes, grated', '1 onion, grated',
+            'Large handful of mixed herbs (parsley, coriander)',
+            'Salt, pepper', '2 tbsp plain flour or chickpea flour'
+          ]},
+          { title: 'Coriander Tamarind Chutney', type: 'list', items: [
+            'Large bunch of coriander', '1 tbsp tamarind paste',
+            'Juice of 1 lime', '1 green chilli', '1 garlic clove',
+            'Salt, a little water'
+          ]},
+          { title: 'Method', type: 'text', text: 'Squeeze excess moisture from grated potato and onion in a clean cloth. Mix with herbs and flour, season well. Fry in batches in plenty of oil — press down flat — for 4–5 minutes per side until deeply golden.\n\nBlend all chutney ingredients until smooth.\n\nServe fritters with chutney, a fennel and cabbage slaw, and a mint, pea and cucumber salad.' }
+        ]
+      }
+    };
+
+    // ── MODAL LOGIC ──
+    const overlay = document.getElementById('modal-overlay');
+    const modalClose = document.getElementById('modal-close');
+
+    function openRecipe(key) {
+      const r = recipes[key];
+      if (!r) return;
+
+      document.getElementById('modal-emoji').textContent = r.emoji;
+      document.getElementById('modal-title').textContent = document.querySelector(`[data-recipe="${key}"] .card-title`).textContent;
+      document.getElementById('modal-subtitle').textContent = r.subtitle;
+
+      const catTag = document.getElementById('modal-cat-tag');
+      catTag.textContent = r.cat;
+      catTag.className = 'modal-cat-tag';
+      const card = document.querySelector(`[data-recipe="${key}"]`);
+      const tagEl = card.querySelector('.card-cat-tag');
+      catTag.style.cssText = tagEl.style.cssText;
+      catTag.style.background = getComputedStyle(tagEl).background;
+      catTag.style.color = getComputedStyle(tagEl).color;
+
+      const headerBg = document.getElementById('modal-header-bg');
+      const thumbBg = card.querySelector('.card-thumb-bg');
+      headerBg.style.background = getComputedStyle(thumbBg).background;
+
+      document.getElementById('modal-meta').innerHTML = `
+        <div class="modal-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>${r.time}</div>
+        <div class="modal-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>Serves 2–3</div>
+        <div class="modal-meta-item">🌱 Plant-based</div>
+      `;
+
+      let html = '';
+      r.sections.forEach(s => {
+        if (s.type === 'list') {
+          html += `<div class="recipe-section"><div class="recipe-section-title">${s.title}</div><ul class="ingredients-list">${s.items.map(i => `<li>${i}</li>`).join('')}</ul></div>`;
+        } else if (s.type === 'text') {
+          html += `<div class="recipe-section"><div class="recipe-section-title">${s.title}</div><div class="method-text">${s.text.split('\n\n').map(p => `<p>${p}</p>`).join('')}</div></div>`;
+        } else if (s.type === 'tip') {
+          html += `<div class="recipe-tip"><p><strong>Tip:</strong> ${s.text}</p></div>`;
+        }
+      });
+      document.getElementById('modal-content').innerHTML = html;
+
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.recipe-card').forEach(card => {
+      card.addEventListener('click', () => openRecipe(card.dataset.recipe));
+    });
+    modalClose.addEventListener('click', closeModal);
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    // ── FILTER LOGIC ──
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const filter = tab.dataset.filter;
+
+        document.querySelectorAll('.category-group').forEach(group => {
+          if (filter === 'all' || group.dataset.category === filter) {
+            delete group.dataset.hidden;
+          } else {
+            group.dataset.hidden = true;
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
