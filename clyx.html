@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clyx Community Hub — Ruby Chauhan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --purple:#7C5CBF; --purple-l:#9B7ED4; --purple-pale:#EDE9F8; --purple-faint:#F5F3FF;
+  --pink:#E8629A; --pink-pale:#FDEDF5;
+  --green:#3BAA74; --green-pale:#E8F7F1;
+  --orange:#F0A050; --orange-pale:#FEF3E8;
+  --red:#E85D5D; --red-pale:#FEEDED;
+  --navy:#18172B; --navy-mid:#2D2B45;
+  --text:#1C1B29; --text-mid:#6B6885; --text-light:#A09CBC;
+  --border:#E5E2F2; --card:#fff; --bg:#F5F3FF;
+  --sidebar-w:234px;
+  --r:10px; --r-lg:18px; --r-sm:7px;
+  --shadow:0 2px 16px rgba(107,79,187,.07);
+  --shadow-lg:0 8px 40px rgba(107,79,187,.13);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+
+/* SIDEBAR */
+#sidebar{width:var(--sidebar-w);min-height:100vh;background:var(--navy);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:100;overflow-y:auto}
+.sb-logo{padding:22px 18px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+.sb-logo-mark{font-size:19px;font-weight:700;color:#fff;letter-spacing:-.4px;display:flex;align-items:center;gap:8px}
+.sb-logo-mark span{background:var(--purple);width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px}
+.sb-sub{font-size:11px;color:rgba(255,255,255,.35);margin-top:3px}
+.sb-nav{flex:1;padding:10px 10px}
+.sb-section{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.28);padding:14px 8px 5px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r-sm);cursor:pointer;transition:all .15s;color:rgba(255,255,255,.55);font-size:13px;font-weight:500;margin-bottom:1px;user-select:none}
+.nav-item:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.9)}
+.nav-item.active{background:var(--purple);color:#fff}
+.nav-item .ni{font-size:15px;width:18px;text-align:center;flex-shrink:0}
+.sb-footer{padding:14px;border-top:1px solid rgba(255,255,255,.08)}
+.sb-user{display:flex;align-items:center;gap:9px}
+.sb-avatar{width:30px;height:30px;border-radius:50%;background:var(--purple);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.sb-name{font-size:12px;font-weight:600;color:#fff}
+.sb-role{font-size:10.5px;color:rgba(255,255,255,.38)}
+
+/* MAIN */
+#main{margin-left:var(--sidebar-w);min-height:100vh}
+.page-head{padding:26px 28px 0;display:flex;align-items:flex-start;justify-content:space-between}
+.page-head-text h2{font-size:22px;font-weight:700;letter-spacing:-.4px}
+.page-head-text p{font-size:13px;color:var(--text-mid);margin-top:3px}
+.page-body{padding:20px 28px 40px}
+
+/* VIEWS */
+.view{display:none}.view.active{display:block}
+
+/* CARDS */
+.card{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);box-shadow:var(--shadow)}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.stat-card{background:var(--card);border-radius:var(--r);padding:18px;border:1.5px solid var(--border)}
+.stat-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;margin-bottom:10px}
+.stat-label{font-size:11.5px;font-weight:500;color:var(--text-mid);text-transform:uppercase;letter-spacing:.4px}
+.stat-value{font-size:30px;font-weight:700;letter-spacing:-1px;margin-top:2px}
+.stat-sub{font-size:11.5px;color:var(--text-light);margin-top:3px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:8px 14px;border-radius:var(--r-sm);font-size:13px;font-weight:500;border:none;transition:all .15s}
+.btn-primary{background:var(--purple);color:#fff}.btn-primary:hover{background:var(--purple-l)}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--text-mid)}.btn-outline:hover{border-color:var(--purple);color:var(--purple)}
+.btn-danger{background:var(--red);color:#fff}
+.btn-ghost{background:transparent;color:var(--text-mid);padding:6px 10px}.btn-ghost:hover{background:var(--bg)}
+.btn-sm{padding:5px 10px;font-size:12px}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500}
+.badge-wellness{background:var(--green-pale);color:#1f7a50}
+.badge-culture{background:var(--orange-pale);color:#a06010}
+.badge-creative{background:var(--pink-pale);color:#b03070}
+.badge-professional{background:var(--purple-pale);color:var(--purple)}
+.badge-fitness{background:#E8F4FD;color:#1a6fa8}
+.badge-food{background:#FFF3E0;color:#b05000}
+.badge-social{background:#F3E8FF;color:#6b20a8}
+.badge-other{background:#F0F0F0;color:#555}
+.badge-potential{background:#F0F0F0;color:#555}
+.badge-in-discussion{background:var(--orange-pale);color:#a06010}
+.badge-active-brand{background:var(--green-pale);color:#1f7a50}
+
+/* STAGE BADGES */
+.stage-identified{background:#F0EFF8;color:#666}
+.stage-outreach-sent{background:var(--purple-pale);color:var(--purple)}
+.stage-in-conversation{background:#E8F4FD;color:#1a6fa8}
+.stage-meeting{background:var(--orange-pale);color:#a06010}
+.stage-onboarding{background:var(--pink-pale);color:#b03070}
+.stage-active{background:var(--green-pale);color:#1f7a50}
+.stage-nurturing{background:#F3E8FF;color:#6b20a8}
+
+/* FORMS */
+.form-group{margin-bottom:14px}
+.form-label{display:block;font-size:12.5px;font-weight:500;color:var(--text);margin-bottom:5px}
+.form-label .req{color:var(--red)}
+.form-input,.form-select,.form-textarea{width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:var(--r-sm);font-size:13px;font-family:inherit;color:var(--text);background:#fff;outline:none;transition:border-color .15s}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(124,92,191,.1)}
+.form-textarea{resize:vertical;min-height:70px;line-height:1.6}
+.form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px)}
+.modal{background:#fff;border-radius:var(--r-lg);width:100%;max-width:560px;max-height:88vh;overflow-y:auto;box-shadow:var(--shadow-lg)}
+.modal-lg{max-width:720px}
+.modal-head{padding:22px 22px 0;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:1;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.modal-title{font-size:17px;font-weight:700}
+.modal-close{width:30px;height:30px;border-radius:7px;border:none;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--text-mid);cursor:pointer}
+.modal-close:hover{background:var(--border)}
+.modal-body{padding:18px 22px}
+.modal-footer{padding:0 22px 20px;display:flex;gap:8px;justify-content:flex-end;border-top:1px solid var(--border);padding-top:14px}
+
+/* PIPELINE */
+.pipeline-board{display:flex;gap:12px;overflow-x:auto;padding-bottom:16px;margin-top:4px}
+.pipeline-col{flex-shrink:0;width:210px;background:var(--bg);border-radius:var(--r);border:1.5px solid var(--border)}
+.pipeline-col-head{padding:10px 12px;border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.pipeline-col-title{font-size:12px;font-weight:600;color:var(--text)}
+.pipeline-col-count{background:#fff;border:1.5px solid var(--border);color:var(--text-mid);width:20px;height:20px;border-radius:50%;font-size:10.5px;font-weight:600;display:flex;align-items:center;justify-content:center}
+.pipeline-col-body{padding:8px;min-height:180px}
+.pipeline-col-body.drag-over{background:var(--purple-pale);border-radius:8px}
+.comm-card{background:#fff;border-radius:var(--r-sm);padding:10px;margin-bottom:6px;border:1.5px solid var(--border);cursor:pointer;transition:all .15s;user-select:none}
+.comm-card:hover{border-color:var(--purple-pale);box-shadow:var(--shadow);transform:translateY(-1px)}
+.comm-card.dragging{opacity:.45;transform:scale(.96)}
+.comm-card-name{font-size:12.5px;font-weight:600;margin-bottom:3px}
+.comm-card-leader{font-size:11px;color:var(--text-mid);margin-bottom:6px}
+.comm-card-meta{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+.comm-card-date{font-size:10.5px;color:var(--text-light)}
+.col-add-btn{width:100%;padding:7px;background:none;border:1.5px dashed var(--border);border-radius:var(--r-sm);color:var(--text-light);font-size:11.5px;cursor:pointer;font-family:inherit;transition:all .15s;margin-top:2px}
+.col-add-btn:hover{border-color:var(--purple);color:var(--purple)}
+
+/* COMMUNITY DETAIL */
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.detail-field label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--text-mid);display:block;margin-bottom:3px}
+.detail-field span{font-size:13px;color:var(--text)}
+.detail-notes{background:var(--bg);border-radius:var(--r-sm);padding:10px 12px;font-size:13px;color:var(--text);line-height:1.6;white-space:pre-wrap}
+.stage-selector{display:flex;flex-wrap:wrap;gap:6px}
+.stage-btn{padding:5px 10px;border-radius:20px;border:1.5px solid var(--border);font-size:11.5px;font-weight:500;cursor:pointer;background:#fff;color:var(--text-mid);font-family:inherit;transition:all .15s}
+.stage-btn:hover{border-color:var(--purple);color:var(--purple)}
+.stage-btn.active{background:var(--purple);border-color:var(--purple);color:#fff}
+
+/* OUTREACH */
+.outreach-layout{display:grid;grid-template-columns:380px 1fr;gap:20px;align-items:start}
+.tone-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.tone-opt{border:2px solid var(--border);border-radius:var(--r-sm);padding:9px 10px;cursor:pointer;transition:all .15s}
+.tone-opt:hover{border-color:var(--purple-pale)}
+.tone-opt.sel{border-color:var(--purple);background:var(--purple-faint)}
+.tone-opt-name{font-size:12px;font-weight:600;color:var(--text)}
+.tone-opt-desc{font-size:10.5px;color:var(--text-mid);margin-top:2px}
+.outreach-output{background:var(--bg);border:1.5px solid var(--border);border-radius:var(--r);padding:18px;font-size:13px;line-height:1.85;color:var(--text);white-space:pre-wrap;min-height:320px;position:relative;word-break:break-word}
+.outreach-placeholder{color:var(--text-light);font-style:italic;font-size:13px}
+.output-actions{display:flex;gap:8px;margin-top:12px}
+.copy-success{color:var(--green);font-size:12px;font-weight:500;display:none}
+
+/* VALUE PROPS */
+.vp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
+.vp-item{background:#fff;border:1.5px solid var(--border);border-radius:var(--r-sm);padding:11px}
+.vp-title{font-size:12px;font-weight:600;color:var(--text)}
+.vp-desc{font-size:11.5px;color:var(--text-mid);margin-top:3px;line-height:1.5}
+
+/* VISION BOARD */
+.vision-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px}
+.brand-card{background:#fff;border-radius:var(--r);padding:18px;border:1.5px solid var(--border);cursor:pointer;transition:all .15s;position:relative}
+.brand-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.brand-icon{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:21px;margin-bottom:10px}
+.brand-name{font-size:14px;font-weight:700}
+.brand-cat{font-size:11.5px;color:var(--text-mid);margin-top:2px}
+.brand-notes{font-size:11.5px;color:var(--text-mid);margin-top:8px;line-height:1.5}
+.brand-status-badge{position:absolute;top:12px;right:12px}
+.brand-add-card{background:transparent;border:2px dashed var(--border);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:150px;cursor:pointer;transition:all .15s;color:var(--text-light)}
+.brand-add-card:hover{border-color:var(--purple);color:var(--purple)}
+
+/* TODO */
+.todo-week-nav{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.todo-week-nav h3{flex:1;text-align:center;font-size:15px;font-weight:600}
+.week-nav-btn{width:32px;height:32px;border-radius:var(--r-sm);border:1.5px solid var(--border);background:#fff;cursor:pointer;font-size:15px;color:var(--text-mid);display:flex;align-items:center;justify-content:center;transition:all .15s}
+.week-nav-btn:hover{border-color:var(--purple);color:var(--purple)}
+.todo-week{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.todo-day{background:#fff;border-radius:var(--r);border:1.5px solid var(--border);overflow:hidden}
+.todo-day-head{padding:9px 10px;background:var(--bg);border-bottom:1.5px solid var(--border);text-align:center}
+.todo-day-head.today{background:var(--purple-pale);border-color:var(--purple-pale)}
+.todo-day-name{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-mid)}
+.todo-day-date{font-size:19px;font-weight:700;line-height:1.2;margin-top:1px}
+.todo-day-date.today-num{color:var(--purple)}
+.todo-day-body{padding:6px}
+.todo-item{display:flex;align-items:flex-start;gap:5px;padding:5px 6px;border-radius:5px;margin-bottom:3px;font-size:11.5px;background:var(--bg);border:1px solid var(--border);position:relative;group:hover}
+.todo-item.done{opacity:.45}
+.todo-item.done .todo-text{text-decoration:line-through}
+.todo-item input[type=checkbox]{flex-shrink:0;margin-top:2px;accent-color:var(--purple)}
+.todo-text{flex:1;line-height:1.4;word-break:break-word}
+.todo-del{opacity:0;background:none;border:none;color:var(--red);font-size:12px;cursor:pointer;padding:0;flex-shrink:0;line-height:1}
+.todo-item:hover .todo-del{opacity:1}
+.todo-item.hi{border-left:2.5px solid var(--red)}
+.todo-item.med{border-left:2.5px solid var(--orange)}
+.todo-item.lo{border-left:2.5px solid var(--green)}
+.todo-add-row{display:flex;margin-top:4px}
+.todo-quick-input{flex:1;padding:4px 6px;border:1.5px dashed var(--border);border-radius:5px;font-size:11.5px;font-family:inherit;outline:none;background:transparent;color:var(--text)}
+.todo-quick-input:focus{border-color:var(--purple);background:#fff}
+.todo-quick-input::placeholder{color:var(--text-light)}
+
+/* CALENDAR */
+.cal-nav{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.cal-nav h3{flex:1;text-align:center;font-size:17px;font-weight:700}
+.cal-nav-btn{width:34px;height:34px;border-radius:var(--r-sm);border:1.5px solid var(--border);background:#fff;cursor:pointer;font-size:16px;color:var(--text-mid);display:flex;align-items:center;justify-content:center;transition:all .15s}
+.cal-nav-btn:hover{border-color:var(--purple);color:var(--purple)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border-radius:var(--r);overflow:hidden;border:1.5px solid var(--border)}
+.cal-header{background:var(--bg);padding:9px;text-align:center;font-size:11px;font-weight:600;color:var(--text-mid);text-transform:uppercase;letter-spacing:.5px}
+.cal-day{background:#fff;padding:7px;min-height:88px;cursor:pointer;transition:background .1s;position:relative}
+.cal-day:hover{background:var(--purple-faint)}
+.cal-day.other{background:var(--bg)}.cal-day.other .day-num{color:var(--text-light)}
+.cal-day.today{background:var(--purple-faint)}
+.day-num{font-size:12.5px;font-weight:600;margin-bottom:3px}
+.cal-day.today .day-num{background:var(--purple);color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11.5px}
+.cal-evt{font-size:10.5px;padding:2px 5px;border-radius:3px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.cal-evt:hover{opacity:.85}
+.cal-evt.community{background:var(--purple-pale);color:var(--purple)}
+.cal-evt.meeting{background:var(--green-pale);color:#1f7a50}
+.cal-evt.follow-up{background:var(--orange-pale);color:#a06010}
+.cal-evt.deadline{background:var(--red-pale);color:var(--red)}
+.cal-legend{display:flex;gap:14px;margin-top:10px;flex-wrap:wrap}
+.cal-legend-item{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--text-mid)}
+.cal-legend-dot{width:10px;height:10px;border-radius:2px}
+
+/* RESEARCH */
+.research-bar{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.search-box{flex:1;padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--r-sm);font-size:13px;font-family:inherit;outline:none;transition:border-color .15s}
+.search-box:focus{border-color:var(--purple)}
+.research-table{width:100%;border-collapse:collapse}
+.research-table th{text-align:left;padding:9px 12px;font-size:11px;font-weight:600;color:var(--text-mid);text-transform:uppercase;letter-spacing:.4px;border-bottom:1.5px solid var(--border);background:var(--bg)}
+.research-table td{padding:11px 12px;font-size:12.5px;border-bottom:1px solid var(--border);vertical-align:top}
+.research-table tr:last-child td{border-bottom:none}
+.research-table tr:hover td{background:var(--purple-faint)}
+.research-table td .td-actions{display:none;gap:4px}
+.research-table tr:hover .td-actions{display:flex}
+
+/* DASHBOARD EXTRAS */
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.dash-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.section-title{font-size:14px;font-weight:700}
+.pipeline-mini{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.pipeline-mini-stage{background:var(--bg);border:1.5px solid var(--border);border-radius:var(--r-sm);padding:8px 6px;text-align:center;cursor:pointer;transition:all .15s}
+.pipeline-mini-stage:hover{border-color:var(--purple)}
+.pipeline-mini-n{font-size:20px;font-weight:700;color:var(--purple)}
+.pipeline-mini-l{font-size:9.5px;color:var(--text-mid);margin-top:1px;line-height:1.3}
+.event-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.event-item:last-child{border-bottom:none}
+.event-date-box{width:40px;height:40px;border-radius:8px;background:var(--purple-pale);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+.event-mo{font-size:8.5px;font-weight:700;text-transform:uppercase;color:var(--purple)}
+.event-day{font-size:17px;font-weight:800;color:var(--purple);line-height:1}
+.event-title{font-size:13px;font-weight:600}
+.event-meta{font-size:11.5px;color:var(--text-mid)}
+.qa-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.qa-card{background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:14px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:10px}
+.qa-card:hover{border-color:var(--purple);box-shadow:var(--shadow)}
+.qa-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.qa-text{font-size:12.5px;font-weight:600;color:var(--text)}
+.qa-sub{font-size:11px;color:var(--text-mid);margin-top:1px}
+.empty-state{text-align:center;padding:32px 16px;color:var(--text-light)}
+.empty-icon{font-size:32px;opacity:.5;margin-bottom:8px}
+.empty-text{font-size:13px}
+.tag-bar{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--text-light)}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside id="sidebar">
+  <div class="sb-logo">
+    <div class="sb-logo-mark"><span>✦</span> Clyx Hub</div>
+    <div class="sb-sub">Community Partnerships</div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-section">Workspace</div>
+    <div class="nav-item active" data-view="dashboard" onclick="navigate('dashboard')"><span class="ni">🏠</span> Dashboard</div>
+    <div class="nav-item" data-view="pipeline" onclick="navigate('pipeline')"><span class="ni">🗂</span> Pipeline</div>
+    <div class="nav-item" data-view="research" onclick="navigate('research')"><span class="ni">🔍</span> Research</div>
+    <div class="sb-section">Outreach</div>
+    <div class="nav-item" data-view="outreach" onclick="navigate('outreach')"><span class="ni">✍️</span> Generate Outreach</div>
+    <div class="nav-item" data-view="vision" onclick="navigate('vision')"><span class="ni">✨</span> Vision Board</div>
+    <div class="sb-section">Planning</div>
+    <div class="nav-item" data-view="todos" onclick="navigate('todos')"><span class="ni">✅</span> Weekly To-Do</div>
+    <div class="nav-item" data-view="calendar" onclick="navigate('calendar')"><span class="ni">📅</span> Calendar</div>
+  </nav>
+  <div class="sb-footer">
+    <div class="sb-user">
+      <div class="sb-avatar">R</div>
+      <div>
+        <div class="sb-name">Ruby Chauhan</div>
+        <div class="sb-role">Community Partnerships · Clyx</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main id="main">
+
+  <!-- DASHBOARD -->
+  <div id="view-dashboard" class="view active">
+    <div class="page-head">
+      <div class="page-head-text">
+        <h2 id="dash-greeting">Good morning, Ruby 👋</h2>
+        <p>Here's your community relationships overview.</p>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-outline btn-sm" onclick="navigate('research')">+ Research Lead</button>
+        <button class="btn btn-primary btn-sm" onclick="openAddCommunity()">+ Add Community</button>
+      </div>
+    </div>
+    <div class="page-body">
+      <div class="stats-grid" id="dash-stats"></div>
+      <div class="dash-grid">
+        <div class="card" style="padding:16px">
+          <div class="section-head">
+            <span class="section-title">Pipeline Overview</span>
+            <button class="btn btn-ghost btn-sm" onclick="navigate('pipeline')">View all →</button>
+          </div>
+          <div class="pipeline-mini" id="dash-pipeline-mini"></div>
+        </div>
+        <div class="card" style="padding:16px">
+          <div class="section-head">
+            <span class="section-title">Upcoming Events</span>
+            <button class="btn btn-ghost btn-sm" onclick="navigate('calendar')">Calendar →</button>
+          </div>
+          <div id="dash-events"></div>
+        </div>
+      </div>
+      <div class="dash-grid">
+        <div class="card" style="padding:16px">
+          <div class="section-head">
+            <span class="section-title">This Week's Tasks</span>
+            <button class="btn btn-ghost btn-sm" onclick="navigate('todos')">All tasks →</button>
+          </div>
+          <div id="dash-todos"></div>
+        </div>
+        <div class="card" style="padding:16px">
+          <div class="section-head"><span class="section-title">Quick Actions</span></div>
+          <div class="qa-grid">
+            <div class="qa-card" onclick="openAddCommunity()">
+              <div class="qa-icon" style="background:var(--purple-pale)">🌱</div>
+              <div><div class="qa-text">Add Community</div><div class="qa-sub">Pipeline or research</div></div>
+            </div>
+            <div class="qa-card" onclick="navigate('outreach')">
+              <div class="qa-icon" style="background:var(--pink-pale)">✍️</div>
+              <div><div class="qa-text">Write Outreach</div><div class="qa-sub">DM or email template</div></div>
+            </div>
+            <div class="qa-card" onclick="navigate('todos')">
+              <div class="qa-icon" style="background:var(--green-pale)">📋</div>
+              <div><div class="qa-text">Weekly Tasks</div><div class="qa-sub">Plan your week</div></div>
+            </div>
+          </div>
+          <div style="margin-top:14px">
+            <div class="section-head" style="margin-bottom:8px"><span class="section-title" style="font-size:12.5px">Clyx Value Props (quick ref)</span></div>
+            <div class="vp-grid">
+              <div class="vp-item"><div class="vp-title">🔍 Discovery</div><div class="vp-desc">Reach new audiences beyond existing followers</div></div>
+              <div class="vp-item"><div class="vp-title">🤝 Brand Partners</div><div class="vp-desc">Connect with aligned brands for activations</div></div>
+              <div class="vp-item"><div class="vp-title">💸 Free to List</div><div class="vp-desc">Cheaper than Eventbrite, free listing option</div></div>
+              <div class="vp-item"><div class="vp-title">👥 Friend Features</div><div class="vp-desc">See who else is going — real friendships form</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PIPELINE -->
+  <div id="view-pipeline" class="view">
+    <div class="page-head">
+      <div class="page-head-text">
+        <h2>Community Pipeline</h2>
+        <p>Track every community from first contact to active partner.</p>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="openAddCommunity()">+ Add Community</button>
+    </div>
+    <div class="page-body">
+      <div class="pipeline-board" id="pipeline-board"></div>
+    </div>
+  </div>
+
+  <!-- RESEARCH -->
+  <div id="view-research" class="view">
+    <div class="page-head">
+      <div class="page-head-text">
+        <h2>Community Research</h2>
+        <p>Track leads you're exploring before moving to pipeline.</p>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="openAddResearch()">+ Add Research Lead</button>
+    </div>
+    <div class="page-body">
+      <div class="research-bar">
+        <input class="search-box" id="research-search" placeholder="Search communities, leaders, notes…" oninput="renderResearch()">
+        <select class="form-select" id="research-filter" style="width:160px" onchange="renderResearch()">
+          <option value="">All types</option>
+          <option value="wellness">Wellness</option>
+          <option value="culture">Culture</option>
+          <option value="creative">Creative</option>
+          <option value="professional">Professional</option>
+          <option value="fitness">Fitness</option>
+          <option value="food">Food & Drink</option>
+          <option value="social">Social</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="card" style="overflow:hidden">
+        <table class="research-table" id="research-table"></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- OUTREACH GENERATOR -->
+  <div id="view-outreach" class="view">
+    <div class="page-head">
+      <div class="page-head-text">
+        <h2>Outreach Generator</h2>
+        <p>Generate personalised Instagram DMs and emails in your tone.</p>
+      </div>
+    </div>
+    <div class="page-body">
+      <div class="outreach-layout">
+        <div>
+          <div class="card" style="padding:18px">
+            <div style="margin-bottom:14px">
+              <div class="form-label" style="margin-bottom:8px">Template style</div>
+              <div class="tone-grid" id="tone-grid">
+                <div class="tone-opt sel" data-tone="instagram" onclick="selectTone('instagram')">
+                  <div class="tone-opt-name">📱 Instagram DM</div>
+                  <div class="tone-opt-desc">Casual, warm, short</div>
+                </div>
+                <div class="tone-opt" data-tone="email" onclick="selectTone('email')">
+                  <div class="tone-opt-name">📧 Email</div>
+                  <div class="tone-opt-desc">Warm, professional</div>
+                </div>
+                <div class="tone-opt" data-tone="launch" onclick="selectTone('launch')">
+                  <div class="tone-opt-name">🚀 Launch Partner</div>
+                  <div class="tone-opt-desc">New to London</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">Leader's first name <span class="req">*</span></label>
+                <input class="form-input" id="o-name" placeholder="e.g. Harry" oninput="liveGenerate()">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Community name <span class="req">*</span></label>
+                <input class="form-input" id="o-community" placeholder="e.g. Outdoor Socials" oninput="liveGenerate()">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Community type</label>
+              <select class="form-select" id="o-type" onchange="liveGenerate()">
+                <option value="wellness">Wellness</option>
+                <option value="culture">Culture</option>
+                <option value="creative">Creative</option>
+                <option value="professional">Professional / Networking</option>
+                <option value="fitness">Fitness / Outdoors</option>
+                <option value="food">Food & Drink</option>
+                <option value="social">Social</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">One thing you specifically love about them</label>
+              <textarea class="form-textarea" id="o-hook" placeholder="e.g. The way you get people outside and build real friendships through movement…" oninput="liveGenerate()" rows="3"></textarea>
+            </div>
+            <div class="form-group" id="o-goal-group" style="display:none">
+              <label class="form-label">Their goal / what they're doing <span style="font-weight:400;color:var(--text-mid)">(for Launch template)</span></label>
+              <input class="form-input" id="o-goal" placeholder="e.g. doubling their size in 3–6 months" oninput="liveGenerate()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Personal closing line <span style="font-weight:400;color:var(--text-mid)">(optional override)</span></label>
+              <input class="form-input" id="o-close" placeholder="Leave blank for auto-generated" oninput="liveGenerate()">
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="section-head" style="margin-bottom:10px">
+            <span class="section-title">Generated Message</span>
+            <span class="copy-success" id="copy-success">✓ Copied!</span>
+          </div>
+          <div class="outreach-output" id="outreach-output">
+            <span class="outreach-placeholder">Fill in the details on the left to generate your outreach message…</span>
+          </div>
+          <div class="output-actions">
+            <button class="btn btn-primary" onclick="copyOutreach()">Copy Message</button>
+            <button class="btn btn-outline" onclick="liveGenerate()">↺ Regenerate</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VISION BOARD -->
+  <div id="view-vision" class="view">
+    <div class="page-head">
+      <div class="page-head-text">
+        <h2>Vision Board</h2>
+        <p>Brand partners, sponsorships, and dream collabs for your communities.</p>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="openAddBrand()">+ Add Brand</button>
+    </div>
+    <div class="page-body">
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+        <button class="btn btn-outline btn-sm" id="vf-all" onclick="filterVision('')" style="border-color:var(--purple);color:var(--purple)">All</button>
+        <button class="btn btn-outline btn-sm" id="vf-potential" onclick="filterVision('potential')">Potential</button>
+        <button class="btn btn-outline btn-sm" id="vf-in-discussion" onclick="filterVision('in-discussion')">In Discussion</button>
+        <button class="btn btn-outline btn-sm" id="vf-active-brand" onclick="filterVision('active-brand')">Active</button>
+      </div>
+      <div class="vision-grid" id="vision-grid"></div>
+    </div>
+  </div>
+
+  <!-- TODO -->
+  <div id="view-todos" class="view">
+    <div class="page-head">
+      <div class="page-head-text">
+        <h2>Weekly To-Do</h2>
+        <p>Plan your week. Press Enter in any day box to add a task quickly.</p>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-outline btn-sm" onclick="suggestTasks()">✨ Suggest tasks</button>
+        <button class="btn btn-outline btn-sm" onclick="clearDone()">Clear done</button>
+      </div>
+    </div>
+    <div class="page-body">
+      <div class="todo-week-nav">
+        <button class="week-nav-btn" onclick="shiftWeek(-1)">‹</button>
+        <h3 id="week-label"></h3>
+        <button class="week-nav-btn" onclick="shiftWeek(1)">›</button>
+      </div>
+      <div class="todo-week" id="todo-week"></div>
+    </div>
+  </div>
+
+  <!-- CALENDAR -->
+  <div id="view-calendar" class="view">
+    <div class="page-head">
+      <div class="page-head-text">
+        <h2>Calendar</h2>
+        <p>Click any date to add an event or meeting.</p>
+      </div>
+    </div>
+    <div class="page-body">
+      <div class="cal-nav">
+        <button class="cal-nav-btn" onclick="shiftMonth(-1)">‹</button>
+        <h3 id="cal-month-label"></h3>
+        <button class="cal-nav-btn" onclick="shiftMonth(1)">›</button>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <div class="cal-legend" style="margin-top:12px">
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--purple-pale);border:1px solid var(--purple)"></div> Community Event</div>
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--green-pale);border:1px solid var(--green)"></div> Meeting</div>
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--orange-pale);border:1px solid var(--orange)"></div> Follow-up</div>
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--red-pale);border:1px solid var(--red)"></div> Deadline</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- MODAL -->
+<div id="modal-overlay" class="modal-overlay" style="display:none" onclick="modalOverlayClick(event)">
+  <div class="modal" id="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <div class="modal-title" id="modal-title">Title</div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer" id="modal-footer"></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// ═══════════════════════════════════════════════════════
+// CONSTANTS
+// ═══════════════════════════════════════════════════════
+const STAGES = [
+  {id:'identified',    label:'Identified'},
+  {id:'outreach-sent', label:'Outreach Sent'},
+  {id:'in-conversation',label:'In Convo'},
+  {id:'meeting',       label:'Meeting / Event'},
+  {id:'onboarding',    label:'Onboarding'},
+  {id:'active',        label:'Active Partner'},
+  {id:'nurturing',     label:'Nurturing'}
+];
+
+const TYPES = {
+  wellness:'wellness', culture:'culture', creative:'creative',
+  professional:'professional', fitness:'fitness', food:'food',
+  social:'social', other:'other'
+};
+
+const TYPE_LABELS = {
+  wellness:'Wellness', culture:'Culture', creative:'Creative',
+  professional:'Professional', fitness:'Fitness', food:'Food & Drink',
+  social:'Social', other:'Other'
+};
+
+const BRAND_EMOJIS = ['🌿','💜','🔥','⚡','🌸','🍵','💧','🧘','🎨','👟','🥗','🌱','💎','🏃','🎭'];
+
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+const DEFAULT_STATE = {
+  communities: [
+    {id:'c1',name:'Morning Walkers London',leader:'Priya',lastName:'Sharma',type:'wellness',platform:'instagram',stage:'in-conversation',size:'2.4K',instagram:'@morningwalkersldn',notes:'Sunrise walks every Saturday in Hyde Park. Very engaged community. Priya is warm and responsive — first DM got a reply within an hour.',dateAdded:'2026-04-18',lastContact:'2026-05-08',nextAction:'Send follow-up with Clyx listing walkthrough'},
+    {id:'c2',name:'The Creative Collective',leader:'James',lastName:'Okoye',type:'creative',platform:'instagram',stage:'outreach-sent',size:'5.1K',instagram:'@creativecollective.ldn',notes:'Monthly workshops in Shoreditch. Mix of freelancers and agency creatives. Emailed + DM\'d on May 10th.',dateAdded:'2026-05-01',lastContact:'2026-05-10',nextAction:'Follow up if no reply by May 15'},
+    {id:'c3',name:'Female Founders Network',leader:'Sophie',lastName:'Chen',type:'professional',platform:'linkedin',stage:'identified',size:'3.2K',notes:'Strong LinkedIn presence. Monthly dinners in Mayfair. Need to find Sophie\'s contact details.',dateAdded:'2026-05-05',lastContact:'',nextAction:'Find contact info and craft personalised outreach'},
+    {id:'c4',name:'Hackney Wellness Club',leader:'Marcus',lastName:'Bell',type:'wellness',platform:'email',stage:'onboarding',size:'800',notes:'Yoga, meditation, running groups. Marcus super aligned with Clyx values. First event listed on platform already.',dateAdded:'2026-03-10',lastContact:'2026-05-09',nextAction:'Check listing is live + send brand intro deck'},
+    {id:'c5',name:'SXSW London Social',leader:'Ama',lastName:'Mensah',type:'culture',platform:'instagram',stage:'active',size:'12K',instagram:'@sxswlondon',notes:'3 events already listed on Clyx, strong ticket sales. Looking to explore brand partnerships next.',dateAdded:'2026-02-14',lastContact:'2026-05-06',nextAction:'Introduce to drinks brand for event activation'},
+    {id:'c6',name:'Film & Frames',leader:'Tom',lastName:'Watts',type:'creative',platform:'instagram',stage:'meeting',size:'1.8K',instagram:'@filmandframes.co',notes:'Photography community. Monthly exhibition evenings. Tom suggested a coffee — meeting booked for May 20.',dateAdded:'2026-04-22',lastContact:'2026-05-07',nextAction:'Coffee meeting May 20 — bring partnership deck'}
+  ],
+  research: [
+    {id:'r1',name:'Outdoor Social Club',leader:'Unknown',type:'fitness',platform:'instagram',instagram:'@outdoorsocialclub',size:'8.1K',notes:'Adventure hikes and outdoor events. Very active posting schedule. Would be great Clyx fit.',dateAdded:'2026-05-10',tags:['outdoors','community','events']},
+    {id:'r2',name:'Book & Brunch',leader:'Unknown',type:'culture',platform:'instagram',instagram:'@bookandbrunch.ldn',size:'3.3K',notes:'Sunday brunch + book club concept. Aesthetic, lifestyle-heavy audience. Could connect with food/drink brands.',dateAdded:'2026-05-08',tags:['culture','lifestyle','books']},
+    {id:'r3',name:'Women in Tech London',leader:'Various',type:'professional',platform:'linkedin',size:'6K+',notes:'Multiple organisers, events at Google/Amazon offices. Worth reaching out via LinkedIn. Large audience.',dateAdded:'2026-05-04',tags:['tech','professional','women']},
+    {id:'r4',name:'Shoreditch Yoga Studio',leader:'Laila',lastName:'Kassem',type:'wellness',platform:'instagram',instagram:'@shoreditchyoga',size:'4.7K',notes:'Weekly classes + retreats. Laila is very community focused. Potential wellness brand tie-in.',dateAdded:'2026-05-11',tags:['yoga','wellness','east-london']}
+  ],
+  todos: [],
+  events: [
+    {id:'e1',title:'Morning Walkers — Hyde Park',date:'2026-05-18',type:'community',notes:'Hyde Park, 7am. Show up as Clyx rep.',communityId:'c1'},
+    {id:'e2',title:'Coffee w/ Tom (Film & Frames)',date:'2026-05-20',type:'meeting',notes:'Flat White, Shoreditch, 11am. Bring partnership deck.',communityId:'c6'},
+    {id:'e3',title:'Follow up: James Okoye',date:'2026-05-15',type:'follow-up',notes:'Chase Creative Collective DM/email if no reply yet.',communityId:'c2'},
+    {id:'e4',title:'SXSW London — Summer Social',date:'2026-05-28',type:'community',notes:'Ama\'s big summer event. Clyx already ticketing.',communityId:'c5'},
+    {id:'e5',title:'Onboarding call: Marcus Bell',date:'2026-05-14',type:'meeting',notes:'Hackney Wellness Club — walk through Clyx platform.',communityId:'c4'}
+  ],
+  brands: [
+    {id:'b1',name:'NEOM Organics',category:'wellness',status:'potential',notes:'Premium home fragrance & wellbeing. Perfect for wellness event gifting or goodie bags.',website:'neomorganics.com',contact:'',emoji:'🌿',color:'#E8F7F1'},
+    {id:'b2',name:'Pukka Herbs',category:'wellness',status:'potential',notes:'Organic herbal teas. Strong wellness community appeal. Would love to activate at yoga/walking events.',website:'pukkaherbs.com',contact:'',emoji:'🍵',color:'#E8F7F1'},
+    {id:'b3',name:'Lululemon',category:'fitness',status:'in-discussion',notes:'Already in early conversation via James. Could be a bigger partnership across fitness communities.',website:'lululemon.com',contact:'partnerships@lululemon.com',emoji:'👟',color:'#E8F4FD'},
+    {id:'b4',name:'Mindful Chef',category:'food',status:'potential',notes:'Healthy recipe boxes. Great brand fit for wellness and fitness communities. Goodie bag inserts ideal.',website:'mindfulchef.com',contact:'',emoji:'🥗',color:'#FEF3E8'},
+    {id:'b5',name:'Bloom & Wild',category:'lifestyle',status:'potential',notes:'Beautiful gifting brand. Aesthetic matches creative and culture communities perfectly.',website:'bloomandwild.com',contact:'',emoji:'🌸',color:'#FDEDF5'},
+    {id:'b6',name:'Oatly',category:'food',status:'potential',notes:'Cult following, great for wellness + fitness event activations. Easy sampling/activation concept.',website:'oatly.com',contact:'',emoji:'🌱',color:'#E8F7F1'},
+    {id:'b7',name:'Gymshark',category:'fitness',status:'potential',notes:'Major fitness brand, community-first ethos. Big potential for fitness community partnerships.',website:'gymshark.com',contact:'',emoji:'🏃',color:'#E8F4FD'},
+    {id:'b8',name:'Drunk Elephant',category:'beauty',status:'potential',notes:'Premium skincare, wellness-adjacent audience. Would elevate goodie bags for wellness events.',website:'drunkelephant.com',contact:'',emoji:'💜',color:'#F3E8FF'}
+  ],
+  calendarOffset: 0,
+  weekOffset: 0
+};
+
+let state;
+try { state = JSON.parse(localStorage.getItem('clyxHub2') || 'null') || JSON.parse(JSON.stringify(DEFAULT_STATE)); }
+catch(e) { state = JSON.parse(JSON.stringify(DEFAULT_STATE)); }
+// Always ensure offsets exist
+if(state.calendarOffset === undefined) state.calendarOffset = 0;
+if(state.weekOffset === undefined) state.weekOffset = 0;
+
+function saveState() {
+  try { localStorage.setItem('clyxHub2', JSON.stringify(state)); } catch(e){}
+}
+
+// ═══════════════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════════════
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+
+function fmtDate(d) {
+  if(!d) return '—';
+  const [y,m,day] = d.split('-');
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${parseInt(day)} ${months[parseInt(m)-1]}`;
+}
+
+function todayStr() {
+  const d = new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+
+function getWeekDates(offset) {
+  const today = new Date();
+  const dow = today.getDay();
+  const monday = new Date(today);
+  monday.setDate(today.getDate() - (dow === 0 ? 6 : dow - 1) + offset * 7);
+  const days = [];
+  for(let i = 0; i < 7; i++) {
+    const d = new Date(monday); d.setDate(monday.getDate() + i);
+    days.push(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'));
+  }
+  return days;
+}
+
+function getDayLabel(dateStr) {
+  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const d = new Date(dateStr + 'T00:00:00');
+  return days[d.getDay()];
+}
+
+function typeBadge(type) {
+  return `<span class="badge badge-${type||'other'}">${TYPE_LABELS[type]||'Other'}</span>`;
+}
+
+function stageBadge(stage) {
+  const s = STAGES.find(x=>x.id===stage);
+  return `<span class="badge stage-${stage||'identified'}">${s?s.label:'Identified'}</span>`;
+}
+
+function escHtml(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ═══════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════
+function navigate(view) {
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const el = document.getElementById('view-'+view);
+  if(el) el.classList.add('active');
+  const nav = document.querySelector(`[data-view="${view}"]`);
+  if(nav) nav.classList.add('active');
+  renderView(view);
+}
+
+function renderView(view) {
+  switch(view) {
+    case 'dashboard': renderDashboard(); break;
+    case 'pipeline': renderPipeline(); break;
+    case 'research': renderResearch(); break;
+    case 'outreach': break;
+    case 'vision': renderVision(); break;
+    case 'todos': renderTodos(); break;
+    case 'calendar': renderCalendar(); break;
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// MODAL
+// ═══════════════════════════════════════════════════════
+function openModal(title, bodyHtml, footerHtml, large) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').innerHTML = bodyHtml;
+  document.getElementById('modal-footer').innerHTML = footerHtml||'';
+  const box = document.getElementById('modal-box');
+  if(large) box.classList.add('modal-lg'); else box.classList.remove('modal-lg');
+  document.getElementById('modal-overlay').style.display = 'flex';
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').style.display = 'none';
+}
+
+function modalOverlayClick(e) {
+  if(e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+// ═══════════════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════════════
+function renderDashboard() {
+  const h = new Date().getHours();
+  const greet = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+  document.getElementById('dash-greeting').textContent = `${greet}, Ruby 👋`;
+
+  const total = state.communities.length;
+  const active = state.communities.filter(c=>c.stage==='active').length;
+  const outreachSent = state.communities.filter(c=>c.stage==='outreach-sent'||c.stage==='in-conversation').length;
+  const today = todayStr();
+  const upcoming = state.events.filter(e=>e.date>=today).length;
+
+  document.getElementById('dash-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-icon" style="background:var(--purple-pale)">🌐</div><div class="stat-label">Total in Pipeline</div><div class="stat-value">${total}</div><div class="stat-sub">communities tracked</div></div>
+    <div class="stat-card"><div class="stat-icon" style="background:var(--pink-pale)">📨</div><div class="stat-label">Active Outreach</div><div class="stat-value">${outreachSent}</div><div class="stat-sub">in convo or sent</div></div>
+    <div class="stat-card"><div class="stat-icon" style="background:var(--green-pale)">✅</div><div class="stat-label">Active Partners</div><div class="stat-value">${active}</div><div class="stat-sub">live on Clyx</div></div>
+    <div class="stat-card"><div class="stat-icon" style="background:var(--orange-pale)">📅</div><div class="stat-label">Upcoming Events</div><div class="stat-value">${upcoming}</div><div class="stat-sub">in your calendar</div></div>
+  `;
+
+  // pipeline mini
+  document.getElementById('dash-pipeline-mini').innerHTML = STAGES.map(s=>{
+    const n = state.communities.filter(c=>c.stage===s.id).length;
+    return `<div class="pipeline-mini-stage" onclick="navigate('pipeline')" title="View ${s.label}">
+      <div class="pipeline-mini-n">${n}</div>
+      <div class="pipeline-mini-l">${s.label}</div>
+    </div>`;
+  }).join('');
+
+  // upcoming events
+  const upcomingEvts = state.events.filter(e=>e.date>=today).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,4);
+  if(upcomingEvts.length) {
+    document.getElementById('dash-events').innerHTML = upcomingEvts.map(e=>{
+      const [,m,d] = e.date.split('-');
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      return `<div class="event-item">
+        <div class="event-date-box"><div class="event-mo">${months[parseInt(m)-1]}</div><div class="event-day">${parseInt(d)}</div></div>
+        <div><div class="event-title">${escHtml(e.title)}</div><div class="event-meta">${escHtml(e.notes||'')}</div></div>
+      </div>`;
+    }).join('');
+  } else {
+    document.getElementById('dash-events').innerHTML = '<div class="empty-state"><div class="empty-icon">📅</div><div class="empty-text">No upcoming events</div></div>';
+  }
+
+  // this week todos
+  const weekDates = getWeekDates(state.weekOffset);
+  const weekTodos = state.todos.filter(t=>weekDates.includes(t.date));
+  const pending = weekTodos.filter(t=>!t.done);
+  if(pending.length) {
+    document.getElementById('dash-todos').innerHTML = pending.slice(0,6).map(t=>`
+      <div class="todo-item ${t.priority==='high'?'hi':t.priority==='medium'?'med':'lo'}" style="margin-bottom:5px;cursor:default">
+        <input type="checkbox" onchange="toggleTodo('${t.id}');renderDashboard()" ${t.done?'checked':''}>
+        <span class="todo-text">${escHtml(t.text)}</span>
+        <span style="font-size:10px;color:var(--text-light);flex-shrink:0">${getDayLabel(t.date)}</span>
+      </div>`).join('');
+  } else {
+    document.getElementById('dash-todos').innerHTML = '<div class="empty-state" style="padding:20px"><div class="empty-icon">✅</div><div class="empty-text">All clear this week!</div></div>';
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// PIPELINE
+// ═══════════════════════════════════════════════════════
+function renderPipeline() {
+  const board = document.getElementById('pipeline-board');
+  board.innerHTML = STAGES.map(s => {
+    const cards = state.communities.filter(c=>c.stage===s.id);
+    const cardsHtml = cards.map(c=>`
+      <div class="comm-card" draggable="true" data-id="${c.id}"
+        ondragstart="dragStart(event,'${c.id}')"
+        onclick="openCommunityDetail('${c.id}')">
+        <div class="comm-card-name">${escHtml(c.name)}</div>
+        <div class="comm-card-leader">${escHtml(c.leader)} ${escHtml(c.lastName||'')}</div>
+        ${typeBadge(c.type)}
+        <div class="comm-card-meta">
+          <span class="comm-card-date">${c.lastContact?'Last: '+fmtDate(c.lastContact):'Added: '+fmtDate(c.dateAdded)}</span>
+          ${c.platform==='instagram'?'<span title="Instagram" style="font-size:13px">📱</span>':c.platform==='linkedin'?'<span style="font-size:13px">💼</span>':'<span style="font-size:13px">📧</span>'}
+        </div>
+      </div>`).join('');
+    return `
+      <div class="pipeline-col">
+        <div class="pipeline-col-head">
+          <span class="pipeline-col-title">${s.label}</span>
+          <span class="pipeline-col-count">${cards.length}</span>
+        </div>
+        <div class="pipeline-col-body" data-stage="${s.id}"
+          ondragover="dragOver(event)" ondrop="drop(event,'${s.id}')" ondragleave="dragLeave(event)">
+          ${cardsHtml}
+          <button class="col-add-btn" onclick="openAddCommunity('${s.id}')">+ Add</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+let dragId = null;
+function dragStart(e, id) {
+  dragId = id;
+  e.dataTransfer.effectAllowed = 'move';
+  setTimeout(()=>{ const el=document.querySelector(`[data-id="${id}"]`); if(el) el.classList.add('dragging'); },0);
+}
+function dragOver(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+function dragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
+function drop(e, stage) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  if(dragId) {
+    const c = state.communities.find(x=>x.id===dragId);
+    if(c) { c.stage = stage; saveState(); renderPipeline(); if(document.querySelector('#view-dashboard.active')) renderDashboard(); }
+  }
+  dragId = null;
+}
+
+function openAddCommunity(stage) {
+  const stageOpts = STAGES.map(s=>`<option value="${s.id}"${s.id===(stage||'identified')?' selected':''}>${s.label}</option>`).join('');
+  const typeOpts = Object.entries(TYPE_LABELS).map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
+  const platformOpts = ['instagram','linkedin','email','in-person'].map(p=>`<option value="${p}">${p.charAt(0).toUpperCase()+p.slice(1)}</option>`).join('');
+  openModal('Add Community', `
+    <div class="form-grid-2">
+      <div class="form-group"><label class="form-label">Community name <span class="req">*</span></label><input class="form-input" id="m-name" placeholder="e.g. Run Club London"></div>
+      <div class="form-group"><label class="form-label">Leader first name</label><input class="form-input" id="m-leader" placeholder="e.g. Sarah"></div>
+    </div>
+    <div class="form-grid-2">
+      <div class="form-group"><label class="form-label">Last name</label><input class="form-input" id="m-lname" placeholder="e.g. Johnson"></div>
+      <div class="form-group"><label class="form-label">Community size</label><input class="form-input" id="m-size" placeholder="e.g. 2.4K followers"></div>
+    </div>
+    <div class="form-grid-3">
+      <div class="form-group"><label class="form-label">Type</label><select class="form-select" id="m-type">${typeOpts}</select></div>
+      <div class="form-group"><label class="form-label">Platform</label><select class="form-select" id="m-platform">${platformOpts}</select></div>
+      <div class="form-group"><label class="form-label">Stage</label><select class="form-select" id="m-stage">${stageOpts}</select></div>
+    </div>
+    <div class="form-grid-2">
+      <div class="form-group"><label class="form-label">Instagram handle</label><input class="form-input" id="m-ig" placeholder="@handle"></div>
+      <div class="form-group"><label class="form-label">Website / LinkedIn</label><input class="form-input" id="m-web" placeholder="url"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" id="m-notes" placeholder="What do they do? Why are they a good fit? What's the next step?" rows="4"></textarea></div>
+    <div class="form-grid-2">
+      <div class="form-group"><label class="form-label">Last contact date</label><input class="form-input" id="m-lastc" type="date"></div>
+      <div class="form-group"><label class="form-label">Next action</label><input class="form-input" id="m-next" placeholder="e.g. Follow up Friday"></div>
+    </div>
+  `, `<button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveCommunity()">Save Community</button>`);
+}
+
+function saveCommunity(id) {
+  const name = document.getElementById('m-name').value.trim();
+  if(!name) { alert('Community name is required.'); return; }
+  if(id) {
+    const c = state.communities.find(x=>x.id===id);
+    Object.assign(c, getCommFormData());
+  } else {
+    state.communities.push({id:uid(), dateAdded:todayStr(), ...getCommFormData()});
+  }
+  saveState(); closeModal(); renderPipeline();
+  if(document.querySelector('#view-dashboard.active')) renderDashboard();
+}
+
+function getCommFormData() {
+  return {
+    name: (document.getElementById('m-name')||{}).value?.trim()||'',
+    leader: (document.getElementById('m-leader')||{}).value?.trim()||'',
+    lastName: (document.getElementById('m-lname')||{}).value?.trim()||'',
+    size: (document.getElementById('m-size')||{}).value?.trim()||'',
+    type: (document.getElementById('m-type')||{}).value||'other',
+    platform: (document.getElementById('m-platform')||{}).value||'instagram',
+    stage: (document.getElementById('m-stage')||{}).value||'identified',
+    instagram: (document.getElementById('m-ig')||{}).value?.trim()||'',
+    website: (document.getElementById('m-web')||{}).value?.trim()||'',
+    notes: (document.getElementById('m-notes')||{}).value?.trim()||'',
+    lastContact: (document.getElementById('m-lastc')||{}).value||'',
+    nextAction: (document.getElementById('m-next')||{}).value?.trim()||''
+  };
+}
+
+function openCommunityDetail(id) {
+  const c = state.communities.find(x=>x.id===id);
+  if(!c) return;
+  const stageBtns = STAGES.map(s=>`<button class="stage-btn${c.stage===s.id?' active':''}" onclick="quickMoveStage('${id}','${s.id}')">${s.label}</button>`).join('');
+  openModal(`${c.name}`, `
+    <div style="margin-bottom:14px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">${typeBadge(c.type)}${c.platform?`<span style="font-size:12px;color:var(--text-mid)">${c.platform}</span>`:''} ${c.size?`<span style="font-size:12px;color:var(--text-mid)">· ${c.size}</span>`:''}</div>
+      <div class="detail-grid">
+        <div class="detail-field"><label>Leader</label><span>${escHtml(c.leader+' '+(c.lastName||''))}</span></div>
+        <div class="detail-field"><label>Stage</label><span>${stageBadge(c.stage)}</span></div>
+        <div class="detail-field"><label>Date Added</label><span>${fmtDate(c.dateAdded)}</span></div>
+        <div class="detail-field"><label>Last Contact</label><span>${c.lastContact?fmtDate(c.lastContact):'—'}</span></div>
+        ${c.instagram?`<div class="detail-field"><label>Instagram</label><span>${escHtml(c.instagram)}</span></div>`:''}
+        ${c.website?`<div class="detail-field"><label>Website</label><span>${escHtml(c.website)}</span></div>`:''}
+      </div>
+      ${c.nextAction?`<div style="margin-bottom:10px"><div class="form-label" style="margin-bottom:4px">Next Action</div><div class="detail-notes" style="background:var(--orange-pale);border-color:var(--orange-pale)">${escHtml(c.nextAction)}</div></div>`:''}
+      ${c.notes?`<div><div class="form-label" style="margin-bottom:4px">Notes</div><div class="detail-notes">${escHtml(c.notes)}</div></div>`:''}
+    </div>
+    <div><div class="form-label" style="margin-bottom:6px">Move to stage</div><div class="stage-selector">${stageBtns}</div></div>
+  `, `
+    <button class="btn btn-outline btn-sm" onclick="deleteCommunity('${id}')">Delete</button>
+    <button class="btn btn-outline" onclick="editCommunity('${id}')">Edit</button>
+    <button class="btn btn-primary" onclick="openOutreachFor('${id}')">✍️ Write Outreach</button>
+  `);
+}
+
+function quickMoveStage(id, stage) {
+  const c = state.communities.find(x=>x.id===id);
+  if(c) { c.stage = stage; saveState(); openCommunityDetail(id); renderPipeline(); }
+}
+
+function editCommunity(id) {
+  const c = state.communities.find(x=>x.id===id);
+  if(!c) return;
+  closeModal();
+  setTimeout(()=>{
+    const stageOpts = STAGES.map(s=>`<option value="${s.id}"${s.id===c.stage?' selected':''}>${s.label}</option>`).join('');
+    const typeOpts = Object.entries(TYPE_LABELS).map(([v,l])=>`<option value="${v}"${v===c.type?' selected':''}>${l}</option>`).join('');
+    const platformOpts = ['instagram','linkedin','email','in-person'].map(p=>`<option value="${p}"${p===c.platform?' selected':''}>${p.charAt(0).toUpperCase()+p.slice(1)}</option>`).join('');
+    openModal('Edit Community', `
+      <div class="form-grid-2">
+        <div class="form-group"><label class="form-label">Community name <span class="req">*</span></label><input class="form-input" id="m-name" value="${escHtml(c.name)}"></div>
+        <div class="form-group"><label class="form-label">Leader first name</label><input class="form-input" id="m-leader" value="${escHtml(c.leader||'')}"></div>
+      </div>
+      <div class="form-grid-2">
+        <div class="form-group"><label class="form-label">Last name</label><input class="form-input" id="m-lname" value="${escHtml(c.lastName||'')}"></div>
+        <div class="form-group"><label class="form-label">Community size</label><input class="form-input" id="m-size" value="${escHtml(c.size||'')}"></div>
+      </div>
+      <div class="form-grid-3">
+        <div class="form-group"><label class="form-label">Type</label><select class="form-select" id="m-type">${typeOpts}</select></div>
+        <div class="form-group"><label class="form-label">Platform</label><select class="form-select" id="m-platform">${platformOpts}</select></div>
+        <div class="form-group"><label class="form-label">Stage</label><select class="form-select" id="m-stage">${stageOpts}</select></div>
+      </div>
+      <div class="form-grid-2">
+        <div class="form-group"><label class="form-label">Instagram handle</label><input class="form-input" id="m-ig" value="${escHtml(c.instagram||'')}"></div>
+        <div class="form-group"><label class="form-label">Website / LinkedIn</label><input class="form-input" id="m-web" value="${escHtml(c.website||'')}"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" id="m-notes" rows="4">${escHtml(c.notes||'')}</textarea></div>
+      <div class="form-grid-2">
+        <div class="form-group"><label class="form-label">Last contact date</label><input class="form-input" id="m-lastc" type="date" value="${c.lastContact||''}"></div>
+        <div class="form-group"><label class="form-label">Next action</label><input class="form-input" id="m-next" value="${escHtml(c.nextAction||'')}"></div>
+      </div>
+    `, `<button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveCommunity('${id}')">Save Changes</button>`);
+  }, 100);
+}
+
+function deleteCommunity(id) {
+  if(!confirm('Delete this community from the pipeline?')) return;
+  state.communities = state.communities.filter(x=>x.id!==id);
+  saveState(); closeModal(); renderPipeline();
+}
+
+function openOutreachFor(id) {
+  const c = state.communities.find(x=>x.id===id);
+  if(!c) return;
+  closeModal();
+  navigate('outreach');
+  setTimeout(()=>{
+    const nameEl = document.getElementById('o-name');
+    const commEl = document.getElementById('o-community');
+    const typeEl = document.getElementById('o-type');
+    if(nameEl) nameEl.value = c.leader||'';
+    if(commEl) commEl.value = c.name||'';
+    if(typeEl) typeEl.value = c.type||'wellness';
+    liveGenerate();
+  }, 100);
+}
+
+// ═══════════════════════════════════════════════════════
+// RESEARCH
+// ═══════════════════════════════════════════════════════
+function renderResearch() {
+  const q = (document.getElementById('research-search')||{}).value?.toLowerCase()||'';
+  const f = (document.getElementById('research-filter')||{}).value||'';
+  let items = state.research;
+  if(q) items = items.filter(r=>r.name.toLowerCase().includes(q)||r.notes?.toLowerCase().includes(q)||(r.leader&&r.leader.toLowerCase().includes(q)));
+  if(f) items = items.filter(r=>r.type===f);
+  const table = document.getElementById('research-table');
+  if(!table) return;
+  if(!items.length) {
+    table.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-light)">No research leads yet. Add one to get started.</td></tr>`;
+    return;
+  }
+  table.innerHTML = `<thead><tr>
+    <th>Community</th><th>Leader</th><th>Type</th><th>Platform</th><th>Size</th><th>Actions</th>
+  </tr></thead><tbody>${items.map(r=>`
+    <tr>
+      <td><div style="font-weight:600">${escHtml(r.name)}</div>${r.notes?`<div style="font-size:11px;color:var(--text-mid);margin-top:2px">${escHtml(r.notes.slice(0,80))}${r.notes.length>80?'…':''}</div>`:''}</td>
+      <td>${escHtml(r.leader||'—')}</td>
+      <td>${typeBadge(r.type)}</td>
+      <td>${r.instagram?`<span style="font-size:12px">📱 ${escHtml(r.instagram)}</span>`:escHtml(r.platform||'—')}</td>
+      <td>${escHtml(r.size||'—')}</td>
+      <td><div class="td-actions">
+        <button class="btn btn-outline btn-sm" onclick="moveToPipeline('${r.id}')">→ Pipeline</button>
+        <button class="btn btn-outline btn-sm" onclick="openOutreachFromResearch('${r.id}')">✍️</button>
+        <button class="btn btn-ghost btn-sm" onclick="editResearch('${r.id}')">Edit</button>
+        <button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="deleteResearch('${r.id}')">×</button>
+      </div></td>
+    </tr>`).join('')}</tbody>`;
+}
+
+function openAddResearch() {
+  const typeOpts = Object.entries(TYPE_LABELS).map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
+  openModal('Add Research Lead', `
+    <div class="form-grid-2">
+      <div class="form-group"><label class="form-label">Community name <span class="req">*</span></label><input class="form-input" id="r-name" placeholder="e.g. Run London"></div>
+      <div class="form-group"><label class="form-label">Leader name</label><input class="form-input" id="r-leader" placeholder="e.g. Sam"></div>
+    </div>
+    <div class="form-grid-3">
+      <div class="form-group"><label class="form-label">Type</label><select class="form-select" id="r-type">${typeOpts}</select></div>
+      <div class="form-group"><label class="form-label">Instagram</label><input class="form-input" id="r-ig" placeholder="@handle"></div>
+      <div class="form-group"><label class="form-label">Estimated size</label><input class="form-input" id="r-size" placeholder="e.g. 4.2K"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Notes / why they're interesting</label><textarea class="form-textarea" id="r-notes" placeholder="What do they do? What caught your eye? Any connection?" rows="3"></textarea></div>
+  `, `<button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveResearch()">Add Lead</button>`);
+}
+
+function saveResearch(id) {
+  const name = document.getElementById('r-name').value.trim();
+  if(!name) { alert('Name required'); return; }
+  const data = {
+    name, leader: document.getElementById('r-leader').value.trim(),
+    type: document.getElementById('r-type').value,
+    instagram: document.getElementById('r-ig').value.trim(),
+    size: document.getElementById('r-size').value.trim(),
+    notes: document.getElementById('r-notes').value.trim(),
+    platform: 'instagram', tags: []
+  };
+  if(id) { Object.assign(state.research.find(x=>x.id===id), data); }
+  else { state.research.push({id:uid(), dateAdded:todayStr(), ...data}); }
+  saveState(); closeModal(); renderResearch();
+}
+
+function editResearch(id) {
+  const r = state.research.find(x=>x.id===id);
+  if(!r) return;
+  const typeOpts = Object.entries(TYPE_LABELS).map(([v,l])=>`<option value="${v}"${v===r.type?' selected':''}>${l}</option>`).join('');
+  openModal('Edit Research Lead', `
+    <div class="form-grid-2">
+      <div class="form-group"><label class="form-label">Community name <span class="req">*</span></label><input class="form-input" id="r-name" value="${escHtml(r.name)}"></div>
+      <div class="form-group"><label class="form-label">Leader name</label><input class="form-input" id="r-leader" value="${escHtml(r.leader||'')}"></div>
+    </div>
+    <div class="form-grid-3">
+      <div class="form-group"><label class="form-label">Type</label><select class="form-select" id="r-type">${typeOpts}</select></div>
+      <div class="form-group"><label class="form-label">Instagram</label><input class="form-input" id="r-ig" value="${escHtml(r.instagram||'')}"></div>
+      <div class="form-group"><label class="form-label">Size</label><input class="form-input" id="r-size" value="${escHtml(r.size||'')}"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" id="r-notes" rows="3">${escHtml(r.notes||'')}</textarea></div>
+  `, `<button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveResearch('${id}')">Save</button>`);
+}
+
+function deleteResearch(id) {
+  if(!confirm('Remove this research lead?')) return;
+  state.research = state.research.filter(x=>x.id!==id);
+  saveState(); renderResearch();
+}
+
+function moveToPipeline(id) {
+  const r = state.research.find(x=>x.id===id);
+  if(!r) return;
+  const newComm = {id:uid(), name:r.name, leader:r.leader||'', lastName:'', type:r.type, platform:r.platform||'instagram', stage:'identified', size:r.size||'', instagram:r.instagram||'', notes:r.notes||'', dateAdded:todayStr(), lastContact:'', nextAction:''};
+  state.communities.push(newComm);
+  state.research = state.research.filter(x=>x.id!==id);
+  saveState(); renderResearch();
+  alert(`${r.name} moved to Pipeline → Identified`);
+}
+
+function openOutreachFromResearch(id) {
+  const r = state.research.find(x=>x.id===id);
+  if(!r) return;
+  navigate('outreach');
+  setTimeout(()=>{
+    const nameEl = document.getElementById('o-name'); if(nameEl) nameEl.value = r.leader||'';
+    const commEl = document.getElementById('o-community'); if(commEl) commEl.value = r.name;
+    const typeEl = document.getElementById('o-type'); if(typeEl) typeEl.value = r.type||'wellness';
+    liveGenerate();
+  }, 100);
+}
+
+// ═══════════════════════════════════════════════════════
+// OUTREACH GENERATOR
+// ═══════════════════════════════════════════════════════
+let currentTone = 'instagram';
+
+function selectTone(tone) {
+  currentTone = tone;
+  document.querySelectorAll('.tone-opt').forEach(el=>el.classList.remove('sel'));
+  document.querySelector(`[data-tone="${tone}"]`)?.classList.add('sel');
+  const goalGroup = document.getElementById('o-goal-group');
+  if(goalGroup) goalGroup.style.display = tone==='launch' ? 'block' : 'none';
+  liveGenerate();
+}
+
+const TYPE_SPACE = {
+  wellness:'the wellness space', culture:'the cultural scene', creative:'the creative community',
+  professional:'the professional networking space', fitness:'the fitness and outdoors community',
+  food:'the food and lifestyle space', social:"London's social scene", other:'this space'
+};
+const TYPE_VALUES = {
+  wellness:'Getting outside and prioritising your wellbeing', culture:'Celebrating culture and building genuine connections',
+  creative:'Creativity and authentic self-expression', professional:'Professional growth and meaningful networking',
+  fitness:'Getting active and building community through movement', food:'Great food and bringing people together',
+  social:'Building real friendships in the city', other:'Community and connection'
+};
+const TYPE_CLOSER = {
+  wellness:"I can't wait to come to the next one",
+  culture:"I'm really excited about what you're building",
+  creative:"Your work is genuinely inspiring",
+  professional:"I'd love to support what you're building",
+  fitness:"I can't wait to come to the next event",
+  food:"I can't wait to try it",
+  social:"I'm really looking forward to meeting the community",
+  other:"I'm really excited about this"
+};
+const TYPE_BRAND = {
+  wellness:'wellness and lifestyle', culture:'culture and lifestyle', creative:'creative and lifestyle',
+  professional:'career development', fitness:'fitness and nutrition', food:'food and drink', social:'lifestyle', other:'lifestyle'
+};
+
+function liveGenerate() {
+  const name = (document.getElementById('o-name')||{}).value?.trim()||'[Name]';
+  const community = (document.getElementById('o-community')||{}).value?.trim()||'[Community Name]';
+  const type = (document.getElementById('o-type')||{}).value||'wellness';
+  const hook = (document.getElementById('o-hook')||{}).value?.trim()||'';
+  const goal = (document.getElementById('o-goal')||{}).value?.trim()||'growing your community';
+  const customClose = (document.getElementById('o-close')||{}).value?.trim()||'';
+  const space = TYPE_SPACE[type]||'this space';
+  const values = TYPE_VALUES[type]||'Connection and community';
+  const closer = customClose || TYPE_CLOSER[type];
+  const brandCat = TYPE_BRAND[type]||'lifestyle';
+  const hookSentence = hook ? `\n\n${hook}` : '';
+
+  let msg = '';
+
+  if(currentTone === 'instagram') {
+    msg = `Hey ${name}!\n\nI'm reaching out because I absolutely love what you're bringing to ${space} — ${community} is exactly the kind of community we need more of.${hookSentence}\n\nI work for a company called Clyx and wanted to reach out with a little proposition! We're a community discovery platform — a bit like Eventbrite but free to list on — and built specifically to help people connect rather than just attend. One of our features lets people see who else is going, which means familiar faces keep showing up, and that's how real friendships form.\n\nI can see you've already built something super special here, and the presence you have speaks for itself. But I'd love to explore whether Clyx could add anything — whether that's reaching new audiences, free ticketing, or connecting you with like-minded brands and sponsors to elevate your events.\n\nWould you be up for a quick call or a coffee? ${closer}!`;
+  } else if(currentTone === 'email') {
+    msg = `Hi ${name},\n\nI hope you're well!\n\nI'm reaching out because I absolutely love what you're building with ${community}. ${values} are two things I feel really strongly about, and the community you've created is exactly the sort of thing we need more of.${hookSentence}\n\nI can see you've already built something really special — with a genuine community feel — and your presence speaks for itself. So I'm not reaching out because I think anything is missing. I'm reaching out because I work for a company called Clyx, and I think we could add something meaningful to what you've already built.\n\nClyx is a community discovery platform — a bit like Eventbrite but free to list on — and built specifically to help people connect rather than just attend. One of our features lets people see who else is going to an event, which means familiar faces keep showing up, and that's how lasting friendships form. Beyond that, we can help you reach new audiences who haven't found you yet, and connect your community with like-minded ${brandCat} brands who share your values. This could lead to goodie bags, on-site activations, or longer-term partnerships that elevate your events.\n\nI'd love to tell you a bit more. Are you free for a quick call or a coffee this week?\n\n${closer}!\n\nWarm regards,\nRuby Chauhan\nCommunity Partnerships, Clyx`;
+  } else if(currentTone === 'launch') {
+    msg = `Hey!\n\nIt's so exciting to hear about ${community} — I really love what you're doing, and ${goal} is certainly an achievable goal.${hookSentence}\n\nLondon is a brilliant market for this. ${values} — and communities centred around that really thrive here. I feel sure yours will add so much value.\n\nWe can promote ${community} directly to our London audience to build buzz and connect you with our influencer network to get the right people talking early. We can also introduce you to some ${brandCat}-focused brands who could show up at your events through goodie bags or on-site activations — making the whole thing feel special without any extra cost to you.\n\nWe'd also be on hand to make sure everything runs smoothly, and we're here to help you organise, grow and scale. I genuinely think there are so many people in London who will value a community like this. Let me know if you have any questions.\n\n${closer}!`;
+  }
+
+  const out = document.getElementById('outreach-output');
+  if(out) { out.textContent = msg; }
+}
+
+function copyOutreach() {
+  const out = document.getElementById('outreach-output');
+  if(!out || !out.textContent.trim()) return;
+  navigator.clipboard.writeText(out.textContent).then(()=>{
+    const s = document.getElementById('copy-success');
+    if(s) { s.style.display='inline'; setTimeout(()=>{ s.style.display='none'; }, 2500); }
+  }).catch(()=>{
+    const range = document.createRange(); range.selectNode(out);
+    window.getSelection()?.removeAllRanges(); window.getSelection()?.addRange(range);
+    document.execCommand('copy');
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// VISION BOARD
+// ═══════════════════════════════════════════════════════
+let visionFilter = '';
+function filterVision(f) {
+  visionFilter = f;
+  document.querySelectorAll('[id^="vf-"]').forEach(b=>{ b.style.borderColor=''; b.style.color=''; });
+  const active = document.getElementById('vf-'+(f||'all'));
+  if(active) { active.style.borderColor='var(--purple)'; active.style.color='var(--purple)'; }
+  renderVision();
+}
+
+function renderVision() {
+  const items = visionFilter ? state.brands.filter(b=>b.status===visionFilter) : state.brands;
+  const grid = document.getElementById('vision-grid');
+  if(!grid) return;
+  grid.innerHTML = items.map(b=>{
+    const statusLabel = b.status==='in-discussion'?'In Discussion':b.status==='active-brand'?'Active':'Potential';
+    return `<div class="brand-card" onclick="editBrand('${b.id}')">
+      <div class="brand-status-badge"><span class="badge badge-${b.status||'potential'}">${statusLabel}</span></div>
+      <div class="brand-icon" style="background:${b.color||'#F5F3FF'}">${b.emoji||'✨'}</div>
+      <div class="brand-name">${escHtml(b.name)}</div>
+      <div class="brand-cat">${escHtml(b.category||'')}</div>
+      ${b.notes?`<div class="brand-notes">${escHtml(b.notes.slice(0,100))}${b.notes.length>100?'…':''}</div>`:''}
+    </div>`;
+  }).join('') + `<div class="brand-add-card" onclick="openAddBrand()">
+    <div style="font-size:28px;margin-bottom:6px">+</div>
+    <div style="font-size:12.5px;font-weight:600">Add Brand</div>
+  </div>`;
+}
+
+function openAddBrand() {
+  const catOpts = ['wellness','fitness','food','beauty','fashion','lifestyle','tech','drinks','other'].map(c=>`<option value="${c}">${c.charAt(0).toUpperCase()+c.slice(1)}</option>`).join('');
+  const statusOpts = [['potential','Potential'],['in-discussion','In Discussion'],['active-brand','Active']].map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
+  openModal('Add Brand to Vision Board', `
+    <div class="form-grid-2">
+      <div class="form-group"><label class="form-label">Brand name <span class="req">*</span></label><input class="form-input" id="b-name" placeholder="e.g. NEOM Organics"></div>
+      <div class="form-group"><label class="form-label">Emoji icon</label><input class="form-input" id="b-emoji" placeholder="e.g. 🌿" maxlength="4"></div>
+    </div>
+    <div class="form-grid-3">
+      <div class="form-group"><label class="form-label">Category</label><select class="form-select" id="b-cat">${catOpts}</select></div>
+      <div class="form-group"><label class="form-label">Status</label><select class="form-select" id="b-status">${statusOpts}</select></div>
+      <div class="form-group"><label class="form-label">Website</label><input class="form-input" id="b-web" placeholder="website.com"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Contact / notes about partnership potential</label><textarea class="form-textarea" id="b-notes" placeholder="Why are they a good fit? What type of activation? Any contacts?" rows="3"></textarea></div>
+    <div class="form-group"><label class="form-label">Contact email</label><input class="form-input" id="b-contact" placeholder="partnerships@brand.com"></div>
+  `, `<button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveBrand()">Add Brand</button>`);
+}
+
+function saveBrand(id) {
+  const name = document.getElementById('b-name').value.trim();
+  if(!name) { alert('Brand name required'); return; }
+  const colors = {wellness:'#E8F7F1',fitness:'#E8F4FD',food:'#FEF3E8',beauty:'#F3E8FF',fashion:'#FDEDF5',lifestyle:'#FFF9E8',tech:'#EDE9F8',drinks:'#E8F7F1',other:'#F0EFF8'};
+  const cat = document.getElementById('b-cat').value;
+  const data = {
+    name, emoji: document.getElementById('b-emoji').value.trim()||'✨',
+    category: cat, status: document.getElementById('b-status').value,
+    website: document.getElementById('b-web').value.trim(),
+    notes: document.getElementById('b-notes').value.trim(),
+    contact: document.getElementById('b-contact').value.trim(),
+    color: colors[cat]||'#F5F3FF'
+  };
+  if(id) { Object.assign(state.brands.find(x=>x.id===id), data); }
+  else { state.brands.push({id:uid(), ...data}); }
+  saveState(); closeModal(); renderVision();
+}
+
+function editBrand(id) {
+  const b = state.brands.find(x=>x.id===id);
+  if(!b) return;
+  const catOpts = ['wellness','fitness','food','beauty','fashion','lifestyle','tech','drinks','other'].map(c=>`<option value="${c}"${c===b.category?' selected':''}>${c.charAt(0).toUpperCase()+c.slice(1)}</option>`).join('');
+  const statusOpts = [['potential','Potential'],['in-discussion','In Discussion'],['active-brand','Active']].map(([v,l])=>`<option value="${v}"${v===b.status?' selected':''}>${l}</option>`).join('');
+  openModal('Edit Brand', `
+    <div class="form-grid-2">
+      <div class="form-group"><label class="form-label">Brand name <span class="req">*</span></label><input class="form-input" id="b-name" value="${escHtml(b.name)}"></div>
+      <div class="form-group"><label class="form-label">Emoji icon</label><input class="form-input" id="b-emoji" value="${escHtml(b.emoji||'')}" maxlength="4"></div>
+    </div>
+    <div class="form-grid-3">
+      <div class="form-group"><label class="form-label">Category</label><select class="form-select" id="b-cat">${catOpts}</select></div>
+      <div class="form-group"><label class="form-label">Status</label><select class="form-select" id="b-status">${statusOpts}</select></div>
+      <div class="form-group"><label class="form-label">Website</label><input class="form-input" id="b-web" value="${escHtml(b.website||'')}"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" id="b-notes" rows="3">${escHtml(b.notes||'')}</textarea></div>
+    <div class="form-group"><label class="form-label">Contact email</label><input class="form-input" id="b-contact" value="${escHtml(b.contact||'')}"></div>
+  `, `<button class="btn btn-danger btn-sm" onclick="deleteBrand('${id}')">Delete</button><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveBrand('${id}')">Save</button>`);
+}
+
+function deleteBrand(id) {
+  if(!confirm('Remove this brand?')) return;
+  state.brands = state.brands.filter(x=>x.id!==id);
+  saveState(); closeModal(); renderVision();
+}
+
+// ═══════════════════════════════════════════════════════
+// TODOS
+// ═══════════════════════════════════════════════════════
+const DAY_NAMES = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+function renderTodos() {
+  const dates = getWeekDates(state.weekOffset);
+  const today = todayStr();
+  const [start, end] = [dates[0], dates[6]];
+  document.getElementById('week-label').textContent = `${fmtDate(start)} – ${fmtDate(end)}`;
+
+  document.getElementById('todo-week').innerHTML = dates.map((date, i)=>{
+    const isToday = date === today;
+    const dayTodos = state.todos.filter(t=>t.date===date);
+    const items = dayTodos.map(t=>`
+      <div class="todo-item ${t.priority==='high'?'hi':t.priority==='medium'?'med':'lo'}${t.done?' done':''}">
+        <input type="checkbox" ${t.done?'checked':''} onchange="toggleTodo('${t.id}')">
+        <span class="todo-text">${escHtml(t.text)}</span>
+        <button class="todo-del" onclick="deleteTodo('${t.id}')">×</button>
+      </div>`).join('');
+    return `<div class="todo-day">
+      <div class="todo-day-head${isToday?' today':''}">
+        <div class="todo-day-name">${DAY_NAMES[i]}</div>
+        <div class="todo-day-date${isToday?' today-num':''}">${parseInt(date.split('-')[2])}</div>
+      </div>
+      <div class="todo-day-body">
+        ${items}
+        <div class="todo-add-row">
+          <input class="todo-quick-input" placeholder="+ add task" data-date="${date}" onkeydown="todoKeydown(event,'${date}')">
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function todoKeydown(e, date) {
+  if(e.key === 'Enter') {
+    const text = e.target.value.trim();
+    if(text) {
+      state.todos.push({id:uid(), text, date, done:false, priority:'medium'});
+      saveState(); renderTodos();
+    }
+  }
+}
+
+function toggleTodo(id) {
+  const t = state.todos.find(x=>x.id===id);
+  if(t) { t.done = !t.done; saveState(); renderTodos(); }
+}
+
+function deleteTodo(id) {
+  state.todos = state.todos.filter(x=>x.id!==id);
+  saveState(); renderTodos();
+}
+
+function clearDone() {
+  const dates = getWeekDates(state.weekOffset);
+  state.todos = state.todos.filter(t=>!dates.includes(t.date)||!t.done);
+  saveState(); renderTodos();
+}
+
+function shiftWeek(dir) {
+  state.weekOffset += dir;
+  saveState(); renderTodos();
+}
+
+function suggestTasks() {
+  const dates = getWeekDates(state.weekOffset);
+  const suggestions = [
+    {day:0, text:'Review pipeline & update contact dates', priority:'medium'},
+    {day:0, text:'Check Instagram DMs + reply to all', priority:'high'},
+    {day:0, text:'Research 3 new communities to reach out to', priority:'medium'},
+    {day:1, text:'Send follow-up messages to In Conversation leads', priority:'high'},
+    {day:1, text:'Write personalised outreach for 2 new communities', priority:'medium'},
+    {day:2, text:'Check email inbox + reply within 24h', priority:'high'},
+    {day:2, text:'Update notes on all pipeline communities', priority:'low'},
+    {day:3, text:'Prepare for any meetings or events this week', priority:'high'},
+    {day:3, text:'Chase any unanswered outreach (sent 3+ days ago)', priority:'medium'},
+    {day:4, text:'Weekly pipeline review — move stages where needed', priority:'medium'},
+    {day:4, text:'Log this week\'s insights + what worked', priority:'low'},
+    {day:4, text:'Plan next week\'s community targets', priority:'low'}
+  ];
+  let added = 0;
+  suggestions.forEach(s=>{
+    const date = dates[s.day];
+    const exists = state.todos.some(t=>t.date===date&&t.text===s.text);
+    if(!exists) { state.todos.push({id:uid(), text:s.text, date, done:false, priority:s.priority}); added++; }
+  });
+  saveState(); renderTodos();
+  if(added === 0) alert('Suggested tasks already added!');
+}
+
+// ═══════════════════════════════════════════════════════
+// CALENDAR
+// ═══════════════════════════════════════════════════════
+function renderCalendar() {
+  const today = new Date();
+  const base = new Date(today.getFullYear(), today.getMonth() + state.calendarOffset, 1);
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('cal-month-label').textContent = `${months[base.getMonth()]} ${base.getFullYear()}`;
+
+  const firstDay = new Date(base.getFullYear(), base.getMonth(), 1);
+  const lastDay = new Date(base.getFullYear(), base.getMonth()+1, 0);
+  const startDow = (firstDay.getDay()+6)%7; // 0=Mon
+  const todayStr2 = todayStr();
+
+  let html = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d=>`<div class="cal-header">${d}</div>`).join('');
+
+  let dayCount = 1 - startDow;
+  for(let row = 0; row < 6; row++) {
+    for(let col = 0; col < 7; col++) {
+      const d = new Date(base.getFullYear(), base.getMonth(), dayCount);
+      const inMonth = d.getMonth() === base.getMonth();
+      const dStr = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+      const isToday = dStr === todayStr2;
+      const dayEvents = state.events.filter(e=>e.date===dStr);
+      const evtHtml = dayEvents.map(e=>`<div class="cal-evt ${e.type||'community'}" onclick="event.stopPropagation();viewCalEvent('${e.id}')" title="${escHtml(e.title)}">${escHtml(e.title)}</div>`).join('');
+      html += `<div class="cal-day${!inMonth?' other':''}${isToday?' today':''}" onclick="addCalEvent('${dStr}')">
+        <div class="day-num">${isToday?`<div style="width:22px;height:22px;border-radius:50%;background:var(--purple);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11.5px">${d.getDate()}</div>`:d.getDate()}</div>
+        ${evtHtml}
+      </div>`;
+      dayCount++;
+    }
+    if(dayCount > lastDay.getDate() + (6-((lastDay.getDay()+6)%7))) break;
+  }
+  document.getElementById('cal-grid').innerHTML = html;
+}
+
+function shiftMonth(dir) {
+  state.calendarOffset += dir;
+  saveState(); renderCalendar();
+}
+
+function addCalEvent(date) {
+  const typeOpts = [['community','Community Event'],['meeting','Meeting'],['follow-up','Follow-up'],['deadline','Deadline']].map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
+  openModal('Add Event — '+fmtDate(date), `
+    <div class="form-group"><label class="form-label">Event title <span class="req">*</span></label><input class="form-input" id="cal-title" placeholder="e.g. Morning Walkers — Hyde Park"></div>
+    <div class="form-grid-2">
+      <div class="form-group"><label class="form-label">Type</label><select class="form-select" id="cal-type">${typeOpts}</select></div>
+      <div class="form-group"><label class="form-label">Time</label><input class="form-input" id="cal-time" placeholder="e.g. 7:00am" type="time"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" id="cal-notes" placeholder="Location, who you're meeting, what to bring…" rows="3"></textarea></div>
+  `, `<button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveCalEvent('${date}')">Add Event</button>`);
+}
+
+function saveCalEvent(date, id) {
+  const title = document.getElementById('cal-title').value.trim();
+  if(!title) { alert('Title required'); return; }
+  const data = { title, date, type: document.getElementById('cal-type').value, time: document.getElementById('cal-time').value, notes: document.getElementById('cal-notes').value.trim() };
+  if(id) { Object.assign(state.events.find(x=>x.id===id), data); }
+  else { state.events.push({id:uid(), ...data}); }
+  saveState(); closeModal(); renderCalendar();
+}
+
+function viewCalEvent(id) {
+  const e = state.events.find(x=>x.id===id);
+  if(!e) return;
+  openModal(e.title, `
+    <div class="detail-grid">
+      <div class="detail-field"><label>Date</label><span>${fmtDate(e.date)}</span></div>
+      <div class="detail-field"><label>Type</label><span>${e.type||'community'}</span></div>
+      ${e.time?`<div class="detail-field"><label>Time</label><span>${e.time}</span></div>`:''}
+    </div>
+    ${e.notes?`<div class="detail-notes">${escHtml(e.notes)}</div>`:''}
+  `, `<button class="btn btn-danger btn-sm" onclick="deleteCalEvent('${id}')">Delete</button><button class="btn btn-outline" onclick="closeModal()">Close</button>`);
+}
+
+function deleteCalEvent(id) {
+  if(!confirm('Delete this event?')) return;
+  state.events = state.events.filter(x=>x.id!==id);
+  saveState(); closeModal(); renderCalendar();
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', ()=>{
+  renderDashboard();
+});
+</script>
+</body>
+</html>
