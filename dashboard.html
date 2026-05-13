@@ -1,0 +1,1985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ruby's Practice Dashboard | Nourish with Ruby</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --sage:        #7a9e7e;
+      --sage-dark:   #4f7055;
+      --sage-pale:   #c8dbc9;
+      --sage-faint:  #eef4ee;
+      --clay:        #c17f5a;
+      --clay-light:  #e8b894;
+      --clay-faint:  #fdf3ec;
+      --cream:       #faf8f3;
+      --warm-white:  #ffffff;
+      --text:        #2c2c2c;
+      --text-mid:    #5a5a5a;
+      --text-light:  #8a8a8a;
+      --border:      #e2ddd6;
+      --radius-sm:   8px;
+      --radius:      14px;
+      --radius-lg:   22px;
+      --shadow:      0 2px 16px rgba(79,112,85,0.08);
+      --shadow-lg:   0 8px 40px rgba(79,112,85,0.12);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    h1, h2, h3, h4, h5 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 400;
+      line-height: 1.2;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 220px;
+      min-height: 100vh;
+      background: var(--warm-white);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 28px 0 20px;
+      position: fixed;
+      top: 0; left: 0;
+      z-index: 100;
+    }
+
+    .sidebar-logo {
+      padding: 0 20px 28px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sidebar-logo h2 {
+      font-size: 1.15rem;
+      color: var(--sage-dark);
+      font-weight: 500;
+    }
+    .sidebar-logo h2 span { color: var(--clay); }
+    .sidebar-logo p {
+      font-size: 0.7rem;
+      color: var(--text-light);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .sidebar-section-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      padding: 12px 8px 6px;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: var(--text-mid);
+      transition: all 0.15s;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+    .nav-item:hover { background: var(--sage-faint); color: var(--sage-dark); }
+    .nav-item.active {
+      background: var(--sage-faint);
+      color: var(--sage-dark);
+      font-weight: 500;
+    }
+    .nav-item .icon { font-size: 1rem; width: 20px; text-align: center; }
+
+    .sidebar-footer {
+      padding: 16px 20px 0;
+      border-top: 1px solid var(--border);
+    }
+    .sidebar-footer p { font-size: 0.72rem; color: var(--text-light); }
+
+    /* ── MAIN ── */
+    .main {
+      margin-left: 220px;
+      flex: 1;
+      padding: 32px 36px;
+      max-width: calc(100vw - 220px);
+    }
+
+    /* ── PAGE ── */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .page-header h1 { font-size: 2.2rem; color: var(--sage-dark); }
+    .page-header p { color: var(--text-mid); font-size: 0.88rem; margin-top: 4px; }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--warm-white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+    .card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      color: var(--sage-dark);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ── GRID LAYOUTS ── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+
+    /* ── STAT CARDS ── */
+    .stat-card {
+      background: var(--warm-white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      box-shadow: var(--shadow);
+    }
+    .stat-card .stat-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-bottom: 8px;
+    }
+    .stat-card .stat-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      color: var(--sage-dark);
+      font-weight: 500;
+      line-height: 1;
+    }
+    .stat-card .stat-sub {
+      font-size: 0.78rem;
+      color: var(--text-light);
+      margin-top: 6px;
+    }
+    .stat-card.clay .stat-value { color: var(--clay); }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 18px;
+      border-radius: 100px;
+      font-size: 0.82rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: var(--sage-dark);
+      color: white;
+    }
+    .btn-primary:hover { background: var(--sage); }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-mid);
+    }
+    .btn-outline:hover { border-color: var(--sage); color: var(--sage-dark); }
+    .btn-clay {
+      background: var(--clay);
+      color: white;
+    }
+    .btn-clay:hover { background: var(--clay-light); }
+    .btn-sm { padding: 6px 12px; font-size: 0.75rem; }
+
+    /* ── FORMS ── */
+    .form-group { margin-bottom: 14px; }
+    label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-mid);
+      margin-bottom: 5px;
+    }
+    input[type="text"],
+    input[type="date"],
+    input[type="number"],
+    input[type="time"],
+    input[type="url"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.84rem;
+      background: var(--cream);
+      color: var(--text);
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--sage);
+      background: white;
+    }
+    textarea { resize: vertical; min-height: 80px; }
+
+    /* ── TAGS / BADGES ── */
+    .badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 100px;
+      font-size: 0.7rem;
+      font-weight: 500;
+    }
+    .badge-sage { background: var(--sage-faint); color: var(--sage-dark); }
+    .badge-clay { background: var(--clay-faint); color: var(--clay); }
+    .badge-grey { background: #f0efec; color: var(--text-mid); }
+    .badge-green { background: #e6f4ea; color: #2e7d32; }
+    .badge-amber { background: #fff8e1; color: #f57f17; }
+    .badge-red   { background: #fce4ec; color: #c62828; }
+
+    /* ── TABLE ── */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    th {
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(226,221,214,0.5);
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--sage-faint); }
+
+    /* ── MODAL ── */
+    .modal-backdrop {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(44,44,44,0.4);
+      backdrop-filter: blur(4px);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      background: var(--warm-white);
+      border-radius: var(--radius-lg);
+      padding: 28px 32px;
+      width: min(540px, 92vw);
+      max-height: 88vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    .modal-header h3 { font-size: 1.4rem; color: var(--sage-dark); }
+    .modal-close {
+      background: none; border: none; cursor: pointer;
+      font-size: 1.4rem; color: var(--text-light);
+      padding: 2px 6px; border-radius: 6px;
+    }
+    .modal-close:hover { background: var(--sage-faint); color: var(--sage-dark); }
+    .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+
+    /* ── DIVIDER ── */
+    hr { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+
+    /* ── PLANNER ── */
+    .week-nav {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+    }
+    .week-nav h3 { font-size: 1.1rem; color: var(--text); flex: 1; }
+    .week-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+    }
+    .day-col { }
+    .day-header {
+      text-align: center;
+      padding: 8px 4px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-bottom: 8px;
+    }
+    .day-date {
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .day-date.today {
+      background: var(--sage-dark);
+      color: white;
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 8px;
+    }
+    .day-drop-zone {
+      min-height: 100px;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-sm);
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .appt-chip {
+      background: var(--sage-faint);
+      border-left: 3px solid var(--sage);
+      border-radius: 4px;
+      padding: 5px 8px;
+      font-size: 0.72rem;
+      cursor: pointer;
+    }
+    .appt-chip.clay {
+      background: var(--clay-faint);
+      border-left-color: var(--clay);
+    }
+    .appt-chip .chip-time { color: var(--text-light); font-size: 0.65rem; }
+    .appt-chip .chip-name { font-weight: 500; color: var(--text); }
+
+    /* ── TIMER ── */
+    .timer-display {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem;
+      color: var(--sage-dark);
+      letter-spacing: 0.05em;
+      text-align: center;
+      margin: 16px 0;
+      font-weight: 500;
+    }
+    .timer-controls {
+      display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+    }
+    .session-log-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(226,221,214,0.4);
+      font-size: 0.84rem;
+    }
+    .session-log-item:last-child { border-bottom: none; }
+    .session-log-item .log-client { font-weight: 500; }
+    .session-log-item .log-dur { color: var(--sage-dark); font-weight: 500; }
+
+    /* ── NOTES ── */
+    .note-card {
+      background: var(--warm-white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      cursor: pointer;
+      transition: box-shadow 0.2s;
+    }
+    .note-card:hover { box-shadow: var(--shadow-lg); }
+    .note-card h4 { font-size: 1rem; margin-bottom: 6px; color: var(--text); }
+    .note-card .note-meta { font-size: 0.73rem; color: var(--text-light); margin-bottom: 8px; }
+    .note-card .note-preview { font-size: 0.82rem; color: var(--text-mid); line-height: 1.5; }
+
+    .note-view { display: none; }
+    .note-view.open { display: block; }
+    .note-editor {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: var(--text);
+      border: none;
+      outline: none;
+      width: 100%;
+      background: transparent;
+      resize: none;
+      min-height: 320px;
+    }
+
+    /* ── READING LIST ── */
+    .reading-item {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(226,221,214,0.5);
+      align-items: flex-start;
+    }
+    .reading-item:last-child { border-bottom: none; }
+    .reading-thumb {
+      width: 48px;
+      height: 64px;
+      border-radius: 6px;
+      background: var(--sage-faint);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+    .reading-info h4 { font-size: 0.9rem; margin-bottom: 3px; }
+    .reading-info .reading-author { font-size: 0.76rem; color: var(--text-light); margin-bottom: 6px; }
+    .reading-progress {
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 8px;
+      width: 140px;
+    }
+    .reading-progress-bar {
+      height: 100%; border-radius: 2px; background: var(--sage);
+      transition: width 0.4s;
+    }
+
+    /* ── FOLLOW-UPS ── */
+    .followup-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 0;
+      border-bottom: 1px solid rgba(226,221,214,0.4);
+      font-size: 0.84rem;
+    }
+    .followup-row:last-child { border-bottom: none; }
+    .followup-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--sage);
+      flex-shrink: 0;
+    }
+    .followup-dot.urgent { background: var(--clay); }
+    .followup-dot.done { background: var(--border); }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 28px; right: 28px;
+      background: var(--sage-dark);
+      color: white;
+      padding: 12px 20px;
+      border-radius: var(--radius);
+      font-size: 0.84rem;
+      box-shadow: var(--shadow-lg);
+      z-index: 9999;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+      pointer-events: none;
+    }
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* ── OVERVIEW SUMMARY ── */
+    .welcome-banner {
+      background: linear-gradient(120deg, var(--sage-faint) 0%, var(--clay-faint) 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px 28px;
+      margin-bottom: 24px;
+    }
+    .welcome-banner h2 { font-size: 1.8rem; color: var(--sage-dark); }
+    .welcome-banner p { color: var(--text-mid); font-size: 0.88rem; margin-top: 4px; }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--sage-pale); border-radius: 3px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .grid-4 { grid-template-columns: 1fr 1fr; }
+      .grid-3 { grid-template-columns: 1fr 1fr; }
+      .week-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 680px) {
+      .sidebar { transform: translateX(-100%); }
+      .main { margin-left: 0; max-width: 100vw; padding: 20px 16px; }
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 32px;
+      color: var(--text-light);
+      font-size: 0.85rem;
+    }
+    .empty-state .empty-icon { font-size: 2rem; margin-bottom: 8px; }
+
+    .section-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .section-row h3 {
+      font-size: 1.1rem;
+      color: var(--sage-dark);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <h2>Nourish <span>with Ruby</span></h2>
+    <p>Practice Dashboard</p>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Overview</div>
+    <button class="nav-item active" onclick="showPage('overview', this)">
+      <span class="icon">🌿</span> Overview
+    </button>
+
+    <div class="sidebar-section-label">Clients</div>
+    <button class="nav-item" onclick="showPage('planner', this)">
+      <span class="icon">📅</span> Weekly Planner
+    </button>
+    <button class="nav-item" onclick="showPage('followups', this)">
+      <span class="icon">🔔</span> Follow-ups
+    </button>
+    <button class="nav-item" onclick="showPage('notes', this)">
+      <span class="icon">📋</span> Meeting Notes
+    </button>
+
+    <div class="sidebar-section-label">Practice</div>
+    <button class="nav-item" onclick="showPage('tracker', this)">
+      <span class="icon">⏱️</span> Hour Tracker
+    </button>
+    <button class="nav-item" onclick="showPage('reading', this)">
+      <span class="icon">📚</span> Reading List
+    </button>
+    <button class="nav-item" onclick="showPage('goals', this)">
+      <span class="icon">🎯</span> Goals & CPD
+    </button>
+  </nav>
+  <div class="sidebar-footer">
+    <p>Nourish with Ruby © 2025</p>
+  </div>
+</aside>
+
+<!-- ── MAIN CONTENT ── -->
+<main class="main">
+
+  <!-- ════════ OVERVIEW ════════ -->
+  <div id="page-overview" class="page active">
+    <div class="welcome-banner">
+      <h2>Good morning, Ruby ✨</h2>
+      <p id="overview-date"></p>
+    </div>
+
+    <div class="grid-4" style="margin-bottom:24px;">
+      <div class="stat-card">
+        <div class="stat-label">Clients this week</div>
+        <div class="stat-value" id="stat-clients-week">0</div>
+        <div class="stat-sub">sessions scheduled</div>
+      </div>
+      <div class="stat-card clay">
+        <div class="stat-label">Hours this month</div>
+        <div class="stat-value" id="stat-hours-month">0</div>
+        <div class="stat-sub">logged hours</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Follow-ups due</div>
+        <div class="stat-value" id="stat-followups">0</div>
+        <div class="stat-sub">this week</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Books reading</div>
+        <div class="stat-value" id="stat-books">0</div>
+        <div class="stat-sub">in progress</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">📅 Today's Sessions</div>
+        <div id="overview-today-sessions">
+          <div class="empty-state"><div class="empty-icon">🌱</div>No sessions today yet.<br>Add one in the Weekly Planner.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🔔 Upcoming Follow-ups</div>
+        <div id="overview-followups">
+          <div class="empty-state"><div class="empty-icon">✉️</div>No follow-ups pending.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📋 Recent Meeting Notes</div>
+        <div id="overview-recent-notes">
+          <div class="empty-state"><div class="empty-icon">📄</div>No notes yet.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🎯 Active Goals</div>
+        <div id="overview-goals">
+          <div class="empty-state"><div class="empty-icon">🌟</div>Add goals to track your CPD progress.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ WEEKLY PLANNER ════════ -->
+  <div id="page-planner" class="page">
+    <div class="page-header">
+      <div>
+        <h1>Weekly Planner</h1>
+        <p>Schedule and manage your consultation sessions</p>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('modal-add-session')">+ Add Session</button>
+    </div>
+
+    <div class="card" style="margin-bottom:20px;">
+      <div class="week-nav">
+        <button class="btn btn-outline btn-sm" onclick="changeWeek(-1)">← Previous</button>
+        <h3 id="week-label"></h3>
+        <button class="btn btn-outline btn-sm" onclick="changeWeek(1)">Next →</button>
+        <button class="btn btn-outline btn-sm" onclick="goToToday()">Today</button>
+      </div>
+      <div class="week-grid" id="week-grid"></div>
+    </div>
+
+    <div class="card">
+      <div class="section-row">
+        <h3>All Sessions</h3>
+        <input type="text" placeholder="Search client…" style="width:200px;" oninput="filterSessions(this.value)">
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Client</th>
+              <th>Type</th>
+              <th>Time</th>
+              <th>Duration</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="sessions-table"></tbody>
+        </table>
+        <div id="sessions-empty" class="empty-state" style="display:none;">
+          <div class="empty-icon">📅</div>No sessions yet. Add your first one!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ FOLLOW-UPS ════════ -->
+  <div id="page-followups" class="page">
+    <div class="page-header">
+      <div>
+        <h1>Follow-ups</h1>
+        <p>Keep track of client check-ins, lab reviews, and action items</p>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('modal-add-followup')">+ Add Follow-up</button>
+    </div>
+
+    <div class="grid-3" style="margin-bottom:24px;">
+      <div class="stat-card">
+        <div class="stat-label">Due this week</div>
+        <div class="stat-value" id="fu-due-week" style="color:var(--clay)">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Completed</div>
+        <div class="stat-value" id="fu-done">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total open</div>
+        <div class="stat-value" id="fu-open">0</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-row">
+        <h3>Follow-up Tracker</h3>
+        <div style="display:flex;gap:8px;">
+          <select id="fu-filter" onchange="renderFollowups()" style="width:140px;">
+            <option value="all">All</option>
+            <option value="pending">Pending</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Client</th>
+              <th>Due Date</th>
+              <th>Type</th>
+              <th>Notes</th>
+              <th>Priority</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="followups-table"></tbody>
+        </table>
+        <div id="followups-empty" class="empty-state" style="display:none;">
+          <div class="empty-icon">🔔</div>No follow-ups yet.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ MEETING NOTES ════════ -->
+  <div id="page-notes" class="page">
+    <div class="page-header">
+      <div>
+        <h1>Meeting Notes</h1>
+        <p>Session summaries, assessments, and care plans</p>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('modal-add-note')">+ New Note</button>
+    </div>
+
+    <!-- Grid of note cards -->
+    <div id="notes-grid" class="grid-3" style="margin-bottom:24px;"></div>
+    <div id="notes-empty" class="empty-state card" style="display:none;">
+      <div class="empty-icon">📋</div>No notes yet. Create your first session note.
+    </div>
+
+    <!-- Expanded note editor -->
+    <div id="note-editor-panel" class="card note-view" style="margin-top:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <div>
+          <h3 id="note-view-title" style="font-size:1.4rem;color:var(--sage-dark);"></h3>
+          <p id="note-view-meta" style="font-size:0.76rem;color:var(--text-light);margin-top:4px;"></p>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-outline btn-sm" onclick="saveNote()">Save</button>
+          <button class="btn btn-outline btn-sm" onclick="closeNoteEditor()">Close</button>
+          <button class="btn btn-sm" style="color:var(--clay);border:1px solid var(--clay);border-radius:100px;background:none;font-size:0.75rem;padding:6px 12px;cursor:pointer;" onclick="deleteNote(currentNoteId)">Delete</button>
+        </div>
+      </div>
+      <hr>
+      <textarea id="note-editor-content" class="note-editor" placeholder="Start typing your session notes…"></textarea>
+    </div>
+  </div>
+
+  <!-- ════════ HOUR TRACKER ════════ -->
+  <div id="page-tracker" class="page">
+    <div class="page-header">
+      <div>
+        <h1>Hour Tracker</h1>
+        <p>Log consultation, admin, CPD, and preparation time</p>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:24px;">
+      <!-- Live Timer -->
+      <div class="card">
+        <div class="card-title">⏱️ Live Timer</div>
+        <div class="form-group">
+          <label>Client / Task</label>
+          <input type="text" id="timer-client" placeholder="e.g. Sarah — initial consultation">
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select id="timer-category">
+            <option value="Consultation">Consultation</option>
+            <option value="Follow-up">Follow-up</option>
+            <option value="Admin">Admin</option>
+            <option value="CPD / Learning">CPD / Learning</option>
+            <option value="Preparation">Preparation</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="timer-display" id="timer-display">00:00:00</div>
+        <div class="timer-controls">
+          <button class="btn btn-primary" id="timer-btn-start" onclick="timerStart()">▶ Start</button>
+          <button class="btn btn-outline" id="timer-btn-pause" onclick="timerPause()" disabled>⏸ Pause</button>
+          <button class="btn btn-outline" id="timer-btn-stop" onclick="timerStop()" disabled>⏹ Log Session</button>
+        </div>
+      </div>
+
+      <!-- Manual entry -->
+      <div class="card">
+        <div class="card-title">✍️ Manual Entry</div>
+        <div class="form-group">
+          <label>Client / Task</label>
+          <input type="text" id="manual-client" placeholder="e.g. Group session">
+        </div>
+        <div class="grid-2" style="gap:10px;">
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="manual-date">
+          </div>
+          <div class="form-group">
+            <label>Duration (mins)</label>
+            <input type="number" id="manual-duration" placeholder="60" min="1">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select id="manual-category">
+            <option value="Consultation">Consultation</option>
+            <option value="Follow-up">Follow-up</option>
+            <option value="Admin">Admin</option>
+            <option value="CPD / Learning">CPD / Learning</option>
+            <option value="Preparation">Preparation</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Notes</label>
+          <input type="text" id="manual-notes" placeholder="Optional notes">
+        </div>
+        <button class="btn btn-primary" onclick="addManualEntry()">+ Log Entry</button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid-4" style="margin-bottom:24px;">
+      <div class="stat-card">
+        <div class="stat-label">Today</div>
+        <div class="stat-value" id="hours-today">0h</div>
+      </div>
+      <div class="stat-card clay">
+        <div class="stat-label">This week</div>
+        <div class="stat-value" id="hours-week">0h</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">This month</div>
+        <div class="stat-value" id="hours-month">0h</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">CPD hours</div>
+        <div class="stat-value" id="hours-cpd">0h</div>
+      </div>
+    </div>
+
+    <!-- Log -->
+    <div class="card">
+      <div class="section-row">
+        <h3>Session Log</h3>
+        <button class="btn btn-outline btn-sm" onclick="exportHours()">⬇ Export CSV</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Client / Task</th>
+              <th>Category</th>
+              <th>Duration</th>
+              <th>Notes</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="hours-log-table"></tbody>
+        </table>
+        <div id="hours-empty" class="empty-state" style="display:none;">
+          <div class="empty-icon">⏱️</div>No hours logged yet.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ READING LIST ════════ -->
+  <div id="page-reading" class="page">
+    <div class="page-header">
+      <div>
+        <h1>Reading List</h1>
+        <p>Papers, books, and resources for your practice</p>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('modal-add-reading')">+ Add Resource</button>
+    </div>
+
+    <div class="grid-3" style="margin-bottom:20px;">
+      <div class="stat-card">
+        <div class="stat-label">Reading now</div>
+        <div class="stat-value" id="reading-active">0</div>
+      </div>
+      <div class="stat-card clay">
+        <div class="stat-label">Completed</div>
+        <div class="stat-value" id="reading-done">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Want to read</div>
+        <div class="stat-value" id="reading-want">0</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-row">
+        <h3>My Library</h3>
+        <div style="display:flex;gap:8px;">
+          <select id="reading-filter" onchange="renderReading()" style="width:150px;">
+            <option value="all">All</option>
+            <option value="reading">Reading now</option>
+            <option value="want">Want to read</option>
+            <option value="done">Completed</option>
+          </select>
+        </div>
+      </div>
+      <div id="reading-list"></div>
+      <div id="reading-empty" class="empty-state" style="display:none;">
+        <div class="empty-icon">📚</div>Add your first paper, book, or article.
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ GOALS & CPD ════════ -->
+  <div id="page-goals" class="page">
+    <div class="page-header">
+      <div>
+        <h1>Goals & CPD</h1>
+        <p>Track your continuing professional development and personal practice goals</p>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('modal-add-goal')">+ Add Goal</button>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:24px;">
+      <div class="card">
+        <div class="card-title">🎯 Active Goals</div>
+        <div id="goals-active-list"></div>
+        <div id="goals-empty" class="empty-state" style="display:none;">
+          <div class="empty-icon">🌟</div>No goals yet. Add your first!
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">✅ Completed Goals</div>
+        <div id="goals-done-list">
+          <div class="empty-state"><div class="empty-icon">🏅</div>Completed goals will appear here.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CPD hours by category breakdown -->
+    <div class="card">
+      <div class="card-title">📊 Time by Category (All time)</div>
+      <div id="category-breakdown" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:8px;"></div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ════════ MODALS ════════ -->
+
+<!-- Add Session Modal -->
+<div class="modal-backdrop" id="modal-add-session">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Add Session</h3>
+      <button class="modal-close" onclick="closeModal('modal-add-session')">×</button>
+    </div>
+    <div class="form-group">
+      <label>Client Name</label>
+      <input type="text" id="s-client" placeholder="e.g. Sarah Johnson">
+    </div>
+    <div class="grid-2" style="gap:12px;">
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" id="s-date">
+      </div>
+      <div class="form-group">
+        <label>Time</label>
+        <input type="time" id="s-time">
+      </div>
+    </div>
+    <div class="grid-2" style="gap:12px;">
+      <div class="form-group">
+        <label>Duration (mins)</label>
+        <input type="number" id="s-duration" value="60" min="15" step="15">
+      </div>
+      <div class="form-group">
+        <label>Type</label>
+        <select id="s-type">
+          <option>Initial Consultation</option>
+          <option>Follow-up</option>
+          <option>Review</option>
+          <option>Group Session</option>
+          <option>Discovery Call</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Notes</label>
+      <textarea id="s-notes" placeholder="Any prep notes, client goals, etc."></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-add-session')">Cancel</button>
+      <button class="btn btn-primary" onclick="addSession()">Save Session</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Follow-up Modal -->
+<div class="modal-backdrop" id="modal-add-followup">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Add Follow-up</h3>
+      <button class="modal-close" onclick="closeModal('modal-add-followup')">×</button>
+    </div>
+    <div class="form-group">
+      <label>Client Name</label>
+      <input type="text" id="f-client" placeholder="e.g. Sarah Johnson">
+    </div>
+    <div class="grid-2" style="gap:12px;">
+      <div class="form-group">
+        <label>Due Date</label>
+        <input type="date" id="f-date">
+      </div>
+      <div class="form-group">
+        <label>Type</label>
+        <select id="f-type">
+          <option>Check-in call</option>
+          <option>Lab results review</option>
+          <option>Diet diary review</option>
+          <option>Email check-in</option>
+          <option>Referral follow-up</option>
+          <option>Supplement review</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Priority</label>
+      <select id="f-priority">
+        <option value="normal">Normal</option>
+        <option value="urgent">Urgent</option>
+        <option value="low">Low</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Notes</label>
+      <textarea id="f-notes" placeholder="Context or action needed…"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-add-followup')">Cancel</button>
+      <button class="btn btn-primary" onclick="addFollowup()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Note Modal -->
+<div class="modal-backdrop" id="modal-add-note">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>New Meeting Note</h3>
+      <button class="modal-close" onclick="closeModal('modal-add-note')">×</button>
+    </div>
+    <div class="form-group">
+      <label>Client Name</label>
+      <input type="text" id="n-client" placeholder="e.g. Sarah Johnson">
+    </div>
+    <div class="grid-2" style="gap:12px;">
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" id="n-date">
+      </div>
+      <div class="form-group">
+        <label>Session Type</label>
+        <select id="n-type">
+          <option>Initial Consultation</option>
+          <option>Follow-up</option>
+          <option>Review</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Session Summary</label>
+      <textarea id="n-content" placeholder="Key points, goals discussed, action plan…" style="min-height:120px;"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-add-note')">Cancel</button>
+      <button class="btn btn-primary" onclick="addNote()">Create Note</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Reading Modal -->
+<div class="modal-backdrop" id="modal-add-reading">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Add to Reading List</h3>
+      <button class="modal-close" onclick="closeModal('modal-add-reading')">×</button>
+    </div>
+    <div class="form-group">
+      <label>Title</label>
+      <input type="text" id="r-title" placeholder="e.g. The Role of Gut Microbiome in Metabolic Health">
+    </div>
+    <div class="form-group">
+      <label>Author / Journal</label>
+      <input type="text" id="r-author" placeholder="e.g. Smith et al., 2024 — Nutrients">
+    </div>
+    <div class="grid-2" style="gap:12px;">
+      <div class="form-group">
+        <label>Type</label>
+        <select id="r-type">
+          <option>Research Paper</option>
+          <option>Book</option>
+          <option>Article</option>
+          <option>Course</option>
+          <option>Podcast</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select id="r-status">
+          <option value="want">Want to read</option>
+          <option value="reading">Reading now</option>
+          <option value="done">Completed</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>URL / Link (optional)</label>
+      <input type="url" id="r-url" placeholder="https://…">
+    </div>
+    <div class="form-group">
+      <label>Notes / Why relevant?</label>
+      <textarea id="r-notes" placeholder="Why are you reading this? Key takeaways…"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-add-reading')">Cancel</button>
+      <button class="btn btn-primary" onclick="addReading()">Add to Library</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Goal Modal -->
+<div class="modal-backdrop" id="modal-add-goal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Add Goal</h3>
+      <button class="modal-close" onclick="closeModal('modal-add-goal')">×</button>
+    </div>
+    <div class="form-group">
+      <label>Goal</label>
+      <input type="text" id="g-title" placeholder="e.g. Complete 25 CPD hours this year">
+    </div>
+    <div class="grid-2" style="gap:12px;">
+      <div class="form-group">
+        <label>Category</label>
+        <select id="g-category">
+          <option>CPD</option>
+          <option>Clinical</option>
+          <option>Business</option>
+          <option>Personal</option>
+          <option>Research</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Target Date</label>
+        <input type="date" id="g-date">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Progress (0–100%)</label>
+      <input type="number" id="g-progress" value="0" min="0" max="100">
+    </div>
+    <div class="form-group">
+      <label>Notes</label>
+      <textarea id="g-notes" placeholder="Why this goal? How will you measure it?"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-add-goal')">Cancel</button>
+      <button class="btn btn-primary" onclick="addGoal()">Save Goal</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ════════════════════════════════════════════════
+// STORAGE HELPERS
+// ════════════════════════════════════════════════
+const S = {
+  get: k => JSON.parse(localStorage.getItem('nwr_' + k) || 'null'),
+  set: (k, v) => localStorage.setItem('nwr_' + k, JSON.stringify(v)),
+  arr: k => JSON.parse(localStorage.getItem('nwr_' + k) || '[]'),
+};
+
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+// ════════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════════
+function showPage(name, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (name === 'overview') refreshOverview();
+  if (name === 'planner') { renderWeekGrid(); renderSessionsTable(); }
+  if (name === 'followups') renderFollowups();
+  if (name === 'notes') renderNotes();
+  if (name === 'tracker') { renderHoursLog(); updateHoursStats(); }
+  if (name === 'reading') renderReading();
+  if (name === 'goals') renderGoals();
+}
+
+// ════════════════════════════════════════════════
+// MODALS
+// ════════════════════════════════════════════════
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  // Set today's date as default
+  const dateInputs = document.querySelectorAll('#' + id + ' input[type="date"]');
+  dateInputs.forEach(i => { if (!i.value) i.value = today(); });
+}
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-backdrop').forEach(b => {
+  b.addEventListener('click', e => { if (e.target === b) b.classList.remove('open'); });
+});
+
+// ════════════════════════════════════════════════
+// DATE HELPERS
+// ════════════════════════════════════════════════
+function today() { return new Date().toISOString().slice(0, 10); }
+function fmt(d) {
+  if (!d) return '';
+  const dt = new Date(d + 'T12:00:00');
+  return dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+function fmtTime(t) {
+  if (!t) return '';
+  const [h, m] = t.split(':');
+  const hr = parseInt(h);
+  return `${hr % 12 || 12}:${m} ${hr < 12 ? 'am' : 'pm'}`;
+}
+function weekStart(offset = 0) {
+  const d = new Date();
+  d.setDate(d.getDate() - d.getDay() + 1 + offset * 7);
+  d.setHours(0,0,0,0);
+  return d;
+}
+function dateStr(d) { return d.toISOString().slice(0,10); }
+
+// ════════════════════════════════════════════════
+// OVERVIEW
+// ════════════════════════════════════════════════
+function refreshOverview() {
+  const now = new Date();
+  document.getElementById('overview-date').textContent =
+    now.toLocaleDateString('en-GB', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+
+  const sessions = S.arr('sessions');
+  const followups = S.arr('followups');
+  const reading = S.arr('reading');
+  const hours = S.arr('hours');
+  const notes = S.arr('notes');
+  const goals = S.arr('goals');
+
+  // Stats
+  const ws = weekStart(); const we = new Date(ws); we.setDate(we.getDate() + 6);
+  const wsSess = sessions.filter(s => s.date >= dateStr(ws) && s.date <= dateStr(we)).length;
+  document.getElementById('stat-clients-week').textContent = wsSess;
+
+  const thisMonth = now.toISOString().slice(0,7);
+  const mHours = hours.filter(h => h.date.startsWith(thisMonth))
+    .reduce((a,h) => a + h.mins, 0);
+  document.getElementById('stat-hours-month').textContent = (mHours/60).toFixed(1) + 'h';
+
+  const fuDue = followups.filter(f => f.status !== 'done' && f.date >= dateStr(ws) && f.date <= dateStr(we)).length;
+  document.getElementById('stat-followups').textContent = fuDue;
+
+  const booksReading = reading.filter(r => r.status === 'reading').length;
+  document.getElementById('stat-books').textContent = booksReading;
+
+  // Today's sessions
+  const todaySess = sessions.filter(s => s.date === today()).sort((a,b) => a.time.localeCompare(b.time));
+  const todayEl = document.getElementById('overview-today-sessions');
+  if (todaySess.length === 0) {
+    todayEl.innerHTML = '<div class="empty-state"><div class="empty-icon">🌱</div>No sessions today.</div>';
+  } else {
+    todayEl.innerHTML = todaySess.map(s => `
+      <div class="session-log-item">
+        <div>
+          <div class="log-client">${s.client}</div>
+          <div style="font-size:0.75rem;color:var(--text-light)">${fmtTime(s.time)} · ${s.type}</div>
+        </div>
+        <span class="badge badge-sage">${s.duration}m</span>
+      </div>`).join('');
+  }
+
+  // Upcoming followups
+  const upcomingFU = followups.filter(f => f.status !== 'done').sort((a,b) => a.date.localeCompare(b.date)).slice(0,4);
+  const fuEl = document.getElementById('overview-followups');
+  if (upcomingFU.length === 0) {
+    fuEl.innerHTML = '<div class="empty-state"><div class="empty-icon">✉️</div>No follow-ups pending.</div>';
+  } else {
+    fuEl.innerHTML = upcomingFU.map(f => `
+      <div class="followup-row">
+        <div class="followup-dot ${f.priority === 'urgent' ? 'urgent' : ''}"></div>
+        <div style="flex:1"><strong>${f.client}</strong> — ${f.type}</div>
+        <span style="font-size:0.75rem;color:var(--text-light)">${fmt(f.date)}</span>
+      </div>`).join('');
+  }
+
+  // Recent notes
+  const recentNotes = [...notes].sort((a,b) => b.date.localeCompare(a.date)).slice(0,3);
+  const notesEl = document.getElementById('overview-recent-notes');
+  if (recentNotes.length === 0) {
+    notesEl.innerHTML = '<div class="empty-state"><div class="empty-icon">📄</div>No notes yet.</div>';
+  } else {
+    notesEl.innerHTML = recentNotes.map(n => `
+      <div class="session-log-item">
+        <div>
+          <div class="log-client">${n.client}</div>
+          <div style="font-size:0.75rem;color:var(--text-light)">${fmt(n.date)} · ${n.type}</div>
+        </div>
+        <span class="badge badge-grey">${n.type}</span>
+      </div>`).join('');
+  }
+
+  // Active goals
+  const activeGoals = goals.filter(g => g.status !== 'done').slice(0,3);
+  const goalsEl = document.getElementById('overview-goals');
+  if (activeGoals.length === 0) {
+    goalsEl.innerHTML = '<div class="empty-state"><div class="empty-icon">🌟</div>No active goals.</div>';
+  } else {
+    goalsEl.innerHTML = activeGoals.map(g => `
+      <div class="session-log-item" style="flex-direction:column;align-items:flex-start;gap:6px;">
+        <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+          <strong style="font-size:0.86rem">${g.title}</strong>
+          <span class="badge badge-sage">${g.progress}%</span>
+        </div>
+        <div style="height:4px;background:var(--border);border-radius:2px;width:100%;">
+          <div style="height:100%;border-radius:2px;background:var(--sage);width:${g.progress}%;"></div>
+        </div>
+      </div>`).join('');
+  }
+}
+
+// ════════════════════════════════════════════════
+// WEEKLY PLANNER
+// ════════════════════════════════════════════════
+let weekOffset = 0;
+function changeWeek(d) { weekOffset += d; renderWeekGrid(); }
+function goToToday() { weekOffset = 0; renderWeekGrid(); }
+
+function renderWeekGrid() {
+  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const ws = weekStart(weekOffset);
+  const we = new Date(ws); we.setDate(we.getDate() + 6);
+  document.getElementById('week-label').textContent =
+    ws.toLocaleDateString('en-GB', {day:'numeric',month:'short'}) + ' – ' +
+    we.toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'});
+
+  const sessions = S.arr('sessions');
+  const grid = document.getElementById('week-grid');
+  grid.innerHTML = days.map((day, i) => {
+    const d = new Date(ws); d.setDate(d.getDate() + i);
+    const ds = dateStr(d);
+    const isToday = ds === today();
+    const daySess = sessions.filter(s => s.date === ds).sort((a,b) => a.time.localeCompare(b.time));
+    const chips = daySess.map(s => `
+      <div class="appt-chip ${s.type === 'Initial Consultation' ? 'clay' : ''}" title="${s.client} — ${s.type}">
+        <div class="chip-time">${fmtTime(s.time)}</div>
+        <div class="chip-name">${s.client}</div>
+      </div>`).join('');
+    return `
+      <div class="day-col">
+        <div class="day-header">${day}</div>
+        <div class="day-date ${isToday ? 'today' : ''}">${d.getDate()}</div>
+        <div class="day-drop-zone">${chips}</div>
+      </div>`;
+  }).join('');
+}
+
+function addSession() {
+  const client = document.getElementById('s-client').value.trim();
+  const date   = document.getElementById('s-date').value;
+  const time   = document.getElementById('s-time').value;
+  const dur    = document.getElementById('s-duration').value;
+  const type   = document.getElementById('s-type').value;
+  const notes  = document.getElementById('s-notes').value.trim();
+  if (!client || !date) return alert('Please fill in client name and date.');
+  const sessions = S.arr('sessions');
+  sessions.push({ id: uid(), client, date, time: time || '09:00', duration: parseInt(dur)||60, type, notes, status: 'scheduled' });
+  S.set('sessions', sessions);
+  closeModal('modal-add-session');
+  ['s-client','s-time','s-notes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('s-duration').value = '60';
+  renderWeekGrid(); renderSessionsTable();
+  toast('Session added ✓');
+}
+
+function renderSessionsTable(filter = '') {
+  const sessions = S.arr('sessions').sort((a,b) => b.date.localeCompare(a.date));
+  const tbody = document.getElementById('sessions-table');
+  const filtered = filter ? sessions.filter(s => s.client.toLowerCase().includes(filter.toLowerCase())) : sessions;
+  if (filtered.length === 0) {
+    tbody.innerHTML = '';
+    document.getElementById('sessions-empty').style.display = 'block';
+    return;
+  }
+  document.getElementById('sessions-empty').style.display = 'none';
+  tbody.innerHTML = filtered.map(s => `
+    <tr>
+      <td>${fmt(s.date)}</td>
+      <td><strong>${s.client}</strong></td>
+      <td><span class="badge ${s.type === 'Initial Consultation' ? 'badge-clay' : 'badge-sage'}">${s.type}</span></td>
+      <td>${fmtTime(s.time)}</td>
+      <td>${s.duration} min</td>
+      <td>
+        <select onchange="updateSessionStatus('${s.id}', this.value)" style="font-size:0.75rem;padding:4px 8px;border-radius:100px;border:1px solid var(--border);">
+          <option ${s.status==='scheduled'?'selected':''}>scheduled</option>
+          <option ${s.status==='completed'?'selected':''}>completed</option>
+          <option ${s.status==='cancelled'?'selected':''}>cancelled</option>
+          <option ${s.status==='no-show'?'selected':''}>no-show</option>
+        </select>
+      </td>
+      <td><button class="btn btn-sm" style="color:var(--clay);border:1px solid var(--clay);border-radius:100px;background:none;cursor:pointer;" onclick="deleteSession('${s.id}')">✕</button></td>
+    </tr>`).join('');
+}
+
+function filterSessions(v) { renderSessionsTable(v); }
+
+function updateSessionStatus(id, status) {
+  const sessions = S.arr('sessions');
+  const i = sessions.findIndex(s => s.id === id);
+  if (i >= 0) { sessions[i].status = status; S.set('sessions', sessions); renderWeekGrid(); }
+}
+
+function deleteSession(id) {
+  if (!confirm('Delete this session?')) return;
+  S.set('sessions', S.arr('sessions').filter(s => s.id !== id));
+  renderWeekGrid(); renderSessionsTable(); toast('Session removed');
+}
+
+// ════════════════════════════════════════════════
+// FOLLOW-UPS
+// ════════════════════════════════════════════════
+function addFollowup() {
+  const client   = document.getElementById('f-client').value.trim();
+  const date     = document.getElementById('f-date').value;
+  const type     = document.getElementById('f-type').value;
+  const priority = document.getElementById('f-priority').value;
+  const notes    = document.getElementById('f-notes').value.trim();
+  if (!client || !date) return alert('Please fill in client and date.');
+  const followups = S.arr('followups');
+  followups.push({ id: uid(), client, date, type, priority, notes, status: 'pending' });
+  S.set('followups', followups);
+  closeModal('modal-add-followup');
+  ['f-client','f-notes'].forEach(id => document.getElementById(id).value = '');
+  renderFollowups(); toast('Follow-up added ✓');
+}
+
+function renderFollowups() {
+  const filter = document.getElementById('fu-filter').value;
+  let data = S.arr('followups').sort((a,b) => a.date.localeCompare(b.date));
+  if (filter !== 'all') data = data.filter(f => f.status === filter);
+
+  const ws = weekStart(), we = new Date(ws); we.setDate(we.getDate()+6);
+  const allData = S.arr('followups');
+  document.getElementById('fu-due-week').textContent = allData.filter(f => f.status !== 'done' && f.date >= dateStr(ws) && f.date <= dateStr(we)).length;
+  document.getElementById('fu-done').textContent = allData.filter(f => f.status === 'done').length;
+  document.getElementById('fu-open').textContent = allData.filter(f => f.status !== 'done').length;
+
+  const tbody = document.getElementById('followups-table');
+  if (data.length === 0) {
+    tbody.innerHTML = '';
+    document.getElementById('followups-empty').style.display = 'block';
+    return;
+  }
+  document.getElementById('followups-empty').style.display = 'none';
+  const priColor = { urgent: 'badge-clay', normal: 'badge-sage', low: 'badge-grey' };
+  tbody.innerHTML = data.map(f => `
+    <tr style="${f.status==='done'?'opacity:0.5':''}">
+      <td><strong>${f.client}</strong></td>
+      <td>${fmt(f.date)}</td>
+      <td>${f.type}</td>
+      <td style="font-size:0.8rem;color:var(--text-mid);max-width:180px;">${f.notes || '—'}</td>
+      <td><span class="badge ${priColor[f.priority]||'badge-grey'}">${f.priority}</span></td>
+      <td>
+        <select onchange="updateFollowupStatus('${f.id}', this.value)" style="font-size:0.75rem;padding:4px 8px;border-radius:100px;border:1px solid var(--border);">
+          <option ${f.status==='pending'?'selected':''} value="pending">pending</option>
+          <option ${f.status==='done'?'selected':''} value="done">done</option>
+        </select>
+      </td>
+      <td><button class="btn btn-sm" style="color:var(--clay);border:1px solid var(--clay);border-radius:100px;background:none;cursor:pointer;" onclick="deleteFollowup('${f.id}')">✕</button></td>
+    </tr>`).join('');
+}
+
+function updateFollowupStatus(id, status) {
+  const arr = S.arr('followups');
+  const i = arr.findIndex(f => f.id === id);
+  if (i >= 0) { arr[i].status = status; S.set('followups', arr); renderFollowups(); }
+}
+function deleteFollowup(id) {
+  if (!confirm('Delete this follow-up?')) return;
+  S.set('followups', S.arr('followups').filter(f => f.id !== id));
+  renderFollowups(); toast('Follow-up removed');
+}
+
+// ════════════════════════════════════════════════
+// MEETING NOTES
+// ════════════════════════════════════════════════
+let currentNoteId = null;
+
+function addNote() {
+  const client  = document.getElementById('n-client').value.trim();
+  const date    = document.getElementById('n-date').value;
+  const type    = document.getElementById('n-type').value;
+  const content = document.getElementById('n-content').value.trim();
+  if (!client || !date) return alert('Please fill in client and date.');
+  const notes = S.arr('notes');
+  notes.push({ id: uid(), client, date, type, content });
+  S.set('notes', notes);
+  closeModal('modal-add-note');
+  ['n-client','n-content'].forEach(id => document.getElementById(id).value = '');
+  renderNotes(); toast('Note created ✓');
+}
+
+function renderNotes() {
+  const notes = S.arr('notes').sort((a,b) => b.date.localeCompare(a.date));
+  const grid = document.getElementById('notes-grid');
+  const empty = document.getElementById('notes-empty');
+  if (notes.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  grid.innerHTML = notes.map(n => `
+    <div class="note-card" onclick="openNote('${n.id}')">
+      <h4>${n.client}</h4>
+      <div class="note-meta">${fmt(n.date)} · <span class="badge badge-sage">${n.type}</span></div>
+      <div class="note-preview">${(n.content || 'No content yet…').slice(0, 100)}${n.content && n.content.length > 100 ? '…' : ''}</div>
+    </div>`).join('');
+}
+
+function openNote(id) {
+  const notes = S.arr('notes');
+  const n = notes.find(n => n.id === id);
+  if (!n) return;
+  currentNoteId = id;
+  document.getElementById('note-view-title').textContent = `${n.client} — ${n.type}`;
+  document.getElementById('note-view-meta').textContent = fmt(n.date);
+  document.getElementById('note-editor-content').value = n.content || '';
+  const panel = document.getElementById('note-editor-panel');
+  panel.classList.add('open');
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function saveNote() {
+  if (!currentNoteId) return;
+  const notes = S.arr('notes');
+  const i = notes.findIndex(n => n.id === currentNoteId);
+  if (i >= 0) {
+    notes[i].content = document.getElementById('note-editor-content').value;
+    S.set('notes', notes);
+    renderNotes();
+    toast('Note saved ✓');
+  }
+}
+
+function deleteNote(id) {
+  if (!confirm('Delete this note?')) return;
+  S.set('notes', S.arr('notes').filter(n => n.id !== id));
+  closeNoteEditor(); renderNotes(); toast('Note deleted');
+}
+
+function closeNoteEditor() {
+  document.getElementById('note-editor-panel').classList.remove('open');
+  currentNoteId = null;
+}
+
+// ════════════════════════════════════════════════
+// HOUR TRACKER
+// ════════════════════════════════════════════════
+let timerInterval = null;
+let timerSeconds = 0;
+let timerRunning = false;
+
+function timerStart() {
+  if (timerRunning) return;
+  timerRunning = true;
+  document.getElementById('timer-btn-start').disabled = true;
+  document.getElementById('timer-btn-pause').disabled = false;
+  document.getElementById('timer-btn-stop').disabled = false;
+  timerInterval = setInterval(() => {
+    timerSeconds++;
+    const h = String(Math.floor(timerSeconds/3600)).padStart(2,'0');
+    const m = String(Math.floor((timerSeconds%3600)/60)).padStart(2,'0');
+    const s = String(timerSeconds%60).padStart(2,'0');
+    document.getElementById('timer-display').textContent = `${h}:${m}:${s}`;
+  }, 1000);
+}
+
+function timerPause() {
+  if (!timerRunning) { timerStart(); return; }
+  timerRunning = false;
+  clearInterval(timerInterval);
+  document.getElementById('timer-btn-pause').textContent = '▶ Resume';
+  document.getElementById('timer-btn-start').disabled = true;
+}
+
+function timerStop() {
+  clearInterval(timerInterval);
+  timerRunning = false;
+  const mins = Math.round(timerSeconds / 60) || 1;
+  const client = document.getElementById('timer-client').value.trim() || 'Untitled session';
+  const cat = document.getElementById('timer-category').value;
+  const hours = S.arr('hours');
+  hours.push({ id: uid(), date: today(), client, category: cat, mins, notes: `Timed session` });
+  S.set('hours', hours);
+  timerSeconds = 0;
+  document.getElementById('timer-display').textContent = '00:00:00';
+  document.getElementById('timer-btn-start').disabled = false;
+  document.getElementById('timer-btn-pause').disabled = true;
+  document.getElementById('timer-btn-stop').disabled = true;
+  document.getElementById('timer-btn-pause').textContent = '⏸ Pause';
+  document.getElementById('timer-client').value = '';
+  renderHoursLog(); updateHoursStats();
+  toast(`Logged ${mins} min ✓`);
+}
+
+function addManualEntry() {
+  const client = document.getElementById('manual-client').value.trim() || 'Untitled';
+  const date   = document.getElementById('manual-date').value || today();
+  const mins   = parseInt(document.getElementById('manual-duration').value);
+  const cat    = document.getElementById('manual-category').value;
+  const notes  = document.getElementById('manual-notes').value.trim();
+  if (!mins || mins < 1) return alert('Please enter a duration.');
+  const hours = S.arr('hours');
+  hours.push({ id: uid(), date, client, category: cat, mins, notes });
+  S.set('hours', hours);
+  document.getElementById('manual-client').value = '';
+  document.getElementById('manual-duration').value = '';
+  document.getElementById('manual-notes').value = '';
+  renderHoursLog(); updateHoursStats();
+  toast('Entry logged ✓');
+}
+
+function updateHoursStats() {
+  const all = S.arr('hours');
+  const now = new Date();
+  const todayStr = today();
+  const ws = weekStart(), we = new Date(ws); we.setDate(we.getDate()+6);
+  const monthStr = now.toISOString().slice(0,7);
+
+  const sum = arr => arr.reduce((a,h) => a + h.mins, 0);
+  const toH = m => (m/60).toFixed(1) + 'h';
+
+  document.getElementById('hours-today').textContent = toH(sum(all.filter(h => h.date === todayStr)));
+  document.getElementById('hours-week').textContent  = toH(sum(all.filter(h => h.date >= dateStr(ws) && h.date <= dateStr(we))));
+  document.getElementById('hours-month').textContent = toH(sum(all.filter(h => h.date.startsWith(monthStr))));
+  document.getElementById('hours-cpd').textContent   = toH(sum(all.filter(h => h.category === 'CPD / Learning')));
+
+  // Update top-level overview stat
+  document.getElementById('stat-hours-month').textContent =
+    toH(sum(all.filter(h => h.date.startsWith(monthStr))));
+}
+
+function renderHoursLog() {
+  const all = S.arr('hours').sort((a,b) => b.date.localeCompare(a.date));
+  const tbody = document.getElementById('hours-log-table');
+  if (all.length === 0) {
+    tbody.innerHTML = '';
+    document.getElementById('hours-empty').style.display = 'block';
+    return;
+  }
+  document.getElementById('hours-empty').style.display = 'none';
+  tbody.innerHTML = all.map(h => `
+    <tr>
+      <td>${fmt(h.date)}</td>
+      <td><strong>${h.client}</strong></td>
+      <td><span class="badge badge-sage">${h.category}</span></td>
+      <td>${h.mins >= 60 ? (h.mins/60).toFixed(1) + ' h' : h.mins + ' min'}</td>
+      <td style="font-size:0.8rem;color:var(--text-mid);">${h.notes || '—'}</td>
+      <td><button class="btn btn-sm" style="color:var(--clay);border:1px solid var(--clay);border-radius:100px;background:none;cursor:pointer;" onclick="deleteHourEntry('${h.id}')">✕</button></td>
+    </tr>`).join('');
+}
+
+function deleteHourEntry(id) {
+  S.set('hours', S.arr('hours').filter(h => h.id !== id));
+  renderHoursLog(); updateHoursStats(); toast('Entry removed');
+}
+
+function exportHours() {
+  const all = S.arr('hours');
+  if (all.length === 0) return alert('No entries to export.');
+  const rows = [['Date','Client/Task','Category','Minutes','Hours','Notes'],
+    ...all.sort((a,b) => a.date.localeCompare(b.date)).map(h => [h.date, h.client, h.category, h.mins, (h.mins/60).toFixed(2), h.notes || ''])];
+  const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'nourish-with-ruby-hours.csv';
+  a.click();
+  toast('CSV exported ✓');
+}
+
+// ════════════════════════════════════════════════
+// READING LIST
+// ════════════════════════════════════════════════
+const typeEmoji = { 'Research Paper':'📄', 'Book':'📕', 'Article':'📰', 'Course':'🎓', 'Podcast':'🎧', 'Other':'🔗' };
+
+function addReading() {
+  const title  = document.getElementById('r-title').value.trim();
+  if (!title) return alert('Please enter a title.');
+  const reading = S.arr('reading');
+  reading.push({
+    id: uid(),
+    title,
+    author: document.getElementById('r-author').value.trim(),
+    type:   document.getElementById('r-type').value,
+    status: document.getElementById('r-status').value,
+    url:    document.getElementById('r-url').value.trim(),
+    notes:  document.getElementById('r-notes').value.trim(),
+    progress: 0,
+  });
+  S.set('reading', reading);
+  closeModal('modal-add-reading');
+  ['r-title','r-author','r-url','r-notes'].forEach(id => document.getElementById(id).value = '');
+  renderReading(); toast('Added to library ✓');
+}
+
+function renderReading() {
+  const filter = document.getElementById('reading-filter').value;
+  let data = S.arr('reading');
+  const all = data;
+
+  document.getElementById('reading-active').textContent = all.filter(r => r.status === 'reading').length;
+  document.getElementById('reading-done').textContent   = all.filter(r => r.status === 'done').length;
+  document.getElementById('reading-want').textContent   = all.filter(r => r.status === 'want').length;
+
+  if (filter !== 'all') data = data.filter(r => r.status === filter);
+
+  const list = document.getElementById('reading-list');
+  if (data.length === 0) {
+    list.innerHTML = '';
+    document.getElementById('reading-empty').style.display = 'block';
+    return;
+  }
+  document.getElementById('reading-empty').style.display = 'none';
+  list.innerHTML = data.map(r => `
+    <div class="reading-item">
+      <div class="reading-thumb">${typeEmoji[r.type] || '📄'}</div>
+      <div class="reading-info" style="flex:1">
+        <h4>${r.url ? `<a href="${r.url}" target="_blank" style="color:var(--sage-dark)">${r.title}</a>` : r.title}</h4>
+        <div class="reading-author">${r.author || '—'} · <span class="badge badge-grey">${r.type}</span></div>
+        ${r.notes ? `<div style="font-size:0.78rem;color:var(--text-mid);margin-top:4px;">${r.notes}</div>` : ''}
+        ${r.status === 'reading' ? `
+        <div style="display:flex;align-items:center;gap:10px;margin-top:8px;">
+          <div class="reading-progress"><div class="reading-progress-bar" style="width:${r.progress}%"></div></div>
+          <input type="range" min="0" max="100" value="${r.progress}" style="width:80px;" oninput="updateReadingProgress('${r.id}', this.value)">
+          <span style="font-size:0.72rem;color:var(--text-light)">${r.progress}%</span>
+        </div>` : ''}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;">
+        <select onchange="updateReadingStatus('${r.id}', this.value)" style="font-size:0.75rem;padding:4px 8px;border-radius:100px;border:1px solid var(--border);">
+          <option ${r.status==='want'?'selected':''} value="want">Want to read</option>
+          <option ${r.status==='reading'?'selected':''} value="reading">Reading</option>
+          <option ${r.status==='done'?'selected':''} value="done">Done</option>
+        </select>
+        <button class="btn btn-sm" style="color:var(--clay);border:1px solid var(--clay);border-radius:100px;background:none;cursor:pointer;font-size:0.7rem;" onclick="deleteReading('${r.id}')">Remove</button>
+      </div>
+    </div>`).join('');
+}
+
+function updateReadingStatus(id, status) {
+  const arr = S.arr('reading');
+  const i = arr.findIndex(r => r.id === id);
+  if (i >= 0) { arr[i].status = status; S.set('reading', arr); renderReading(); }
+}
+function updateReadingProgress(id, val) {
+  const arr = S.arr('reading');
+  const i = arr.findIndex(r => r.id === id);
+  if (i >= 0) { arr[i].progress = parseInt(val); S.set('reading', arr); renderReading(); }
+}
+function deleteReading(id) {
+  S.set('reading', S.arr('reading').filter(r => r.id !== id));
+  renderReading(); toast('Removed from library');
+}
+
+// ════════════════════════════════════════════════
+// GOALS & CPD
+// ════════════════════════════════════════════════
+function addGoal() {
+  const title = document.getElementById('g-title').value.trim();
+  if (!title) return alert('Please enter a goal.');
+  const goals = S.arr('goals');
+  goals.push({
+    id: uid(), title,
+    category: document.getElementById('g-category').value,
+    date:     document.getElementById('g-date').value,
+    progress: parseInt(document.getElementById('g-progress').value) || 0,
+    notes:    document.getElementById('g-notes').value.trim(),
+    status:   'active',
+  });
+  S.set('goals', goals);
+  closeModal('modal-add-goal');
+  ['g-title','g-notes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('g-progress').value = '0';
+  renderGoals(); toast('Goal added ✓');
+}
+
+function renderGoals() {
+  const goals = S.arr('goals');
+  const active = goals.filter(g => g.status !== 'done');
+  const done   = goals.filter(g => g.status === 'done');
+
+  const catColors = { CPD:'badge-sage', Clinical:'badge-clay', Business:'badge-grey', Personal:'badge-green', Research:'badge-amber' };
+
+  const goalHTML = (g) => `
+    <div style="padding:12px 0;border-bottom:1px solid rgba(226,221,214,0.4);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+        <div style="flex:1">
+          <div style="font-weight:500;font-size:0.88rem;">${g.title}</div>
+          <div style="font-size:0.73rem;color:var(--text-light);margin-top:3px;">
+            <span class="badge ${catColors[g.category]||'badge-grey'}">${g.category}</span>
+            ${g.date ? ' · Target: ' + fmt(g.date) : ''}
+          </div>
+          ${g.notes ? `<div style="font-size:0.78rem;color:var(--text-mid);margin-top:4px;">${g.notes}</div>` : ''}
+          ${g.status !== 'done' ? `
+          <div style="display:flex;align-items:center;gap:10px;margin-top:8px;">
+            <div style="height:4px;background:var(--border);border-radius:2px;flex:1;">
+              <div style="height:100%;border-radius:2px;background:var(--sage);width:${g.progress}%;"></div>
+            </div>
+            <input type="range" min="0" max="100" value="${g.progress}" style="width:70px;" oninput="updateGoalProgress('${g.id}', this.value)">
+            <span style="font-size:0.72rem;color:var(--text-light);min-width:32px">${g.progress}%</span>
+          </div>` : ''}
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px;align-items:flex-end;">
+          ${g.status !== 'done' ? `<button class="btn btn-sm" style="border:1px solid var(--sage);color:var(--sage-dark);border-radius:100px;background:none;cursor:pointer;font-size:0.7rem;" onclick="markGoalDone('${g.id}')">Mark done</button>` : ''}
+          <button class="btn btn-sm" style="color:var(--clay);border:1px solid var(--clay);border-radius:100px;background:none;cursor:pointer;font-size:0.7rem;" onclick="deleteGoal('${g.id}')">Remove</button>
+        </div>
+      </div>
+    </div>`;
+
+  const activeEl = document.getElementById('goals-active-list');
+  const emptyEl  = document.getElementById('goals-empty');
+  if (active.length === 0) {
+    activeEl.innerHTML = '';
+    emptyEl.style.display = 'block';
+  } else {
+    emptyEl.style.display = 'none';
+    activeEl.innerHTML = active.map(goalHTML).join('');
+  }
+
+  const doneEl = document.getElementById('goals-done-list');
+  doneEl.innerHTML = done.length === 0
+    ? '<div class="empty-state"><div class="empty-icon">🏅</div>Completed goals will appear here.</div>'
+    : done.map(goalHTML).join('');
+
+  // Category breakdown from hours
+  const hours = S.arr('hours');
+  const cats = {};
+  hours.forEach(h => { cats[h.category] = (cats[h.category] || 0) + h.mins; });
+  const breakdown = document.getElementById('category-breakdown');
+  breakdown.innerHTML = Object.entries(cats).sort((a,b) => b[1]-a[1]).map(([cat,mins]) => `
+    <div style="background:var(--sage-faint);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;min-width:140px;text-align:center;">
+      <div style="font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-light);margin-bottom:6px;">${cat}</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--sage-dark);">${(mins/60).toFixed(1)}h</div>
+    </div>`).join('') || '<div style="color:var(--text-light);font-size:0.84rem;">Log hours to see breakdown.</div>';
+}
+
+function updateGoalProgress(id, val) {
+  const arr = S.arr('goals');
+  const i = arr.findIndex(g => g.id === id);
+  if (i >= 0) { arr[i].progress = parseInt(val); S.set('goals', arr); renderGoals(); }
+}
+function markGoalDone(id) {
+  const arr = S.arr('goals');
+  const i = arr.findIndex(g => g.id === id);
+  if (i >= 0) { arr[i].status = 'done'; arr[i].progress = 100; S.set('goals', arr); renderGoals(); toast('Goal completed 🎉'); }
+}
+function deleteGoal(id) {
+  S.set('goals', S.arr('goals').filter(g => g.id !== id));
+  renderGoals(); toast('Goal removed');
+}
+
+// ════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════
+(function init() {
+  document.getElementById('overview-date').textContent =
+    new Date().toLocaleDateString('en-GB', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+  document.getElementById('manual-date').value = today();
+
+  // Set default dates in modals
+  ['s-date','f-date','n-date','g-date'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && !el.value) el.value = today();
+  });
+
+  refreshOverview();
+})();
+</script>
+</body>
+</html>
