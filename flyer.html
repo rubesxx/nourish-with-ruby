@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nourish with Ruby – Flyer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --sage:       #7a9870;
+      --sage-mid:   #4a6845;
+      --sage-deep:  #2c4230;
+      --sage-pale:  #d4d9cc;
+      --sage-hero:  #bec4b0;
+      --clay:       #c4846a;
+      --clay-lt:    #e8c4b0;
+      --rose:       #c49a8a;
+      --cream:      #faf7f2;
+      --parch:      #f3ede3;
+      --white:      #fefcf8;
+      --charcoal:   #252523;
+      --mid:        #5e5e5a;
+    }
+
+    body {
+      background: #8a9882;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; padding: 48px 24px;
+      font-family: 'Raleway', sans-serif;
+    }
+
+    @media print {
+      body { background: white; padding: 0; margin: 0; }
+      .flyer { box-shadow: none !important; border-radius: 0 !important; }
+      .print-btn { display: none !important; }
+      @page { margin: 0; size: A5 portrait; }
+    }
+
+    .print-btn {
+      position: fixed; top: 20px; right: 20px;
+      background: var(--sage-mid); color: white; border: none;
+      padding: 11px 22px; border-radius: 30px;
+      font-family: 'Raleway', sans-serif; font-size: 0.82rem;
+      font-weight: 500; cursor: pointer; letter-spacing: 0.06em;
+      z-index: 100; box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+    }
+    .print-btn:hover { background: var(--sage-deep); }
+
+    /* FLYER */
+    .flyer {
+      width: 559px;
+      border-radius: 6px;
+      box-shadow: 0 28px 80px rgba(0,0,0,0.22);
+      overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+
+    /* HERO — light sage green */
+    .hero {
+      background: var(--sage-hero);
+      position: relative; overflow: hidden;
+      min-height: 230px;
+      display: flex; align-items: stretch;
+    }
+
+    .wc-hero-canvas {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none; z-index: 1;
+    }
+
+    .hero-left {
+      flex: 1;
+      padding: 38px 16px 34px 38px;
+      display: flex; flex-direction: column; justify-content: center;
+      position: relative; z-index: 4;
+    }
+    .hero-eyebrow {
+      font-size: 0.56rem; letter-spacing: 0.24em;
+      text-transform: uppercase; color: var(--sage-mid); margin-bottom: 12px;
+    }
+    .hero-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem; font-weight: 400;
+      color: var(--sage-deep); line-height: 1.0;
+    }
+    .hero-name em { font-style: italic; font-weight: 600; color: var(--clay); }
+    .hero-rule {
+      width: 44px; height: 2px; border-radius: 2px;
+      background: linear-gradient(90deg, var(--clay), var(--sage));
+      margin: 16px 0;
+    }
+    .hero-tagline {
+      font-size: 0.67rem; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--sage-mid); line-height: 1.55;
+    }
+
+    .hero-right {
+      width: 158px; flex-shrink: 0;
+      display: flex; align-items: flex-end; justify-content: center;
+      padding: 0 22px 0 0; position: relative; z-index: 4;
+    }
+    .photo-frame {
+      width: 128px; height: 162px;
+      border-radius: 70px 70px 0 0; overflow: hidden;
+      border: 3px solid rgba(255,255,255,0.5);
+      box-shadow: 0 6px 24px rgba(46,77,50,0.18);
+      background: var(--sage); align-self: flex-end;
+    }
+    .photo-frame img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center top; display: block;
+    }
+
+    /* BODY */
+    .body {
+      background: var(--white);
+      padding: 28px 40px 0;
+      display: flex; flex-direction: column; gap: 20px;
+      position: relative; overflow: hidden;
+    }
+
+    .body-wc-canvas {
+      position: absolute; bottom: -20px; right: -20px;
+      width: 220px; height: 220px;
+      pointer-events: none; z-index: 0; opacity: 0.6;
+    }
+    .courgette-flower {
+      position: absolute; left: -18px; bottom: 60px;
+      width: 160px; height: 200px;
+      pointer-events: none; z-index: 0; opacity: 0.82;
+    }
+    .bean-art {
+      position: absolute; right: -14px; top: 30px;
+      width: 130px; height: 180px;
+      pointer-events: none; z-index: 0; opacity: 0.78;
+    }
+
+    /* pull quote */
+    .pull-quote {
+      text-align: center; padding: 2px 10px; position: relative; z-index: 1;
+    }
+    .pull-quote p {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.08rem; font-style: italic;
+      color: var(--sage-deep); line-height: 1.6;
+    }
+    .pq-dec {
+      display: flex; align-items: center; gap: 10px;
+      margin-top: 10px; justify-content: center;
+    }
+    .pq-dec span { width: 30px; height: 1px; background: var(--clay-lt); display: block; }
+
+    /* benefits */
+    .benefits { display: flex; flex-direction: column; gap: 9px; position: relative; z-index: 1; }
+    .benefit-row {
+      display: flex; align-items: flex-start; gap: 14px;
+      background: var(--parch); border-radius: 8px; padding: 11px 14px;
+    }
+    .benefit-icon { flex-shrink: 0; margin-top: 1px; }
+    .benefit-text strong {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.88rem; font-weight: 600; color: var(--charcoal);
+      display: block; margin-bottom: 2px;
+    }
+    .benefit-text span {
+      font-size: 0.67rem; color: var(--mid); line-height: 1.5;
+    }
+
+    /* specialisms */
+    .section-label {
+      font-size: 0.56rem; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--sage-mid);
+      text-align: center; margin-bottom: 9px; position: relative; z-index: 1;
+    }
+    .specialisms {
+      display: flex; flex-wrap: wrap; gap: 7px;
+      justify-content: center; position: relative; z-index: 1;
+    }
+    .spec-tag {
+      background: transparent; border: 1px solid var(--sage);
+      color: var(--sage-mid); padding: 5px 13px; border-radius: 30px;
+      font-size: 0.61rem; letter-spacing: 0.05em;
+    }
+
+    .wave-div { display: flex; justify-content: center; position: relative; z-index: 1; margin: -4px 0; }
+
+    /* QR */
+    .qr-bar {
+      background: var(--sage-deep);
+      margin: 12px -40px 0; padding: 18px 40px;
+      display: flex; align-items: center; gap: 20px;
+      position: relative; overflow: hidden;
+    }
+    .qr-bar-art { position: absolute; right: 0; top: 0; width: 130px; height: 100%; pointer-events: none; opacity: 0.18; }
+    .qr-img-wrap {
+      flex-shrink: 0; width: 70px; height: 70px;
+      background: white; border-radius: 6px; padding: 4px;
+      overflow: hidden; position: relative; z-index: 1;
+    }
+    .qr-img-wrap img { width: 100%; height: 100%; display: block; }
+    .qr-info { position: relative; z-index: 1; }
+    .qr-info h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; font-weight: 600; color: white; margin-bottom: 3px;
+    }
+    .qr-info p { font-size: 0.65rem; color: rgba(255,255,255,0.6); line-height: 1.5; }
+
+    /* footer */
+    .footer {
+      background: var(--charcoal); padding: 12px 40px;
+      display: flex; justify-content: center; align-items: center; gap: 12px;
+    }
+    .footer-email { font-size: 0.68rem; color: rgba(255,255,255,0.7); letter-spacing: 0.06em; }
+  </style>
+</head>
+<body>
+<button class="print-btn" onclick="window.print()">&#x2193; Save as PDF</button>
+
+<div class="flyer">
+
+  <!-- HERO -->
+  <div class="hero">
+
+    <!-- WATERCOLOUR BOTANICALS in hero -->
+    <svg class="wc-hero-canvas" viewBox="0 0 559 230" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- watercolour displacement filters -->
+        <filter id="wf1" x="-40%" y="-40%" width="180%" height="180%">
+          <feTurbulence type="turbulence" baseFrequency="0.03" numOctaves="4" seed="6" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="11" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <filter id="wf2" x="-40%" y="-40%" width="180%" height="180%">
+          <feTurbulence type="turbulence" baseFrequency="0.04" numOctaves="3" seed="14" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="8" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <filter id="wf3" x="-40%" y="-40%" width="180%" height="180%">
+          <feTurbulence type="turbulence" baseFrequency="0.025" numOctaves="4" seed="2" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="13" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <filter id="wfsoft" x="-20%" y="-20%" width="140%" height="140%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3" seed="9" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="6"/>
+        </filter>
+      </defs>
+
+      <!-- BLUE MORNING GLORY — climbing right side -->
+
+      <!-- vine stem -->
+      <path d="M475 230 C472 205 468 185 472 162 C476 140 470 118 474 95 C478 72 472 50 476 28 C478 16 480 8 482 2" stroke="#2e4d32" stroke-width="1.4" stroke-linecap="round" fill="none" filter="url(#wf2)" opacity="0.65"/>
+
+      <!-- leaf pairs -->
+      <g filter="url(#wf1)" opacity="0.6">
+        <path d="M472 162 C456 152 444 156 442 168 C454 174 466 170 472 162Z" fill="#4e7430"/>
+        <path d="M472 162 C486 152 498 154 500 166 C488 172 474 168 472 162Z" fill="#4e7353"/>
+        <path d="M474 105 C460 96 448 100 446 112 C458 118 468 114 474 105Z" fill="#3a6040"/>
+        <path d="M474 105 C488 96 500 98 502 110 C490 116 476 112 474 105Z" fill="#4e7430"/>
+      </g>
+
+      <!-- tendrils -->
+      <path d="M468 140 C458 132 452 138 454 146 C456 154 466 152 466 144 C466 136 456 134 452 140" stroke="#4e7353" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.55"/>
+      <path d="M476 78 C488 70 494 76 492 84 C490 92 480 90 480 82 C480 74 490 72 494 78" stroke="#4e7353" stroke-width="0.9" fill="none" stroke-linecap="round" opacity="0.5"/>
+
+      <!-- MORNING GLORY 1 — large open trumpet, deep indigo -->
+      <g filter="url(#wf1)" opacity="0.8">
+        <path d="M430 120 C410 96 406 68 422 54 C438 40 458 52 460 76 C462 100 448 122 430 120Z" fill="#3a5a9a"/>
+      </g>
+      <g filter="url(#wf2)" opacity="0.5">
+        <path d="M430 118 C414 96 412 72 426 60 C440 48 456 60 456 82 C456 102 444 120 430 118Z" fill="#7a96cc"/>
+      </g>
+      <!-- radiating veins -->
+      <path d="M430 115 C428 95 424 75 426 57" stroke="#2a3a7a" stroke-width="0.8" fill="none" opacity="0.4" stroke-linecap="round"/>
+      <path d="M430 115 C436 94 440 74 434 56" stroke="#2a3a7a" stroke-width="0.7" fill="none" opacity="0.35" stroke-linecap="round"/>
+      <path d="M430 115 C418 98 412 80 416 60" stroke="#2a3a7a" stroke-width="0.7" fill="none" opacity="0.3" stroke-linecap="round"/>
+      <path d="M430 115 C442 98 448 80 444 60" stroke="#2a3a7a" stroke-width="0.7" fill="none" opacity="0.3" stroke-linecap="round"/>
+      <!-- white star centre -->
+      <g filter="url(#wf2)" opacity="0.85">
+        <path d="M430 115 C426 107 426 99 430 95 C434 99 434 107 430 115Z" fill="white" fill-opacity="0.75"/>
+        <path d="M430 115 C422 111 418 105 422 101 C426 101 430 107 430 115Z" fill="white" fill-opacity="0.5"/>
+        <path d="M430 115 C438 111 442 105 438 101 C434 101 430 107 430 115Z" fill="white" fill-opacity="0.5"/>
+      </g>
+      <path d="M430 120 C410 96 406 68 422 54 C438 40 458 52 460 76 C462 100 448 122 430 120Z" stroke="#1a2a6a" stroke-width="1.4" fill="none" filter="url(#wf2)" opacity="0.75"/>
+      <!-- green calyx -->
+      <g filter="url(#wf2)" opacity="0.85">
+        <path d="M430 120 C422 116 416 120 418 128 C424 132 430 128 430 120Z" fill="#3a6040"/>
+        <path d="M430 120 C438 116 444 120 442 128 C436 132 430 128 430 120Z" fill="#4e7430"/>
+      </g>
+
+      <!-- MORNING GLORY 2 — second bloom, lower -->
+      <g filter="url(#wf3)" opacity="0.82">
+        <path d="M400 178 C384 158 380 134 394 122 C408 110 426 122 426 142 C426 162 414 180 400 178Z" fill="#4a6aaa"/>
+      </g>
+      <g filter="url(#wf2)" opacity="0.45">
+        <path d="M400 176 C388 158 386 136 398 126 C410 118 422 128 422 146 C422 162 412 178 400 176Z" fill="#8aaad8"/>
+      </g>
+      <g filter="url(#wf2)" opacity="0.8">
+        <path d="M400 172 C396 164 396 156 400 152 C404 156 404 164 400 172Z" fill="white" fill-opacity="0.7"/>
+        <path d="M400 172 C392 168 390 160 394 156 C398 158 400 164 400 172Z" fill="white" fill-opacity="0.45"/>
+      </g>
+      <path d="M400 178 C384 158 380 134 394 122 C408 110 426 122 426 142 C426 162 414 180 400 178Z" stroke="#1a2a6a" stroke-width="1.2" fill="none" filter="url(#wf2)" opacity="0.65"/>
+      <g filter="url(#wf2)" opacity="0.8">
+        <path d="M400 178 C392 174 386 178 388 186 C394 190 400 186 400 178Z" fill="#3a6040"/>
+        <path d="M400 178 C408 174 414 178 412 186 C406 190 400 186 400 178Z" fill="#4e7430"/>
+      </g>
+
+      <!-- BUD top -->
+      <g filter="url(#wf1)" opacity="0.85">
+        <path d="M478 30 C470 18 466 6 474 0 C482 2 484 16 480 30Z" fill="#3a5a9a"/>
+        <path d="M478 32 C470 24 464 32 466 40 C472 44 478 40 478 32Z" fill="#3a6040"/>
+        <path d="M478 32 C486 24 492 32 490 40 C484 44 478 40 478 32Z" fill="#4e7430"/>
+      </g>
+      <path d="M478 40 L476 55" stroke="#2e4d32" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
+
+      <!-- ink splats blue -->
+      <circle cx="460" cy="145" r="1.6" fill="#1a2a6a" fill-opacity="0.3"/>
+      <circle cx="388" cy="118" r="1.3" fill="#1a2a6a" fill-opacity="0.22"/>
+      <circle cx="498" cy="62"  r="1.2" fill="#1a2a6a" fill-opacity="0.2"/>
+      <circle cx="415" cy="195" r="1"   fill="#2e4d32" fill-opacity="0.22"/>
+
+      <!-- WATERCOLOUR LEAF CLUSTER — upper left -->
+      <g filter="url(#wf1)" opacity="0.5">
+        <path d="M30 30 C50 10 80 15 90 35 C70 50 40 50 30 30Z" fill="#4e7353"/>
+        <path d="M55 20 C70 5 95 8 100 28 C82 42 58 38 55 20Z" fill="#7a9e7e"/>
+        <path d="M18 50 C35 30 62 32 68 52 C50 65 24 62 18 50Z" fill="#2e4d32" fill-opacity="0.7"/>
+      </g>
+      <!-- leaf veins -->
+      <path d="M60 40 C70 30 82 28" stroke="#2e4d32" stroke-width="0.7" fill="none" stroke-linecap="round" opacity="0.4"/>
+      <path d="M42 44 C52 34 64 30" stroke="#2e4d32" stroke-width="0.6" fill="none" stroke-linecap="round" opacity="0.4"/>
+
+      <!-- LEAF CLUSTER top right corner (around flower) -->
+      <g filter="url(#wf2)" opacity="0.5">
+        <path d="M480 10 C500 0 530 8 535 28 C515 40 486 32 480 10Z" fill="#7a9e7e"/>
+        <path d="M500 5 C518 -5 545 5 548 22 C530 34 504 26 500 5Z" fill="#4e7353" fill-opacity="0.8"/>
+      </g>
+      <!-- leaf right edge -->
+      <g filter="url(#wf1)" opacity="0.4">
+        <path d="M540 60 C556 44 560 20 550 8" stroke="#2e4d32" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M546 40 C558 32 562 18" stroke="#4e7353" stroke-width="1" fill="none" stroke-linecap="round"/>
+      </g>
+
+      <!-- SPIRAL TENDRILS -->
+      <path d="M100 40 C108 30 118 32 116 42 C114 52 104 52 102 44 C100 36 108 32 114 38" stroke="#4e7353" stroke-width="1.3" fill="none" stroke-linecap="round" opacity="0.6"/>
+      <path d="M60 185 C68 175 78 177 76 187 C74 197 64 195 63 187 C62 179 70 175 76 181" stroke="#4e7353" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.45"/>
+      <!-- small sweet pea bud left side -->
+      <g filter="url(#wf3)" opacity="0.45">
+        <path d="M72 118 C66 110 64 100 70 94 C76 88 82 94 82 104 C82 114 78 120 72 118Z" fill="#c4846a"/>
+        <path d="M72 120 C66 114 62 120 64 126 C68 130 72 128 72 120Z" fill="#4e7353"/>
+        <path d="M72 120 C78 114 82 120 80 126 C76 130 72 128 72 120Z" fill="#3a6040"/>
+      </g>
+      <path d="M72 128 L72 140" stroke="#2e4d32" stroke-width="1.1" stroke-linecap="round" opacity="0.45"/>
+
+      <!-- SMALL SCATTERED BUDS -->
+      <!-- bud 1 -->
+      <g filter="url(#wfsoft)" opacity="0.55">
+        <path d="M155 18 C150 10 148 4 155 2 C162 4 160 10 155 18Z" fill="#7a9e7e"/>
+        <path d="M155 18 C160 10 164 6 160 2 C154 2 150 8 155 18Z" fill="#4e7353" fill-opacity="0.7"/>
+      </g>
+      <line x1="155" y1="18" x2="155" y2="30" stroke="#4e7353" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+      <!-- bud 2 -->
+      <g filter="url(#wfsoft)" opacity="0.4">
+        <path d="M490" cy="160" r="0"/>
+        <path d="M490 155 C486 147 485 141 490 139 C495 141 494 147 490 155Z" fill="#c4846a"/>
+      </g>
+      <line x1="490" y1="155" x2="490" y2="168" stroke="#4e7353" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
+
+      <!-- soft green washes behind everything -->
+      <ellipse cx="260" cy="0" rx="200" ry="50" fill="#a8bea8" fill-opacity="0.3" filter="url(#wf1)"/>
+      <ellipse cx="430" cy="230" rx="120" ry="50" fill="#8aaa8a" fill-opacity="0.2" filter="url(#wf2)"/>
+    </svg>
+
+    <div class="hero-left">
+      <div class="hero-eyebrow">Registered Nutritionist</div>
+      <div class="hero-name">Nourish<br>with <em>Ruby</em></div>
+      <div class="hero-rule"></div>
+      <div class="hero-tagline">Personalised nutrition<br>for your whole self</div>
+    </div>
+
+    <div class="hero-right">
+      <div class="photo-frame">
+        <img src="ruby.jpg" alt="Ruby Chauhan, Nutritionist" />
+      </div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- WATERCOLOUR BOTANICAL CORNER — body bottom right -->
+    <svg class="body-wc-canvas" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="wcbb1" x="-40%" y="-40%" width="180%" height="180%">
+          <feTurbulence type="turbulence" baseFrequency="0.03" numOctaves="4" seed="3" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="11"/>
+        </filter>
+        <filter id="wcbb2" x="-40%" y="-40%" width="180%" height="180%">
+          <feTurbulence type="turbulence" baseFrequency="0.04" numOctaves="3" seed="11" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="8"/>
+        </filter>
+      </defs>
+
+      <!-- flower bottom right -->
+      <g filter="url(#wcbb1)" opacity="0.5">
+        <ellipse cx="160" cy="160" rx="35" ry="14" fill="#d4848a" transform="rotate(0 160 160)"/>
+        <ellipse cx="160" cy="160" rx="35" ry="14" fill="#d4848a" transform="rotate(45 160 160)"/>
+        <ellipse cx="160" cy="160" rx="35" ry="14" fill="#b8c898" transform="rotate(90 160 160)"/>
+        <ellipse cx="160" cy="160" rx="35" ry="14" fill="#b8c898" transform="rotate(135 160 160)"/>
+      </g>
+      <circle cx="160" cy="160" r="12" fill="#e8c4b0" fill-opacity="0.65" filter="url(#wcbb2)"/>
+      <circle cx="160" cy="160" r="6" fill="#c4846a" fill-opacity="0.6"/>
+
+      <!-- leaf sprigs -->
+      <g filter="url(#wcbb1)" opacity="0.55">
+        <path d="M80 190 C100 170 130 168 140 188 C120 202 92 200 80 190Z" fill="#7a9e7e"/>
+        <path d="M100 200 C118 180 146 176 152 196 C134 210 104 208 100 200Z" fill="#4e7353" fill-opacity="0.7"/>
+      </g>
+
+      <!-- spiral tendril -->
+      <path d="M110 130 C120 118 132 120 130 132 C128 144 116 144 114 134 C112 124 122 120 130 128" stroke="#4e7353" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.55"/>
+
+      <!-- small bud -->
+      <path d="M70 145 C66 137 65 131 70 129 C75 131 74 137 70 145Z" fill="#7a9e7e" fill-opacity="0.6" filter="url(#wcbb2)"/>
+      <line x1="70" y1="145" x2="70" y2="158" stroke="#4e7353" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+    </svg>
+
+    <!-- COURGETTE FLOWER — left edge -->
+    <svg class="courgette-flower" viewBox="0 0 160 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="ink1" x="-30%" y="-30%" width="160%" height="160%">
+          <feTurbulence type="turbulence" baseFrequency="0.035" numOctaves="4" seed="17" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="9" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <filter id="ink2" x="-30%" y="-30%" width="160%" height="160%">
+          <feTurbulence type="turbulence" baseFrequency="0.05" numOctaves="3" seed="22" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="6"/>
+        </filter>
+        <filter id="inkblur" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="1.2"/>
+        </filter>
+      </defs>
+
+      <!-- baby courgette at base -->
+      <g filter="url(#ink1)">
+        <ellipse cx="72" cy="178" rx="10" ry="22" fill="#4e7430" fill-opacity="0.75" transform="rotate(-12 72 178)"/>
+        <ellipse cx="72" cy="178" rx="7" ry="18" fill="#3a6a20" fill-opacity="0.4" transform="rotate(-12 72 178)"/>
+      </g>
+      <!-- courgette ink lines -->
+      <path d="M65 162 C67 170 68 180 66 190" stroke="#2e4d20" stroke-width="0.8" fill="none" stroke-linecap="round" opacity="0.5"/>
+      <path d="M70 160 C72 168 73 178 71 188" stroke="#2e4d20" stroke-width="0.7" fill="none" stroke-linecap="round" opacity="0.4"/>
+
+      <!-- main stem -->
+      <path d="M78 155 C76 145 74 132 76 118 C78 105 74 95 78 80" stroke="#2e4d20" stroke-width="1.8" stroke-linecap="round" fill="none" filter="url(#ink2)"/>
+
+      <!-- green calyx / sepals at flower base -->
+      <g filter="url(#ink1)" opacity="0.85">
+        <path d="M78 85 C68 78 58 82 54 92 C62 96 72 92 78 85Z" fill="#4e7a2e"/>
+        <path d="M78 85 C82 74 78 64 70 62 C66 70 68 80 78 85Z" fill="#3a6020"/>
+        <path d="M78 85 C88 78 98 80 102 90 C94 96 84 92 78 85Z" fill="#4e7430"/>
+        <path d="M78 85 C84 74 90 68 98 68 C98 76 90 82 78 85Z" fill="#4e7a2e" fill-opacity="0.8"/>
+        <path d="M78 85 C66 80 60 70 62 60 C70 60 76 72 78 85Z" fill="#3a6020" fill-opacity="0.7"/>
+      </g>
+      <!-- calyx ink outline -->
+      <path d="M78 85 C68 78 58 82 54 92" stroke="#2e4d20" stroke-width="0.9" fill="none" stroke-linecap="round" opacity="0.6"/>
+      <path d="M78 85 C88 78 98 80 102 90" stroke="#2e4d20" stroke-width="0.9" fill="none" stroke-linecap="round" opacity="0.6"/>
+      <path d="M78 85 C82 72 78 62 70 60" stroke="#2e4d20" stroke-width="0.9" fill="none" stroke-linecap="round" opacity="0.6"/>
+
+      <!-- PETALS — big golden trumpet courgette flower -->
+      <!-- watercolour wash layer first (soft) -->
+      <g filter="url(#inkblur)" opacity="0.45">
+        <path d="M78 82 C62 68 44 52 36 30 C50 22 66 34 78 52Z" fill="#f0c030"/>
+        <path d="M78 82 C72 62 72 40 78 18 C88 24 90 46 88 64Z" fill="#e8b820"/>
+        <path d="M78 82 C94 68 112 52 120 30 C108 22 92 34 78 52Z" fill="#f0c030"/>
+        <path d="M78 82 C58 72 40 72 22 80 C26 94 46 96 62 88Z" fill="#e8b020"/>
+        <path d="M78 82 C98 72 116 72 134 80 C130 94 110 96 94 88Z" fill="#f0c030"/>
+      </g>
+      <!-- main petal colour layer -->
+      <g filter="url(#ink1)" opacity="0.75">
+        <!-- top petal -->
+        <path d="M78 80 C70 60 68 38 76 16 C84 20 86 44 84 64Z" fill="#f5c824"/>
+        <!-- top-left petal -->
+        <path d="M78 80 C60 66 42 50 34 28 C46 20 64 34 76 54Z" fill="#ebb818"/>
+        <!-- top-right petal -->
+        <path d="M78 80 C96 66 114 50 122 28 C110 20 92 34 80 54Z" fill="#f5c824"/>
+        <!-- left petal -->
+        <path d="M78 80 C56 74 36 76 20 86 C24 100 46 102 64 92Z" fill="#e8b010"/>
+        <!-- right petal -->
+        <path d="M78 80 C100 74 120 76 136 86 C132 100 110 102 92 92Z" fill="#f0be1c"/>
+      </g>
+      <!-- deeper orange/ink at petal bases -->
+      <g filter="url(#ink2)" opacity="0.5">
+        <path d="M78 82 C70 72 62 68 54 72 C60 80 70 84 78 82Z" fill="#d4880a"/>
+        <path d="M78 82 C86 72 94 68 102 72 C96 80 86 84 78 82Z" fill="#d4880a"/>
+        <path d="M78 82 C74 70 74 60 78 52 C82 60 82 70 78 82Z" fill="#c87808"/>
+      </g>
+      <!-- petal ink outlines — loose and inky -->
+      <path d="M78 80 C70 60 68 38 76 16" stroke="#8a5c00" stroke-width="1.1" fill="none" stroke-linecap="round" opacity="0.55" filter="url(#ink2)"/>
+      <path d="M78 80 C60 66 42 50 34 28" stroke="#8a5c00" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.5" filter="url(#ink2)"/>
+      <path d="M78 80 C96 66 114 50 122 28" stroke="#8a5c00" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.5" filter="url(#ink2)"/>
+      <path d="M78 80 C56 74 36 76 20 86" stroke="#8a5c00" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.45" filter="url(#ink2)"/>
+      <path d="M78 80 C100 74 120 76 136 86" stroke="#8a5c00" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.45" filter="url(#ink2)"/>
+      <!-- petal vein lines -->
+      <path d="M78 80 C74 62 72 44 74 22" stroke="#c8920e" stroke-width="0.6" fill="none" stroke-linecap="round" opacity="0.4"/>
+      <path d="M78 80 C64 68 50 56 38 34" stroke="#c8920e" stroke-width="0.6" fill="none" stroke-linecap="round" opacity="0.35"/>
+      <path d="M78 80 C92 68 106 56 118 34" stroke="#c8920e" stroke-width="0.6" fill="none" stroke-linecap="round" opacity="0.35"/>
+      <path d="M78 80 C60 76 44 76 26 84" stroke="#c8920e" stroke-width="0.5" fill="none" stroke-linecap="round" opacity="0.3"/>
+      <!-- flower centre / stamens -->
+      <circle cx="78" cy="80" r="9" fill="#c87808" fill-opacity="0.6" filter="url(#inkblur)"/>
+      <circle cx="78" cy="80" r="5" fill="#8a4c00" fill-opacity="0.55"/>
+      <circle cx="75" cy="78" r="1.4" fill="#5a2c00" fill-opacity="0.7"/>
+      <circle cx="81" cy="77" r="1.4" fill="#5a2c00" fill-opacity="0.7"/>
+      <circle cx="78" cy="83" r="1.4" fill="#5a2c00" fill-opacity="0.7"/>
+      <circle cx="74" cy="82" r="1.1" fill="#5a2c00" fill-opacity="0.5"/>
+      <circle cx="82" cy="82" r="1.1" fill="#5a2c00" fill-opacity="0.5"/>
+
+      <!-- ink splash drops around flower (inky style) -->
+      <circle cx="30" cy="26" r="1.8" fill="#8a5c00" fill-opacity="0.35"/>
+      <circle cx="125" cy="24" r="1.4" fill="#8a5c00" fill-opacity="0.3"/>
+      <circle cx="17" cy="88" r="1.2" fill="#2e4d20" fill-opacity="0.3"/>
+      <circle cx="138" cy="90" r="1.5" fill="#2e4d20" fill-opacity="0.25"/>
+      <circle cx="76" cy="10" r="1" fill="#8a5c00" fill-opacity="0.3"/>
+    </svg>
+
+    <!-- RUNNER BEAN — right edge -->
+    <svg class="bean-art" viewBox="0 0 130 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="bink1" x="-40%" y="-40%" width="180%" height="180%">
+          <feTurbulence type="turbulence" baseFrequency="0.04" numOctaves="4" seed="31" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="8" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <filter id="bink2" x="-40%" y="-40%" width="180%" height="180%">
+          <feTurbulence type="turbulence" baseFrequency="0.06" numOctaves="3" seed="19" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="5"/>
+        </filter>
+        <filter id="bblur">
+          <feGaussianBlur stdDeviation="1"/>
+        </filter>
+      </defs>
+
+      <!-- stem curving down from top -->
+      <path d="M80 5 C82 20 78 35 82 50 C86 65 80 80 84 98 C88 115 82 130 80 148" stroke="#2e4d20" stroke-width="1.6" stroke-linecap="round" fill="none" filter="url(#bink2)"/>
+
+      <!-- small leaf top -->
+      <g filter="url(#bink1)" opacity="0.8">
+        <path d="M80 22 C64 14 50 18 46 30 C58 38 72 34 80 22Z" fill="#4e7430"/>
+        <path d="M80 22 C96 14 108 20 110 32 C98 40 84 36 80 22Z" fill="#4e7a2e" fill-opacity="0.85"/>
+      </g>
+      <path d="M80 22 L46 30" stroke="#2e4d20" stroke-width="0.7" fill="none" opacity="0.4" stroke-linecap="round"/>
+      <path d="M80 22 L110 32" stroke="#2e4d20" stroke-width="0.7" fill="none" opacity="0.4" stroke-linecap="round"/>
+      <!-- leaf veins -->
+      <path d="M63 26 C60 20 56 18" stroke="#2e4d20" stroke-width="0.5" fill="none" opacity="0.35" stroke-linecap="round"/>
+      <path d="M95 28 C98 22 102 20" stroke="#2e4d20" stroke-width="0.5" fill="none" opacity="0.35" stroke-linecap="round"/>
+
+      <!-- spiral tendril off stem -->
+      <path d="M84 60 C94 54 100 58 98 66 C96 74 88 74 86 66 C84 58 92 54 98 60" stroke="#4e7a2e" stroke-width="1.1" fill="none" stroke-linecap="round" opacity="0.65"/>
+
+      <!-- BEAN POD — long curved shape -->
+      <!-- soft watercolour wash underneath -->
+      <path d="M72 78 C58 90 52 108 54 126 C56 144 66 158 76 165 C86 172 96 168 102 156 C108 144 106 124 100 108 C94 92 84 78 72 78Z" fill="#6a9838" fill-opacity="0.28" filter="url(#bblur)"/>
+      <!-- main pod body -->
+      <g filter="url(#bink1)">
+        <path d="M74 80 C60 92 55 112 57 130 C59 148 68 160 78 166 C88 172 98 166 103 152 C108 138 106 118 99 102 C92 86 82 78 74 80Z" fill="#5a8e28" fill-opacity="0.7"/>
+      </g>
+      <!-- pod highlight / inner colour variation -->
+      <g filter="url(#bink2)" opacity="0.5">
+        <path d="M76 88 C65 98 60 116 62 132 C64 148 72 158 80 162 C88 158 94 148 94 132 C94 116 88 98 80 88Z" fill="#7aaa38"/>
+      </g>
+      <!-- darker ink shading along edge -->
+      <g filter="url(#bink1)" opacity="0.4">
+        <path d="M74 80 C62 94 56 114 58 132" stroke="#2e6010" stroke-width="4" fill="none" stroke-linecap="round"/>
+      </g>
+
+      <!-- bean bumps inside pod (the beans themselves) -->
+      <!-- each bump is an ellipse sitting inside the pod -->
+      <ellipse cx="78" cy="98"  rx="7" ry="5.5" fill="#3a7010" fill-opacity="0.22" filter="url(#bink2)"/>
+      <ellipse cx="76" cy="112" rx="7" ry="5.5" fill="#3a7010" fill-opacity="0.2"  filter="url(#bink2)"/>
+      <ellipse cx="78" cy="126" rx="7" ry="5.5" fill="#3a7010" fill-opacity="0.22" filter="url(#bink2)"/>
+      <ellipse cx="80" cy="140" rx="6" ry="5"   fill="#3a7010" fill-opacity="0.18" filter="url(#bink2)"/>
+      <ellipse cx="80" cy="153" rx="5" ry="4.5" fill="#3a7010" fill-opacity="0.15" filter="url(#bink2)"/>
+
+      <!-- pod ink outline — loose, inky -->
+      <path d="M74 80 C60 92 55 112 57 130 C59 148 68 160 78 166 C88 172 98 166 103 152 C108 138 106 118 99 102 C92 86 82 78 74 80Z" stroke="#2e5c10" stroke-width="1.3" fill="none" filter="url(#bink2)" opacity="0.65"/>
+      <!-- pod spine line (centre vein) -->
+      <path d="M76 82 C74 100 74 120 76 140 C77 150 78 160 80 166" stroke="#2e6010" stroke-width="0.8" fill="none" stroke-linecap="round" opacity="0.35"/>
+
+      <!-- curly tip at bottom of pod -->
+      <path d="M78 166 C76 172 72 176 70 172 C68 168 72 164 76 168" stroke="#2e5c10" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.6" filter="url(#bink2)"/>
+
+      <!-- ink splats -->
+      <circle cx="110" cy="78"  r="1.8" fill="#2e5c10" fill-opacity="0.3"/>
+      <circle cx="50"  cy="145" r="1.4" fill="#2e5c10" fill-opacity="0.25"/>
+      <circle cx="106" cy="165" r="1.2" fill="#2e5c10" fill-opacity="0.2"/>
+      <circle cx="118" cy="108" r="1"   fill="#5a8e28" fill-opacity="0.35"/>
+    </svg>
+
+    <!-- pull quote -->
+    <div class="pull-quote">
+      <p>"Everyone deserves to move through life with the energy to squeeze every last bit of enjoyment out of it."</p>
+      <div class="pq-dec">
+        <span></span>
+        <svg width="18" height="10" viewBox="0 0 18 10">
+          <path d="M1 5 C3 1 6 1 8 5 C10 9 13 9 15 5" stroke="#c4846a" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+        </svg>
+        <span></span>
+      </div>
+    </div>
+
+    <!-- benefits -->
+    <div class="benefits">
+
+      <div class="benefit-row">
+        <div class="benefit-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M11 3 C11 3 7 7 7 11 C7 14 9 16 11 16 C13 16 15 14 15 11 C15 7 11 3 11 3Z" stroke="#7a9e7e" stroke-width="1.3" fill="#7a9e7e" fill-opacity="0.15"/>
+            <line x1="11" y1="16" x2="11" y2="20" stroke="#7a9e7e" stroke-width="1.3" stroke-linecap="round"/>
+            <path d="M11 18 C9 16 6 16 5 17" stroke="#7a9e7e" stroke-width="1" stroke-linecap="round"/>
+            <path d="M11 18 C13 16 16 16 17 17" stroke="#7a9e7e" stroke-width="1" stroke-linecap="round" stroke-dasharray="1.5 1.5"/>
+          </svg>
+        </div>
+        <div class="benefit-text">
+          <strong>A truly holistic view</strong>
+          <span>Gut health, hormones, sleep, energy and daily routine: all considered together.</span>
+        </div>
+      </div>
+
+      <div class="benefit-row">
+        <div class="benefit-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M11 11 C11 7 14 5 16 7 C18 9 16 13 12 13 C8 13 6 9 8 6 C10 3 14 3 16 5" stroke="#7a9e7e" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+            <circle cx="11" cy="11" r="9" stroke="#7a9e7e" stroke-width="0.9" fill="none" stroke-dasharray="2 3"/>
+          </svg>
+        </div>
+        <div class="benefit-text">
+          <strong>Your plan, your way</strong>
+          <span>No one-size-fits-all. Everything tailored to your lifestyle, preferences and goals.</span>
+        </div>
+      </div>
+
+      <div class="benefit-row">
+        <div class="benefit-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <circle cx="11" cy="11" r="8" stroke="#7a9e7e" stroke-width="1.3" fill="none"/>
+            <path d="M7 11 L10 14 L15 8" stroke="#c4846a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="benefit-text">
+          <strong>Grounded in evidence</strong>
+          <span>The latest research, translated into realistic strategies you can actually stick to.</span>
+        </div>
+      </div>
+
+      <div class="benefit-row">
+        <div class="benefit-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M4 14 C4 10 7 7 11 7 C15 7 18 10 18 14" stroke="#7a9e7e" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+            <path d="M2 14 L20 14" stroke="#7a9e7e" stroke-width="1.3" stroke-linecap="round"/>
+            <path d="M6 14 C6 11 8 9 11 9 C14 9 16 11 16 14" fill="#7a9e7e" fill-opacity="0.12"/>
+            <circle cx="11" cy="6" r="2" fill="#c4846a" fill-opacity="0.5"/>
+          </svg>
+        </div>
+        <div class="benefit-text">
+          <strong>Cut through the noise</strong>
+          <span>Clear, trustworthy guidance. No fads, no conflicting advice, no overwhelm.</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- wavy divider -->
+    <div class="wave-div">
+      <svg width="180" height="16" viewBox="0 0 180 16" fill="none">
+        <path d="M0 8 C12 2 22 14 34 8 C46 2 56 14 68 8 C80 2 90 14 102 8 C114 2 124 14 136 8 C148 2 158 14 170 8 C176 5 178 7 180 8" stroke="#c4846a" stroke-width="0.9" fill="none" stroke-linecap="round" opacity="0.5"/>
+        <circle cx="90" cy="8" r="2" fill="#c4846a" fill-opacity="0.45"/>
+      </svg>
+    </div>
+
+    <!-- specialisms -->
+    <div style="position:relative;z-index:1;">
+      <div class="section-label">Areas of Expertise</div>
+      <div class="specialisms">
+        <span class="spec-tag">RED-S</span>
+        <span class="spec-tag">Menopause</span>
+        <span class="spec-tag">Gut Health</span>
+        <span class="spec-tag">Circadian Rhythms</span>
+        <span class="spec-tag">Herbal Medicine</span>
+        <span class="spec-tag">Hormone Balance</span>
+        <span class="spec-tag">Sports Nutrition</span>
+        <span class="spec-tag">Inflammation</span>
+      </div>
+    </div>
+
+    <!-- QR bar -->
+    <div class="qr-bar">
+      <!-- botanical art inside QR bar -->
+      <svg class="qr-bar-art" viewBox="0 0 130 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="wcqr" x="-30%" y="-30%" width="160%" height="160%">
+            <feTurbulence type="turbulence" baseFrequency="0.04" numOctaves="3" seed="5"/>
+            <feDisplacementMap in="SourceGraphic" scale="7"/>
+          </filter>
+        </defs>
+        <g filter="url(#wcqr)">
+          <ellipse cx="90" cy="30" rx="28" ry="12" fill="white" transform="rotate(0 90 30)"/>
+          <ellipse cx="90" cy="30" rx="28" ry="12" fill="white" transform="rotate(60 90 30)"/>
+          <ellipse cx="90" cy="30" rx="28" ry="12" fill="white" transform="rotate(120 90 30)"/>
+        </g>
+        <circle cx="90" cy="30" r="9" fill="white" fill-opacity="0.5" filter="url(#wcqr)"/>
+        <path d="M100 60 C108 50 118 50 122 58 C116 64 106 64 100 60Z" fill="white" fill-opacity="0.4" filter="url(#wcqr)"/>
+        <path d="M110 65 C114 55 124 54 126 62" stroke="white" stroke-width="0.8" fill="none" opacity="0.5"/>
+      </svg>
+
+      <div class="qr-img-wrap">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&color=252523&bgcolor=ffffff&data=https%3A%2F%2Fcalendly.com%2Fnourishwithruby%2F30min&margin=4" alt="Scan to book"/>
+      </div>
+      <div class="qr-info">
+        <h4>Book a Free Discovery Call</h4>
+        <p>Scan to choose a time that suits you. No commitment,<br>just a friendly chat about your health goals.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- footer -->
+  <div class="footer">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="opacity:0.35">
+      <path d="M6 6 C6 3 8 2 9 3 C10 4 9 6 7 6 C5 6 4 4 5 2.5 C6 1 8 1 9 2" stroke="white" stroke-width="1" fill="none" stroke-linecap="round"/>
+    </svg>
+    <div class="footer-email">nourishwithruby@outlook.com</div>
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="opacity:0.35;transform:scaleX(-1)">
+      <path d="M6 6 C6 3 8 2 9 3 C10 4 9 6 7 6 C5 6 4 4 5 2.5 C6 1 8 1 9 2" stroke="white" stroke-width="1" fill="none" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+</div>
+</body>
+</html>
