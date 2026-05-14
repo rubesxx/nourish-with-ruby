@@ -1,0 +1,22 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images"
+public_folder: "/images"
+
+collections:
+  - name: "recipes"
+    label: "Recipes"
+    folder: "_recipes"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Recipe Name", name: "title", widget: "string"}
+      - {label: "Category", name: "category", widget: "select", options: ["Breakfast", "Bean Main", "Lighter Plates"]}
+      - {label: "Emoji", name: "emoji", widget: "string"}
+      - {label: "Description", name: "description", widget: "text"}
+      - {label: "Prep Time", name: "time", widget: "string"}
+      - {label: "Photo", name: "image", widget: "image", required: false}
+      - {label: "Ingredients", name: "ingredients", widget: "text"}
+      - {label: "Method", name: "method", widget: "text"}
