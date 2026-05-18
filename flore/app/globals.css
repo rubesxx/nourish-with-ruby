@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+  --bg: #1F1235;
+  --surface: #2D1B4E;
+  --muted: #4C1D78;
+  --purple: #6B21A8;
+  --pink: #DB2777;
+  --text: #F5F0FF;
+  --dim: #A78FC0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #1F1235;
+  color: #F5F0FF;
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100dvh;
+  /* Safe area for bottom nav on iOS */
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #1F1235;
+}
+::-webkit-scrollbar-thumb {
+  background: #4C1D78;
+  border-radius: 3px;
+}
+
+/* Bottom nav safe area */
+.pb-safe {
+  padding-bottom: calc(80px + env(safe-area-inset-bottom));
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .gradient-purple-pink {
+    background: linear-gradient(135deg, #6B21A8, #DB2777);
+  }
+  .gradient-text {
+    background: linear-gradient(135deg, #A855F7, #EC4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
