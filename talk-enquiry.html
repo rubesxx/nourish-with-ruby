@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enquire About a Talk | Nourish with Ruby</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --sage:        #7a9e7e;
+      --sage-dark:   #4f7055;
+      --sage-pale:   #c8dbc9;
+      --sage-faint:  #eef4ee;
+      --clay:        #c17f5a;
+      --clay-light:  #e8b894;
+      --cream:       #faf8f3;
+      --text:        #2c2c2c;
+      --text-mid:    #5a5a5a;
+      --text-light:  #8a8a8a;
+      --border:      #e2ddd6;
+      --radius:      16px;
+      --shadow:      0 4px 32px rgba(79,112,85,0.10);
+      --shadow-lg:   0 12px 60px rgba(79,112,85,0.15);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 400;
+      line-height: 1.2;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%;
+      height: 70px;
+      background: rgba(250,248,243,0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(226,221,214,0.6);
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      color: var(--sage-dark);
+    }
+    .nav-logo span { color: var(--clay); }
+
+    .nav-back {
+      font-size: 0.875rem;
+      color: var(--text-mid);
+      display: flex; align-items: center; gap: 6px;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--sage-dark); }
+    .nav-back svg { flex-shrink: 0; }
+
+    /* ── PAGE LAYOUT ── */
+    .page {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 120px 24px 80px;
+    }
+
+    /* ── HEADER ── */
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 14px;
+    }
+
+    .page-title {
+      font-size: clamp(2.2rem, 5vw, 3rem);
+      color: var(--sage-dark);
+      margin-bottom: 16px;
+    }
+
+    .page-intro {
+      font-size: 1rem;
+      color: var(--text-mid);
+      line-height: 1.75;
+      margin-bottom: 48px;
+      max-width: 540px;
+    }
+
+    /* ── TOPICS STRIP ── */
+    .topics-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 48px;
+    }
+    .topic-pill {
+      background: var(--sage-faint);
+      border: 1px solid var(--sage-pale);
+      color: var(--sage-dark);
+      border-radius: 30px;
+      padding: 5px 14px;
+      font-size: 0.78rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── FORM CARD ── */
+    .form-card {
+      background: white;
+      border-radius: 24px;
+      padding: 48px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
+    }
+
+    .form-group {
+      margin-bottom: 28px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+      margin-bottom: 8px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 14px 18px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--sage);
+      box-shadow: 0 0 0 3px rgba(122,158,126,0.12);
+      background: white;
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: var(--text-light);
+    }
+
+    .select-wrap {
+      position: relative;
+    }
+    .select-wrap::after {
+      content: '';
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 6px solid var(--text-mid);
+      pointer-events: none;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 130px;
+      line-height: 1.6;
+    }
+
+    .form-hint {
+      font-size: 0.78rem;
+      color: var(--text-light);
+      margin-top: 6px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    /* ── SUBMIT BTN ── */
+    .btn-submit {
+      width: 100%;
+      padding: 17px 32px;
+      background: var(--sage-dark);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      margin-top: 8px;
+    }
+    .btn-submit:hover {
+      background: var(--sage);
+      box-shadow: 0 6px 24px rgba(79,112,85,0.25);
+      transform: translateY(-1px);
+    }
+    .btn-submit:active { transform: translateY(0); }
+
+    /* ── DIVIDER ── */
+    .form-divider {
+      display: flex; align-items: center; gap: 16px;
+      margin: 32px 0;
+    }
+    .form-divider span {
+      font-size: 0.78rem;
+      color: var(--text-light);
+      white-space: nowrap;
+    }
+    .form-divider::before,
+    .form-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── SUCCESS STATE ── */
+    .success-msg {
+      display: none;
+      text-align: center;
+      padding: 48px 24px;
+    }
+    .success-msg.show { display: block; }
+
+    .success-icon {
+      width: 64px; height: 64px;
+      background: var(--sage-faint);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 24px;
+    }
+
+    .success-msg h2 {
+      font-size: 1.8rem;
+      color: var(--sage-dark);
+      margin-bottom: 12px;
+    }
+
+    .success-msg p {
+      color: var(--text-mid);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .btn-return {
+      display: inline-block;
+      margin-top: 28px;
+      padding: 12px 28px;
+      border: 1.5px solid var(--sage-pale);
+      border-radius: 50px;
+      font-size: 0.85rem;
+      color: var(--sage-dark);
+      transition: all 0.2s;
+    }
+    .btn-return:hover {
+      background: var(--sage-faint);
+      border-color: var(--sage);
+    }
+
+    /* ── FOOTER NOTE ── */
+    .privacy-note {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--text-light);
+      margin-top: 24px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 560px) {
+      .form-card { padding: 32px 24px; }
+      .form-row { grid-template-columns: 1fr; gap: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="/" class="nav-logo">Nourish with <span>Ruby</span></a>
+    <a href="/#services" class="nav-back">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Back to services
+    </a>
+  </nav>
+
+  <div class="page">
+
+    <div class="section-label">Wellness Talks</div>
+    <h1 class="page-title">Enquire About<br><em>a Talk</em></h1>
+    <p class="page-intro">
+      Tell me a little about your event and what you're hoping to cover. I'll come back to you within 2 working days to discuss topics, format and logistics.
+    </p>
+
+    <div class="topics-strip">
+      <span class="topic-pill">Gut health</span>
+      <span class="topic-pill">Eating for energy</span>
+      <span class="topic-pill">Nutrition myths</span>
+      <span class="topic-pill">Hormonal health</span>
+      <span class="topic-pill">Menopause &amp; nutrition</span>
+      <span class="topic-pill">Herbal medicine</span>
+    </div>
+
+    <div class="form-card">
+
+      <!-- SUCCESS STATE (shown after submit) -->
+      <div class="success-msg" id="successMsg">
+        <div class="success-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <path d="M6 14L11 19L22 9" stroke="#4f7055" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h2>Enquiry sent!</h2>
+        <p>Thank you — I'll be in touch within 2 working days to chat about your event.</p>
+        <a href="/" class="btn-return">Back to the site</a>
+      </div>
+
+      <!-- FORM -->
+      <form
+        id="talkForm"
+        name="talk-enquiry"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+      >
+        <!-- Netlify honeypot spam filter -->
+        <p style="display:none"><label>Don't fill this in: <input name="bot-field"/></label></p>
+        <!-- Hidden field so Netlify knows the form name -->
+        <input type="hidden" name="form-name" value="talk-enquiry" />
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Your name</label>
+            <input type="text" id="name" name="name" placeholder="Jane Smith" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" id="email" name="email" placeholder="jane@company.com" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="organisation">Organisation / Event</label>
+          <input type="text" id="organisation" name="organisation" placeholder="e.g. Acme Ltd, Community centre, Women's network…" />
+        </div>
+
+        <div class="form-group">
+          <label for="topic">Preferred topic</label>
+          <div class="select-wrap">
+            <select id="topic" name="topic" required>
+              <option value="" disabled selected>Select a topic or suggest your own…</option>
+              <option>Gut health</option>
+              <option>Eating for energy</option>
+              <option>Nutrition myths busted</option>
+              <option>Hormonal health &amp; nutrition</option>
+              <option>Menopause &amp; nutrition</option>
+              <option>Herbal medicine &amp; adaptogens</option>
+              <option>Sports &amp; performance nutrition</option>
+              <option>Something else (tell me in the message)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="message">Tell me about your event</label>
+          <textarea id="message" name="message" placeholder="When is it, how many people, any particular focus or tone you're after? The more you share, the better I can tailor things." required></textarea>
+          <p class="form-hint">Approx. date, audience size and any specific requirements are really helpful.</p>
+        </div>
+
+        <button type="submit" class="btn-submit">Send Enquiry</button>
+      </form>
+
+    </div>
+
+    <p class="privacy-note">
+      Your details are only used to respond to your enquiry and will never be shared with third parties.
+    </p>
+
+  </div>
+
+  <script>
+    // Handle Netlify form submit via fetch for a smooth in-page success state
+    const form = document.getElementById('talkForm');
+    const successMsg = document.getElementById('successMsg');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new URLSearchParams(new FormData(form));
+
+      try {
+        await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: data.toString()
+        });
+        form.style.display = 'none';
+        successMsg.classList.add('show');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (err) {
+        alert('Something went wrong — please email nourishwithruby@outlook.com directly.');
+      }
+    });
+  </script>
+
+</body>
+</html>
