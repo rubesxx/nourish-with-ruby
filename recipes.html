@@ -235,8 +235,8 @@
     }
     .card-thumb-emoji { position: relative; z-index: 1; }
     .cat-breakfast .card-thumb-bg { background: linear-gradient(135deg, #fdf3e3, #f5ddb0); }
-    .cat-mains .card-thumb-bg { background: linear-gradient(135deg, #e8f0e9, #c8dbc9); }
-    .cat-lighter .card-thumb-bg { background: linear-gradient(135deg, #fce8e0, #f0cfc0); }
+    .cat-dinner .card-thumb-bg { background: linear-gradient(135deg, #e8f0e9, #c8dbc9); }
+    .cat-lunch .card-thumb-bg { background: linear-gradient(135deg, #fce8e0, #f0cfc0); }
     .card-body { padding: 22px 22px 24px; }
     .card-cat-tag {
       display: inline-block;
@@ -249,8 +249,8 @@
       margin-bottom: 10px;
     }
     .cat-breakfast .card-cat-tag { background: var(--amber-faint); color: #a0602a; }
-    .cat-mains .card-cat-tag { background: var(--sage-faint); color: var(--sage-dark); }
-    .cat-lighter .card-cat-tag { background: #fce8e0; color: #a04030; }
+    .cat-dinner .card-cat-tag { background: var(--sage-faint); color: var(--sage-dark); }
+    .cat-lunch .card-cat-tag { background: #fce8e0; color: #a04030; }
     .card-title {
       font-family: 'Cormorant Garamond', serif;
       font-size: 1.3rem;
@@ -481,8 +481,9 @@
     <div class="filter-tabs">
       <button class="filter-tab active" data-filter="all">All recipes <span class="filter-count">12</span></button>
       <button class="filter-tab" data-filter="breakfast">🌅 Breakfast <span class="filter-count">4</span></button>
-      <button class="filter-tab" data-filter="mains">🫘 Bean Mains <span class="filter-count">5</span></button>
-      <button class="filter-tab" data-filter="lighter">🥗 Lighter Plates <span class="filter-count">3</span></button>
+      <button class="filter-tab" data-filter="lunch">🥗 Lunch <span class="filter-count">3</span></button>
+      <button class="filter-tab" data-filter="dinner">🫘 Dinner <span class="filter-count">5</span></button>
+      <button class="filter-tab" data-filter="snacks">🍎 Snacks <span class="filter-count">0</span></button>
     </div>
   </div>
 
@@ -550,11 +551,11 @@
     </div>
 
     <!-- MAINS -->
-    <div class="category-group" data-category="mains">
-      <div class="category-label">🫘 Bean & Legume Mains <span style="font-size:0.85rem; font-family:'DM Sans'; color:var(--text-light); font-weight:400;">Bold, layered flavours built around legumes</span></div>
+    <div class="category-group" data-category="dinner">
+      <div class="category-label">🫘 Bean & Legume Dinners <span style="font-size:0.85rem; font-family:'DM Sans'; color:var(--text-light); font-weight:400;">Bold, layered flavours built around legumes</span></div>
       <div class="recipes-grid">
 
-        <div class="recipe-card cat-mains" data-category="mains" data-recipe="smoky-black-beans">
+        <div class="recipe-card cat-dinner" data-category="dinner" data-recipe="smoky-black-beans">
           <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🫘</div></div>
           <div class="card-body">
             <div class="card-cat-tag">Bean Main</div>
@@ -567,7 +568,7 @@
           </div>
         </div>
 
-        <div class="recipe-card cat-mains" data-category="mains" data-recipe="chimichurri-butter-beans">
+        <div class="recipe-card cat-dinner" data-category="dinner" data-recipe="chimichurri-butter-beans">
           <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🌶️</div></div>
           <div class="card-body">
             <div class="card-cat-tag">Bean Main</div>
@@ -580,7 +581,7 @@
           </div>
         </div>
 
-        <div class="recipe-card cat-mains" data-category="mains" data-recipe="wild-garlic-pesto">
+        <div class="recipe-card cat-dinner" data-category="dinner" data-recipe="wild-garlic-pesto">
           <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🌿</div></div>
           <div class="card-body">
             <div class="card-cat-tag">Bean Main</div>
@@ -593,7 +594,7 @@
           </div>
         </div>
 
-        <div class="recipe-card cat-mains" data-category="mains" data-recipe="tahini-sesame-beans">
+        <div class="recipe-card cat-dinner" data-category="dinner" data-recipe="tahini-sesame-beans">
           <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🍋</div></div>
           <div class="card-body">
             <div class="card-cat-tag">Bean Main</div>
@@ -606,7 +607,7 @@
           </div>
         </div>
 
-        <div class="recipe-card cat-mains" data-category="mains" data-recipe="red-pepper-butter-beans">
+        <div class="recipe-card cat-dinner" data-category="dinner" data-recipe="red-pepper-butter-beans">
           <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🫑</div></div>
           <div class="card-body">
             <div class="card-cat-tag">Bean Main</div>
@@ -623,11 +624,11 @@
     </div>
 
     <!-- LIGHTER PLATES -->
-    <div class="category-group" data-category="lighter">
-      <div class="category-label">🥗 Lighter Plates & Sides <span style="font-size:0.85rem; font-family:'DM Sans'; color:var(--text-light); font-weight:400;">Big flavour, lighter touch</span></div>
+    <div class="category-group" data-category="lunch">
+      <div class="category-label">🥗 Lighter Lunch Plates <span style="font-size:0.85rem; font-family:'DM Sans'; color:var(--text-light); font-weight:400;">Big flavour, lighter touch</span></div>
       <div class="recipes-grid">
 
-        <div class="recipe-card cat-lighter" data-category="lighter" data-recipe="smashed-cucumber">
+        <div class="recipe-card cat-lunch" data-category="lunch" data-recipe="smashed-cucumber">
           <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🥒</div></div>
           <div class="card-body">
             <div class="card-cat-tag">Side / Lighter</div>
@@ -640,7 +641,7 @@
           </div>
         </div>
 
-        <div class="recipe-card cat-lighter" data-category="lighter" data-recipe="harissa-carrots">
+        <div class="recipe-card cat-lunch" data-category="lunch" data-recipe="harissa-carrots">
           <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🥕</div></div>
           <div class="card-body">
             <div class="card-cat-tag">Side / Lighter</div>
@@ -653,7 +654,7 @@
           </div>
         </div>
 
-        <div class="recipe-card cat-lighter" data-category="lighter" data-recipe="potato-fritters">
+        <div class="recipe-card cat-lunch" data-category="lunch" data-recipe="potato-fritters">
           <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🧆</div></div>
           <div class="card-body">
             <div class="card-cat-tag">Side / Lighter</div>
@@ -756,7 +757,7 @@
       'smoky-black-beans': {
         emoji: '🫘', cat: 'Bean Main', time: '25 min · serves 2–3',
         subtitle: 'Coconut milk and smoked paprika transform everyday black beans into something deeply comforting. The cashew herb relish ties everything together.',
-        bgClass: 'cat-mains',
+        bgClass: 'cat-dinner',
         sections: [
           { title: 'Beans', type: 'list', items: [
             '2 tins black beans, drained', '1 tin coconut milk + a splash of stock',
@@ -779,7 +780,7 @@
       'chimichurri-butter-beans': {
         emoji: '🌶️', cat: 'Bean Main', time: '35 min · serves 2–3',
         subtitle: 'A roasted pepper and cashew sauce with butter beans, topped with cornflour-crispy aubergine and a fresh chimichurri.',
-        bgClass: 'cat-mains',
+        bgClass: 'cat-dinner',
         sections: [
           { title: 'Red Pepper Sauce', type: 'list', items: [
             '2 red peppers, roasted (keep a few raw chunks)',
@@ -806,7 +807,7 @@
       'wild-garlic-pesto': {
         emoji: '🌿', cat: 'Bean Main', time: '30 min · serves 2–3',
         subtitle: 'Light and vibrant — pesto coats tender butter beans and chunky roasted greens for a spring-feel plate.',
-        bgClass: 'cat-mains',
+        bgClass: 'cat-dinner',
         sections: [
           { title: 'Ingredients', type: 'list', items: [
             '1 tin each cannellini and butter beans', '1 onion, diced',
@@ -825,7 +826,7 @@
       'tahini-sesame-beans': {
         emoji: '🍋', cat: 'Bean Main', time: '30 min · serves 2–3',
         subtitle: 'A rich, umami-laden sauce blended from tahini and fried aromatics, with jewel-bright toppings.',
-        bgClass: 'cat-mains',
+        bgClass: 'cat-dinner',
         sections: [
           { title: 'Tahini Sauce', type: 'list', items: [
             '3 tbsp tahini', '1 tsp sesame oil', 'Juice of 1 lime',
@@ -843,7 +844,7 @@
       'red-pepper-butter-beans': {
         emoji: '🫑', cat: 'Bean Main', time: '35 min · serves 2–3',
         subtitle: 'A deeply flavoured red pepper and cashew sauce with butter beans, chimichurri and crispy sumac aubergine.',
-        bgClass: 'cat-mains',
+        bgClass: 'cat-dinner',
         sections: [
           { title: 'Sauce', type: 'list', items: [
             '2 red peppers, roasted', 'A few sun-dried tomatoes',
@@ -856,7 +857,7 @@
       'smashed-cucumber': {
         emoji: '🥒', cat: 'Lighter Plate', time: '15 min',
         subtitle: 'Cracked cucumber absorbs the satay dressing like nothing else. Ready in minutes, somehow always impressive on the table.',
-        bgClass: 'cat-lighter',
+        bgClass: 'cat-lunch',
         sections: [
           { title: 'Ingredients', type: 'list', items: [
             '2 cucumbers', '3 spring onions, thinly sliced', '2 tbsp sesame seeds'
@@ -872,7 +873,7 @@
       'harissa-carrots': {
         emoji: '🥕', cat: 'Lighter Plate', time: '40 min',
         subtitle: 'Caramelised harissa carrots on a cloud of whipped tahini yoghurt. Finished with crushed almonds, crispy sage and chilli oil.',
-        bgClass: 'cat-lighter',
+        bgClass: 'cat-lunch',
         sections: [
           { title: 'Carrots', type: 'list', items: [
             '500g carrots (or butternut squash), halved lengthways',
@@ -892,7 +893,7 @@
       'potato-fritters': {
         emoji: '🧆', cat: 'Lighter Plate', time: '30 min',
         subtitle: 'One big, satisfying fritter served with a vibrant coriander-tamarind chutney and a crunchy salad.',
-        bgClass: 'cat-lighter',
+        bgClass: 'cat-lunch',
         sections: [
           { title: 'Fritters', type: 'list', items: [
             '3 medium potatoes, grated', '1 onion, grated',
@@ -1023,8 +1024,8 @@
     }
 
     function catClass(cat) {
-      return { Breakfast:'cat-breakfast', Lunch:'cat-mains', Dinner:'cat-mains',
-               Snack:'cat-lighter', 'Sweet Treat':'cat-lighter' }[cat] || 'cat-breakfast';
+      return { Breakfast:'cat-breakfast', Lunch:'cat-lunch', Dinner:'cat-dinner',
+               Snacks:'cat-dinner', Snack:'cat-dinner' }[cat] || 'cat-breakfast';
     }
 
     async function loadCMSRecipes() {
@@ -1079,7 +1080,8 @@
 
           const card = document.createElement('div');
           card.className = `recipe-card ${catClass(d.category)}`;
-          card.dataset.category = (d.category || '').toLowerCase();
+          const catMap = { Breakfast:'breakfast', Lunch:'lunch', Dinner:'dinner', Snacks:'snacks', Snack:'snacks' };
+          card.dataset.category = catMap[d.category] || (d.category || '').toLowerCase();
           card.dataset.recipe = slug;
           card.innerHTML = `
             <div class="card-thumb"><div class="card-thumb-bg"></div>${thumb}</div>

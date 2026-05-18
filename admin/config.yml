@@ -13,7 +13,7 @@ collections:
     slug: "{{slug}}"
     fields:
       - {label: "Recipe Name", name: "title", widget: "string"}
-      - {label: "Category", name: "category", widget: "select", options: ["Breakfast", "Lunch", "Dinner", "Snack", "Sweet Treat"]}
+      - {label: "Category", name: "category", widget: "select", options: ["Breakfast", "Lunch", "Dinner", "Snacks"]}
       - {label: "Emoji", name: "emoji", widget: "string"}
       - {label: "Description", name: "description", widget: "text"}
       - {label: "Prep Time", name: "time", widget: "string"}
