@@ -984,6 +984,127 @@
         });
       });
     });
+
+    // ── LOAD CMS RECIPES FROM _recipes/ ──
+    function parseFrontmatter(text) {
+      const lines = text.split('\n');
+      if (lines[0].trim() !== '---') return null;
+      const data = {};
+      let i = 1, currentKey = null, currentValue = [], blockType = null;
+      while (i < lines.length) {
+        const line = lines[i];
+        if (line.trim() === '---') break;
+        if (blockType) {
+          if (line.startsWith('  ') || line === '') {
+            currentValue.push(line.replace(/^  /, '')); i++; continue;
+          } else {
+            data[currentKey] = blockType === 'literal'
+              ? currentValue.join('\n').trimEnd()
+              : currentValue.filter(Boolean).join(' ').trim();
+            currentKey = null; currentValue = []; blockType = null; continue;
+          }
+        }
+        const colonIdx = line.indexOf(':');
+        if (colonIdx > 0) {
+          const key = line.slice(0, colonIdx).trim();
+          const val = line.slice(colonIdx + 1).trim();
+          if (val === '|') { currentKey = key; blockType = 'literal'; currentValue = []; }
+          else if (val === '>-' || val === '>') { currentKey = key; blockType = 'folded'; currentValue = []; }
+          else { data[key] = val.replace(/^["']|["']$/g, ''); }
+        }
+        i++;
+      }
+      if (currentKey && currentValue.length) {
+        data[currentKey] = blockType === 'literal'
+          ? currentValue.join('\n').trimEnd()
+          : currentValue.filter(Boolean).join(' ').trim();
+      }
+      return data;
+    }
+
+    function catClass(cat) {
+      return { Breakfast:'cat-breakfast', Lunch:'cat-mains', Dinner:'cat-mains',
+               Snack:'cat-lighter', 'Sweet Treat':'cat-lighter' }[cat] || 'cat-breakfast';
+    }
+
+    async function loadCMSRecipes() {
+      try {
+        const res = await fetch('https://api.github.com/repos/rubesxx/nourish-with-ruby/contents/_recipes');
+        if (!res.ok) return;
+        const files = await res.json();
+        const mdFiles = Array.isArray(files) ? files.filter(f => f.name.endsWith('.md')) : [];
+        if (!mdFiles.length) return;
+
+        // Create a new section for CMS-added recipes
+        const main = document.querySelector('.recipes-main');
+        const section = document.createElement('div');
+        section.className = 'category-group';
+        section.setAttribute('data-category', 'cms');
+        section.innerHTML = `
+          <div class="category-label">🌿 From Ruby's Kitchen
+            <span style="font-size:0.85rem;font-family:'DM Sans';color:var(--text-light);font-weight:400;">
+              Fresh from the blog
+            </span>
+          </div>
+          <div class="recipes-grid" id="cms-grid"></div>`;
+        main.appendChild(section);
+        const grid = document.getElementById('cms-grid');
+
+        for (const file of mdFiles) {
+          const r = await fetch(file.download_url);
+          const text = await r.text();
+          const d = parseFrontmatter(text);
+          if (!d || !d.title) continue;
+
+          const slug = file.name.replace('.md', '');
+
+          // Register in recipes object so modal works
+          recipes[slug] = {
+            emoji: d.emoji || '🍽️',
+            cat: d.category || 'Recipe',
+            time: d.time || '',
+            subtitle: d.description || '',
+            bgClass: catClass(d.category),
+            sections: [
+              { title: 'Ingredients', type: 'list',
+                items: (d.ingredients || '').split('\n').map(l => l.trim()).filter(Boolean) },
+              { title: 'Method', type: 'text', text: d.method || '' }
+            ]
+          };
+
+          // Build card
+          const thumb = d.image
+            ? `<img src="${d.image}" alt="${d.title}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;"/>`
+            : `<div class="card-thumb-emoji">${d.emoji || '🍽️'}</div>`;
+
+          const card = document.createElement('div');
+          card.className = `recipe-card ${catClass(d.category)}`;
+          card.dataset.category = (d.category || '').toLowerCase();
+          card.dataset.recipe = slug;
+          card.innerHTML = `
+            <div class="card-thumb"><div class="card-thumb-bg"></div>${thumb}</div>
+            <div class="card-body">
+              <div class="card-cat-tag">${d.category || 'Recipe'}</div>
+              <div class="card-title">${d.title}</div>
+              <p class="card-desc">${d.description || ''}</p>
+              <div class="card-meta">
+                <span class="card-time">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+                  </svg> ${d.time || ''}
+                </span>
+                <span class="card-btn">View recipe</span>
+              </div>
+            </div>`;
+          card.addEventListener('click', () => openRecipe(slug));
+          grid.appendChild(card);
+        }
+      } catch(e) {
+        console.log('CMS recipes:', e);
+      }
+    }
+
+    loadCMSRecipes();
   </script>
 
 </body>
