@@ -88,7 +88,7 @@ export default function ShopPage() {
                 <button
                   onClick={() => setExpanded(isExpanded ? null : supp.id)}
                   className="text-xs text-brand-purple font-semibold underline underline-offset-2 mb-4"
-                  style={{ color: '#A855F7' }}
+                  style={{ color: '#8CBD8C' }}
                 >
                   {isExpanded ? 'Hide evidence ↑' : 'Why it\'s evidence-backed ↓'}
                 </button>

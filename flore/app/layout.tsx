@@ -1,9 +1,10 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter } from 'next/font/google'
+import { DM_Sans, Playfair_Display } from 'next/font/google'
 import './globals.css'
 import BottomNav from '@/components/nav/BottomNav'
 
-const inter = Inter({ subsets: ['latin'], display: 'swap' })
+const dmSans = DM_Sans({ subsets: ['latin'], display: 'swap', variable: '--font-dm-sans' })
+const playfair = Playfair_Display({ subsets: ['latin'], display: 'swap', variable: '--font-playfair' })
 
 export const metadata: Metadata = {
   title: 'FLO:RE — Women\'s Health',
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#1F1235',
+  themeColor: '#0E1A0E',
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
@@ -20,8 +21,8 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={inter.className}>
-      <body className="bg-brand-bg text-brand-text min-h-dvh">
+    <html lang="en" className={`${dmSans.variable} ${playfair.variable}`}>
+      <body className="bg-brand-bg text-brand-text min-h-dvh font-sans">
         <main className="pb-safe">
           {children}
         </main>

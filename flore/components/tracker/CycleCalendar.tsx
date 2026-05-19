@@ -68,7 +68,7 @@ export default function CycleCalendar({ profile, logs, selectedDate, onSelectDat
 
           let dotColor = ''
           if (hasPeriod) dotColor = '#BE123C'
-          else if (hasSymptoms) dotColor = '#DB2777'
+          else if (hasSymptoms) dotColor = '#C8956C'
           else if (phase && isCurrentMonth) dotColor = phaseColor(phase) + '44'
 
           return (

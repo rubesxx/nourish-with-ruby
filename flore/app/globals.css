@@ -2,63 +2,50 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
 :root {
-  --bg: #1F1235;
-  --surface: #2D1B4E;
-  --muted: #4C1D78;
-  --purple: #6B21A8;
-  --pink: #DB2777;
-  --text: #F5F0FF;
-  --dim: #A78FC0;
+  --bg:      #0E1A0E;
+  --surface: #172318;
+  --muted:   #2A3D2A;
+  --green:   #6B9E6B;
+  --honey:   #C8956C;
+  --text:    #EDE8DC;
+  --dim:     #7A9E7A;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
 body {
-  background-color: #1F1235;
-  color: #F5F0FF;
-  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #0E1A0E;
+  color: #EDE8DC;
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100dvh;
-  /* Safe area for bottom nav on iOS */
   padding-bottom: env(safe-area-inset-bottom);
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: #1F1235;
-}
-::-webkit-scrollbar-thumb {
-  background: #4C1D78;
-  border-radius: 3px;
+h1, h2 {
+  font-family: var(--font-playfair), Georgia, serif;
 }
 
-/* Bottom nav safe area */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0E1A0E; }
+::-webkit-scrollbar-thumb { background: #2A3D2A; border-radius: 3px; }
+
 .pb-safe {
   padding-bottom: calc(80px + env(safe-area-inset-bottom));
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+  .text-balance { text-wrap: balance; }
+
   .gradient-purple-pink {
-    background: linear-gradient(135deg, #6B21A8, #DB2777);
+    background: linear-gradient(135deg, #6B9E6B, #C8956C);
   }
+
   .gradient-text {
-    background: linear-gradient(135deg, #A855F7, #EC4899);
+    background: linear-gradient(135deg, #8CBD8C, #D4A57A);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
