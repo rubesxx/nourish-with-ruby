@@ -39,7 +39,7 @@ const PHASE_CONFIG: Record<CyclePhase, Omit<PhaseInfo, 'phase' | 'dayOfCycle'>> 
 export function detectPhase(profile: UserProfile, today = new Date()): PhaseInfo | null {
   if (!profile.lastPeriodStart) return null
 
-  const start = new Date(profile.lastPeriodStart)
+  const start = parseLocalDate(profile.lastPeriodStart)
   const diffMs = today.getTime() - start.getTime()
   const dayOfCycle = Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1
 
@@ -61,7 +61,7 @@ export function detectPhase(profile: UserProfile, today = new Date()): PhaseInfo
 
 export function getPhaseForDate(profile: UserProfile, date: Date): CyclePhase | null {
   if (!profile.lastPeriodStart) return null
-  const start = new Date(profile.lastPeriodStart)
+  const start = parseLocalDate(profile.lastPeriodStart)
   const diffMs = date.getTime() - start.getTime()
   if (diffMs < 0) return null
   const dayOfCycle = Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1
@@ -78,12 +78,22 @@ export function phaseColor(phase: CyclePhase | null): string {
   return PHASE_CONFIG[phase].accent
 }
 
+// Use local date parts to avoid UTC offset shifting the day
 export function toISODate(date: Date): string {
-  return date.toISOString().split('T')[0]
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
 }
 
 export function today(): string {
   return toISODate(new Date())
+}
+
+// Parse YYYY-MM-DD as local midnight (not UTC midnight)
+function parseLocalDate(iso: string): Date {
+  const [y, m, d] = iso.split('-').map(Number)
+  return new Date(y, m - 1, d)
 }
 
 // Returns array of dates for a month grid (including padding days)
