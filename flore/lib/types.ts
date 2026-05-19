@@ -46,3 +46,22 @@ export interface DayLog {
   symptoms: Symptom[]
   notes: string
 }
+
+export type Mood = 'calm' | 'anxious' | 'irritable' | 'energised'
+
+export type PhysicalTag =
+  | 'cramps'
+  | 'bloating'
+  | 'headache'
+  | 'breast_tenderness'
+  | 'cravings'
+  | 'acne'
+
+export interface SymptomLog {
+  date: string
+  moods: Mood[]
+  energyLevel: number   // 1–5
+  sleepQuality: number  // 1–5
+  physicalSymptoms: PhysicalTag[]
+  notes: string
+}

@@ -6,6 +6,7 @@ import { getUser } from '@/lib/storage'
 import { detectPhase } from '@/lib/cycleEngine'
 import type { UserProfile } from '@/lib/types'
 import recommendations from '@/data/phaseRecommendations'
+import PhaseCheckInBanner from '@/components/PhaseCheckInBanner'
 
 export default function RecommendationsPage() {
   const router = useRouter()
@@ -35,6 +36,9 @@ export default function RecommendationsPage() {
       <p className="text-brand-dim text-sm mb-1">Personalised for you</p>
       <h1 className="text-2xl font-black text-brand-text mb-1">{data.label}</h1>
       <p className="text-brand-dim text-sm mb-6">{data.tagline}</p>
+
+      {/* Daily check-in banner */}
+      <PhaseCheckInBanner />
 
       {/* Phase indicator for cycling users */}
       {profile.lifeStage === 'cycling' && (

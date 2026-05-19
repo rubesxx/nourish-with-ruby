@@ -8,6 +8,7 @@ import type { UserProfile, DayLog } from '@/lib/types'
 import PhaseChip from '@/components/tracker/PhaseChip'
 import CycleCalendar from '@/components/tracker/CycleCalendar'
 import LogForm from '@/components/tracker/LogForm'
+import PhaseCheckInBanner from '@/components/PhaseCheckInBanner'
 
 export default function TrackerPage() {
   const router = useRouter()
@@ -39,7 +40,7 @@ export default function TrackerPage() {
           <h1 className="text-2xl font-black text-brand-text">Cycle Tracker</h1>
         </div>
         <button
-          onClick={() => router.push('/onboarding')}
+          onClick={() => router.push('/settings')}
           className="text-xs text-brand-dim border border-brand-muted rounded-lg px-3 py-1.5"
         >
           Settings
@@ -48,6 +49,9 @@ export default function TrackerPage() {
 
       {/* Phase chip */}
       <PhaseChip phaseInfo={phaseInfo} lifeStage={profile.lifeStage} />
+
+      {/* Daily check-in banner */}
+      <PhaseCheckInBanner />
 
       {/* Calendar — not shown for menopause */}
       {profile.lifeStage !== 'menopause' && (
