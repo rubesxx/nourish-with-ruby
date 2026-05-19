@@ -147,7 +147,7 @@ export default function ChatPage() {
                   ? 'text-white rounded-br-sm'
                   : 'bg-brand-surface text-brand-text rounded-bl-sm'
               }`}
-              style={msg.role === 'user' ? { background: 'linear-gradient(135deg, #6B9E6B, #C8956C)' } : {}}
+              style={msg.role === 'user' ? { background: 'linear-gradient(135deg, #D8E63C, #D6B4FC)' } : {}}
             >
               {msg.content || (
                 <span className="flex gap-1 items-center text-brand-dim">

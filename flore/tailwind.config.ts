@@ -10,16 +10,18 @@ const config: Config = {
     extend: {
       colors: {
         brand: {
-          bg:      '#0E1A0E',   // deep forest
-          surface: '#172318',   // dark moss
-          muted:   '#2A3D2A',   // forest border
-          green:   '#6B9E6B',   // sage green (primary)
-          honey:   '#C8956C',   // warm honey/terracotta (accent)
-          text:    '#EDE8DC',   // warm cream
-          dim:     '#7A9E7A',   // muted sage
-          // aliases — existing Tailwind classes keep working
-          purple:  '#6B9E6B',   // was deep purple → now sage
-          pink:    '#C8956C',   // was hot pink → now honey
+          bg:      '#17184B',   // Tetsu-Kon Blue
+          surface: '#1E2262',   // mid navy
+          muted:   '#273287',   // Intergalactic Highway
+          yellow:  '#D8E63C',   // Duranta Yellow
+          violet:  '#D6B4FC',   // Light Violet
+          text:    '#F0EEE9',   // Cloud Dancer
+          dim:     '#D3DDE7',   // Nordic Breeze
+          // aliases for existing class names
+          purple:  '#D8E63C',   // → Duranta Yellow
+          pink:    '#D6B4FC',   // → Light Violet
+          green:   '#D8E63C',
+          honey:   '#D6B4FC',
         },
       },
       fontFamily: {
@@ -31,14 +33,8 @@ const config: Config = {
         'slide-up': 'slideUp 0.3s ease-out',
       },
       keyframes: {
-        fadeIn: {
-          '0%':   { opacity: '0' },
-          '100%': { opacity: '1' },
-        },
-        slideUp: {
-          '0%':   { transform: 'translateY(12px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)',     opacity: '1' },
-        },
+        fadeIn:  { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+        slideUp: { '0%': { transform: 'translateY(12px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
       },
     },
   },

@@ -11,7 +11,7 @@ const TAG_COLORS: Record<ArticleTag, string> = {
   Cycle:         '#0F766E',
   Perimenopause: '#7C3AED',
   Menopause:     '#9333EA',
-  Nutrition:     '#C8956C',
+  Nutrition:     '#D6B4FC',
   Exercise:      '#D97706',
 }
 
@@ -29,7 +29,7 @@ export default function ResourcesPage() {
 
       {/* Tag filter */}
       <div className="flex gap-2 overflow-x-auto pb-2 mb-6">
-        <FilterChip label="All" active={activeTag === 'All'} onClick={() => setActiveTag('All')} color="#C8956C" />
+        <FilterChip label="All" active={activeTag === 'All'} onClick={() => setActiveTag('All')} color="#D6B4FC" />
         {ALL_TAGS.map(tag => (
           <FilterChip
             key={tag}
@@ -85,7 +85,7 @@ function FilterChip({ label, active, onClick, color }: {
       className="flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-semibold border-2 transition-all"
       style={active
         ? { borderColor: color, background: `${color}22`, color }
-        : { borderColor: '#2A3D2A', color: '#7A9E7A' }
+        : { borderColor: '#273287', color: '#D3DDE7' }
       }
     >
       {label}

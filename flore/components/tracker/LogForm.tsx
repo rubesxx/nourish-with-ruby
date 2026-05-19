@@ -31,7 +31,7 @@ const PERI_EXTRA_SYMPTOMS: { id: Symptom; label: string }[] = [
 ]
 
 const FLOW_LEVELS: { id: FlowLevel; label: string; color: string }[] = [
-  { id: 'none',     label: 'None',     color: '#2A3D2A' },
+  { id: 'none',     label: 'None',     color: '#273287' },
   { id: 'spotting', label: 'Spotting', color: '#9F1239' },
   { id: 'light',    label: 'Light',    color: '#BE123C' },
   { id: 'medium',   label: 'Medium',   color: '#E11D48' },
