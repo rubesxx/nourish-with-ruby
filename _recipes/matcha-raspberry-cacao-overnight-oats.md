@@ -1,7 +1,7 @@
 ---
 title: Matcha, Raspberry & Cacao Overnight Oats
 category: Breakfast
-emoji: cup of matcha
+emoji: " 🍵"
 description: Earthy matcha, tart raspberries and bitter cacao nibs!
 time: 5. ins + overnight
 ingredients: |
