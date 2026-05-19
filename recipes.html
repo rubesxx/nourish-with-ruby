@@ -237,6 +237,7 @@
     .cat-breakfast .card-thumb-bg { background: linear-gradient(135deg, #fdf3e3, #f5ddb0); }
     .cat-dinner .card-thumb-bg { background: linear-gradient(135deg, #e8f0e9, #c8dbc9); }
     .cat-lunch .card-thumb-bg { background: linear-gradient(135deg, #fce8e0, #f0cfc0); }
+    .cat-snacks .card-thumb-bg { background: linear-gradient(135deg, #f0f4e8, #dce8c0); }
     .card-body { padding: 22px 22px 24px; }
     .card-cat-tag {
       display: inline-block;
@@ -251,6 +252,7 @@
     .cat-breakfast .card-cat-tag { background: var(--amber-faint); color: #a0602a; }
     .cat-dinner .card-cat-tag { background: var(--sage-faint); color: var(--sage-dark); }
     .cat-lunch .card-cat-tag { background: #fce8e0; color: #a04030; }
+    .cat-snacks .card-cat-tag { background: #f0f4e8; color: #5a7030; }
     .card-title {
       font-family: 'Cormorant Garamond', serif;
       font-size: 1.3rem;
@@ -456,16 +458,16 @@
         <p>Bringing people together around the table is my craft. Every recipe here is tried and tested, most of them regulars at dinner parties or cooked simply as an act of love. Each one celebrates the functional properties of its ingredients while proving, hopefully convincingly, that vegetables can be genuinely indulgent.</p>
       </div>
       <div class="hero-stats">
-        <div class="hero-stat"><strong>12</strong><span>recipes</span></div>
+        <div class="hero-stat"><strong>12+</strong><span>recipes</span></div>
         <div class="hero-stat"><strong>Plant-based</strong><span>ingredients</span></div>
         <div class="hero-stat"><strong>&lt;30 min</strong><span>most dishes</span></div>
       </div>
     </div>
     <div class="hero-visual">
       <div class="hero-mosaic">
-        <div class="mosaic-tile" style="background: #e8f0e9;">🫘<span>Bean mains</span></div>
-        <div class="mosaic-tile" style="background: var(--amber-faint); grid-row: span 2; font-size: 3.5rem; justify-content: center;">🌿<span style="margin-top: 12px; font-size: 0.85rem; color: var(--clay); font-weight: 500;">Holistic<br>ingredients</span></div>
-        <div class="mosaic-tile" style="background: #fce8e0;">🥗<span>Lighter plates</span></div>
+        <div class="mosaic-tile" style="background: var(--amber-faint);">🌅<span>Breakfast</span></div>
+        <div class="mosaic-tile" style="background: #e8f0e9; grid-row: span 2; font-size: 3.5rem; justify-content: center;">🌿<span style="margin-top: 12px; font-size: 0.85rem; color: var(--clay); font-weight: 500;">Holistic<br>ingredients</span></div>
+        <div class="mosaic-tile" style="background: #fce8e0;">🥗<span>Lunch</span></div>
       </div>
     </div>
   </section>
@@ -473,17 +475,17 @@
   <!-- BATCH COOK NOTE -->
   <div class="batch-note" style="margin-top: 48px;">
     <span style="font-size: 1.2rem; flex-shrink: 0; margin-top: 1px;">💡</span>
-    <p><strong>Batch cooking tip:</strong> All of the bean sauces freeze beautifully. Double the sauce, portion into freezer bags and you have a quick meal on hand whenever you need it. The crispy toppings (kale, aubergine, seeds) are always best made fresh. The overnight oats keep in the fridge for up to 3 days — ideal for prepping at the start of the week.</p>
+    <p><strong>Batch cooking tip:</strong> All of the bean sauces freeze beautifully. Double the sauce, portion into freezer bags and you have a quick meal on hand whenever you need it. The crispy toppings (kale, aubergine, seeds) are always best made fresh. The overnight oats keep in the fridge for up to 3 days, ideal for prepping at the start of the week.</p>
   </div>
 
   <!-- FILTER TABS -->
   <div class="filter-wrap">
     <div class="filter-tabs">
-      <button class="filter-tab active" data-filter="all">All recipes <span class="filter-count">12</span></button>
-      <button class="filter-tab" data-filter="breakfast">🌅 Breakfast <span class="filter-count">4</span></button>
-      <button class="filter-tab" data-filter="lunch">🥗 Lunch <span class="filter-count">3</span></button>
-      <button class="filter-tab" data-filter="dinner">🫘 Dinner <span class="filter-count">5</span></button>
-      <button class="filter-tab" data-filter="snacks">🍎 Snacks <span class="filter-count">0</span></button>
+      <button class="filter-tab active" data-filter="all">All recipes</button>
+      <button class="filter-tab" data-filter="breakfast">🌅 Breakfast</button>
+      <button class="filter-tab" data-filter="lunch">🥗 Lunch</button>
+      <button class="filter-tab" data-filter="dinner">🫘 Dinner</button>
+      <button class="filter-tab" data-filter="snacks">🍎 Snacks</button>
     </div>
   </div>
 
@@ -492,86 +494,21 @@
 
     <!-- BREAKFAST -->
     <div class="category-group" data-category="breakfast">
-      <div class="category-label">🌅 Overnight Oats Series <span style="font-size:0.85rem; font-family:'DM Sans'; color:var(--text-light); font-weight:400;">Prep the night before, grab and go</span></div>
-      <div class="recipes-grid">
-
-        <div class="recipe-card cat-breakfast" data-category="breakfast" data-recipe="lemon-blueberry">
-          <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🫐</div></div>
-          <div class="card-body">
-            <div class="card-cat-tag">Breakfast</div>
-            <div class="card-title">Lemon Blueberry Overnight Oats</div>
-            <p class="card-desc">Smashed blueberries act as a natural sweetener, soaking into the oats overnight. Bright, fresh and no added sugar needed.</p>
-            <div class="card-meta">
-              <span class="card-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 5 min prep</span>
-              <span class="card-btn">View recipe</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="recipe-card cat-breakfast" data-category="breakfast" data-recipe="matcha-raspberry">
-          <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🍵</div></div>
-          <div class="card-body">
-            <div class="card-cat-tag">Breakfast</div>
-            <div class="card-title">Matcha, Raspberry & Cacao Overnight Oats</div>
-            <p class="card-desc">Earthy matcha, tart raspberries and bitter cacao nibs — a breakfast with real depth and a gentle energy lift.</p>
-            <div class="card-meta">
-              <span class="card-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 5 min prep</span>
-              <span class="card-btn">View recipe</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="recipe-card cat-breakfast" data-category="breakfast" data-recipe="almond-croissant">
-          <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🥐</div></div>
-          <div class="card-body">
-            <div class="card-cat-tag">Breakfast</div>
-            <div class="card-title">Almond Croissant Overnight Oats</div>
-            <p class="card-desc">All the cosy warmth of an almond croissant, none of the pastry. Almond butter, almond essence and toasted flaked almonds on top.</p>
-            <div class="card-meta">
-              <span class="card-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 5 min prep</span>
-              <span class="card-btn">View recipe</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="recipe-card cat-breakfast" data-category="breakfast" data-recipe="sticky-date">
-          <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🍯</div></div>
-          <div class="card-body">
-            <div class="card-cat-tag">Breakfast</div>
-            <div class="card-title">Sticky Date & Pecan Overnight Oats</div>
-            <p class="card-desc">Maple syrup, pecans, cinnamon and a pinch of Maldon salt. Rich, caramel-forward and genuinely satisfying.</p>
-            <div class="card-meta">
-              <span class="card-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 5 min prep</span>
-              <span class="card-btn">View recipe</span>
-            </div>
-          </div>
-        </div>
-
+      <div class="category-label">🌅 Breakfast <span style="font-size:0.85rem; font-family:'DM Sans'; color:var(--text-light); font-weight:400;">Prep the night before, grab and go</span></div>
+      <div class="recipes-grid" id="breakfast-grid">
+        <!-- CMS breakfast recipes loaded here -->
       </div>
     </div>
 
-    <!-- MAINS -->
+    <!-- DINNER -->
     <div class="category-group" data-category="dinner">
-      <div class="category-label">🫘 Bean & Legume Dinners <span style="font-size:0.85rem; font-family:'DM Sans'; color:var(--text-light); font-weight:400;">Bold, layered flavours built around legumes</span></div>
-      <div class="recipes-grid">
-
-        <div class="recipe-card cat-dinner" data-category="dinner" data-recipe="smoky-black-beans">
-          <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🫘</div></div>
-          <div class="card-body">
-            <div class="card-cat-tag">Bean Main</div>
-            <div class="card-title">Smoky Black Beans</div>
-            <p class="card-desc">Coconut milk and smoked paprika transform everyday black beans into something deeply comforting. Finished with a cashew herb relish.</p>
-            <div class="card-meta">
-              <span class="card-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 25 min</span>
-              <span class="card-btn">View recipe</span>
-            </div>
-          </div>
-        </div>
+      <div class="category-label">🫘 Dinner <span style="font-size:0.85rem; font-family:'DM Sans'; color:var(--text-light); font-weight:400;">Bold, layered flavours built around legumes</span></div>
+      <div class="recipes-grid" id="dinner-grid">
 
         <div class="recipe-card cat-dinner" data-category="dinner" data-recipe="chimichurri-butter-beans">
           <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🌶️</div></div>
           <div class="card-body">
-            <div class="card-cat-tag">Bean Main</div>
+            <div class="card-cat-tag">Dinner</div>
             <div class="card-title">Chimichurri Butter Beans with Sumac Aubergine</div>
             <p class="card-desc">A roasted red pepper and cashew sauce with butter beans, topped with cornflour-crispy aubergine and a vibrant chimichurri.</p>
             <div class="card-meta">
@@ -584,7 +521,7 @@
         <div class="recipe-card cat-dinner" data-category="dinner" data-recipe="wild-garlic-pesto">
           <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🌿</div></div>
           <div class="card-body">
-            <div class="card-cat-tag">Bean Main</div>
+            <div class="card-cat-tag">Dinner</div>
             <div class="card-title">Wild Garlic Pesto Beans with Roasted Greens</div>
             <p class="card-desc">Light and vibrant. Homemade wild garlic pesto coats tender butter and cannellini beans with roasted broccoli and charred courgette.</p>
             <div class="card-meta">
@@ -597,7 +534,7 @@
         <div class="recipe-card cat-dinner" data-category="dinner" data-recipe="tahini-sesame-beans">
           <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🍋</div></div>
           <div class="card-body">
-            <div class="card-cat-tag">Bean Main</div>
+            <div class="card-cat-tag">Dinner</div>
             <div class="card-title">Tahini Sesame Beans with Roasted Aubergine</div>
             <p class="card-desc">Rich, umami-laden tahini sauce blended from fried aromatics. Topped with pomegranate, coriander and lime-pickled red cabbage.</p>
             <div class="card-meta">
@@ -610,7 +547,7 @@
         <div class="recipe-card cat-dinner" data-category="dinner" data-recipe="red-pepper-butter-beans">
           <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🫑</div></div>
           <div class="card-body">
-            <div class="card-cat-tag">Bean Main</div>
+            <div class="card-cat-tag">Dinner</div>
             <div class="card-title">Red Pepper Butter Beans & Crispy Aubergine</div>
             <p class="card-desc">A deeply flavoured red pepper and cashew sauce with butter beans, chimichurri, crispy kale and sumac-dusted aubergine.</p>
             <div class="card-meta">
@@ -623,15 +560,15 @@
       </div>
     </div>
 
-    <!-- LIGHTER PLATES -->
+    <!-- LUNCH -->
     <div class="category-group" data-category="lunch">
-      <div class="category-label">🥗 Lighter Lunch Plates <span style="font-size:0.85rem; font-family:'DM Sans'; color:var(--text-light); font-weight:400;">Big flavour, lighter touch</span></div>
-      <div class="recipes-grid">
+      <div class="category-label">🥗 Lunch <span style="font-size:0.85rem; font-family:'DM Sans'; color:var(--text-light); font-weight:400;">Big flavour, lighter touch</span></div>
+      <div class="recipes-grid" id="lunch-grid">
 
         <div class="recipe-card cat-lunch" data-category="lunch" data-recipe="smashed-cucumber">
           <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🥒</div></div>
           <div class="card-body">
-            <div class="card-cat-tag">Side / Lighter</div>
+            <div class="card-cat-tag">Lunch</div>
             <div class="card-title">Smashed Cucumber with Peanut Satay</div>
             <p class="card-desc">Cracked cucumber absorbs the satay dressing like nothing else. Ready in minutes, somehow always impressive on the table.</p>
             <div class="card-meta">
@@ -644,7 +581,7 @@
         <div class="recipe-card cat-lunch" data-category="lunch" data-recipe="harissa-carrots">
           <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🥕</div></div>
           <div class="card-body">
-            <div class="card-cat-tag">Side / Lighter</div>
+            <div class="card-cat-tag">Lunch</div>
             <div class="card-title">Harissa Carrots on Tahini Whip</div>
             <p class="card-desc">Caramelised harissa carrots on a cloud of whipped tahini yoghurt, finished with crushed almonds, crispy sage and chilli oil.</p>
             <div class="card-meta">
@@ -657,7 +594,7 @@
         <div class="recipe-card cat-lunch" data-category="lunch" data-recipe="potato-fritters">
           <div class="card-thumb"><div class="card-thumb-bg"></div><div class="card-thumb-emoji">🧆</div></div>
           <div class="card-body">
-            <div class="card-cat-tag">Side / Lighter</div>
+            <div class="card-cat-tag">Lunch</div>
             <div class="card-title">Potato & Herb Fritters</div>
             <p class="card-desc">One big, deeply golden fritter served with a vibrant coriander-tamarind chutney and a crunchy fennel and cabbage slaw.</p>
             <div class="card-meta">
@@ -667,6 +604,14 @@
           </div>
         </div>
 
+      </div>
+    </div>
+
+    <!-- SNACKS -->
+    <div class="category-group" data-category="snacks">
+      <div class="category-label">🍎 Snacks <span style="font-size:0.85rem; font-family:'DM Sans'; color:var(--text-light); font-weight:400;">Small plates, big flavour</span></div>
+      <div class="recipes-grid" id="snacks-grid">
+        <!-- CMS snack recipes loaded here -->
       </div>
     </div>
 
@@ -697,88 +642,10 @@
   </footer>
 
   <script>
-    // ── RECIPE DATA ──
+    // ── RECIPE DATA (hardcoded non-CMS recipes) ──
     const recipes = {
-      'lemon-blueberry': {
-        emoji: '🫐', cat: 'Breakfast', time: '5 min prep + overnight',
-        subtitle: 'The smashed blueberries act as a natural sweetener and soak into the oats overnight — no added sugar needed.',
-        bgClass: 'cat-breakfast',
-        sections: [
-          { title: 'Ingredients', type: 'list', items: [
-            '¼ cup rolled oats', '½ cup almond milk', '3 tbsp Greek yoghurt',
-            '1 tbsp chia seeds', '1 tbsp desiccated coconut', 'Zest of ½ lemon',
-            '1 tsp vanilla essence', 'A handful of blueberries', 'Pinch of Maldon salt'
-          ]},
-          { title: 'Method', type: 'text', text: 'Smash the blueberries in the bottom of a jar or bowl. Add all remaining ingredients and stir well. Seal and refrigerate overnight. In the morning, give it a stir and add a splash more milk if needed. Top with fresh blueberries and extra coconut.' },
-          { title: 'Tip', type: 'tip', text: 'The smashed blueberries act as a natural sweetener and soak into the oats overnight. No added sugar needed. Pair with Greek yoghurt for a protein hit that keeps you full until lunch.' }
-        ]
-      },
-      'matcha-raspberry': {
-        emoji: '🍵', cat: 'Breakfast', time: '5 min prep + overnight',
-        subtitle: 'Earthy matcha, tart raspberries and bitter cacao nibs — a breakfast with real depth and complexity.',
-        bgClass: 'cat-breakfast',
-        sections: [
-          { title: 'Ingredients', type: 'list', items: [
-            '¼ cup rolled oats', '½ cup milk of choice', '3 tbsp Greek yoghurt',
-            '1 tbsp chia seeds', '1 tsp matcha powder', 'Zest of ½ lemon',
-            'Handful of fresh or frozen raspberries', '1 tbsp cacao nibs'
-          ]},
-          { title: 'Method', type: 'text', text: 'Whisk the matcha into the milk until dissolved. Combine with oats, yoghurt, chia seeds and lemon zest. Fold in the raspberries gently. Refrigerate overnight. Top with cacao nibs before eating.' },
-          { title: 'Tip', type: 'tip', text: 'Cacao nibs add crunch and a bitter chocolate note that balances the tartness of the raspberries beautifully.' }
-        ]
-      },
-      'almond-croissant': {
-        emoji: '🥐', cat: 'Breakfast', time: '5 min prep + overnight',
-        subtitle: 'All the cosy warmth of an almond croissant, none of the pastry. Deeply almond-forward and satisfying.',
-        bgClass: 'cat-breakfast',
-        sections: [
-          { title: 'Ingredients', type: 'list', items: [
-            '¼ cup rolled oats', '½ cup almond milk', '2 tbsp ground almonds',
-            '1 tbsp chia seeds', '1 tbsp almond butter', '1 tsp almond essence',
-            '½ tsp cinnamon', 'Flaked almonds to top'
-          ]},
-          { title: 'Method', type: 'text', text: 'Mix all ingredients except the flaked almonds. Stir until the almond butter is well combined. Refrigerate overnight. Top with flaked almonds in the morning — toast them in a dry pan for extra flavour.' }
-        ]
-      },
-      'sticky-date': {
-        emoji: '🍯', cat: 'Breakfast', time: '5 min prep + overnight',
-        subtitle: 'Rich, caramel-forward and genuinely satisfying. The Maldon salt is not optional.',
-        bgClass: 'cat-breakfast',
-        sections: [
-          { title: 'Ingredients', type: 'list', items: [
-            '¼ cup rolled oats', '½ cup milk of choice', '1 tbsp chia seeds',
-            '1 tbsp maple syrup', '2 tbsp pecans, roughly chopped',
-            '1 tsp vanilla essence', '½ tsp cinnamon', 'Pinch of Maldon salt'
-          ]},
-          { title: 'Method', type: 'text', text: 'Combine all ingredients, ensuring the maple syrup is evenly mixed through. Refrigerate overnight. In the morning, top with extra pecans and an extra drizzle of maple if desired.' },
-          { title: 'Tip', type: 'tip', text: 'The pinch of Maldon salt is essential here. It brings out the caramel notes of the maple and balances the sweetness in a way nothing else does.' }
-        ]
-      },
-      'smoky-black-beans': {
-        emoji: '🫘', cat: 'Bean Main', time: '25 min · serves 2–3',
-        subtitle: 'Coconut milk and smoked paprika transform everyday black beans into something deeply comforting. The cashew herb relish ties everything together.',
-        bgClass: 'cat-dinner',
-        sections: [
-          { title: 'Beans', type: 'list', items: [
-            '2 tins black beans, drained', '1 tin coconut milk + a splash of stock',
-            '2 tomatoes, blistered in a hot pan', '2 mixed peppers, sliced',
-            '1 onion, diced', '4 garlic cloves', '1 tsp smoked paprika',
-            'A handful of coriander stems', 'Lime juice, salt'
-          ]},
-          { title: 'Toppings', type: 'list', items: [
-            'Crispy kale (tossed in oil, baked 10 mins)', 'Toasted seeds',
-            'Pickled red onion', 'Sour cream or yoghurt', 'Feta, crumbled'
-          ]},
-          { title: 'Cashew Herb Relish', type: 'list', items: [
-            'A handful each of coriander and parsley',
-            '¼ cup raw cashews, soaked 1 hour',
-            '1 tbsp jalapeño brine', 'Juice of 1 lime', 'Glug of olive oil'
-          ]},
-          { title: 'Method', type: 'text', text: 'Blister the tomatoes in a dry pan until charred. In the same pan, fry the onion, garlic and coriander stems until soft. Add smoked paprika, then the peppers. Add the blistered tomatoes, beans, coconut milk and stock. Simmer 15 minutes until saucy. Season with lime juice and salt.\n\nBlend all relish ingredients until smooth. Loosen with water if needed.\n\nServe beans topped with crispy kale, seeds, pickled onion, a spoon of sour cream, crumbled feta and a generous drizzle of relish.' }
-        ]
-      },
       'chimichurri-butter-beans': {
-        emoji: '🌶️', cat: 'Bean Main', time: '35 min · serves 2–3',
+        emoji: '🌶️', cat: 'Dinner', time: '35 min · serves 2–3',
         subtitle: 'A roasted pepper and cashew sauce with butter beans, topped with cornflour-crispy aubergine and a fresh chimichurri.',
         bgClass: 'cat-dinner',
         sections: [
@@ -801,12 +668,12 @@
           { title: 'Crispy Aubergine', type: 'list', items: [
             '1 large aubergine, cubed', '2 tbsp cornflour', '1 tsp sumac', 'Salt'
           ]},
-          { title: 'Method', type: 'text', text: 'Blend all sauce ingredients until smooth. Sauté the red onions, add sauce and almond milk, then add butter beans. Simmer 10 minutes.\n\nSalt the aubergine cubes and leave 10 minutes. Pat dry, toss in cornflour and sumac, and air-fry or bake at 220°C for 20 minutes until golden.\n\nBlend all chimichurri ingredients by hand-chopping or blending roughly — it should have some texture.\n\nServe beans topped with crispy aubergine, chimichurri and crumbled feta.' }
+          { title: 'Method', type: 'text', text: 'Blend all sauce ingredients until smooth. Sauté the red onions, add sauce and almond milk, then add butter beans. Simmer 10 minutes.\n\nSalt the aubergine cubes and leave 10 minutes. Pat dry, toss in cornflour and sumac, and air-fry or bake at 220°C for 20 minutes until golden.\n\nBlend all chimichurri ingredients by hand-chopping or blending roughly. It should have some texture.\n\nServe beans topped with crispy aubergine, chimichurri and crumbled feta.' }
         ]
       },
       'wild-garlic-pesto': {
-        emoji: '🌿', cat: 'Bean Main', time: '30 min · serves 2–3',
-        subtitle: 'Light and vibrant — pesto coats tender butter beans and chunky roasted greens for a spring-feel plate.',
+        emoji: '🌿', cat: 'Dinner', time: '30 min · serves 2–3',
+        subtitle: 'Light and vibrant. Pesto coats tender butter beans and chunky roasted greens for a spring-feel plate.',
         bgClass: 'cat-dinner',
         sections: [
           { title: 'Ingredients', type: 'list', items: [
@@ -824,7 +691,7 @@
         ]
       },
       'tahini-sesame-beans': {
-        emoji: '🍋', cat: 'Bean Main', time: '30 min · serves 2–3',
+        emoji: '🍋', cat: 'Dinner', time: '30 min · serves 2–3',
         subtitle: 'A rich, umami-laden sauce blended from tahini and fried aromatics, with jewel-bright toppings.',
         bgClass: 'cat-dinner',
         sections: [
@@ -842,7 +709,7 @@
         ]
       },
       'red-pepper-butter-beans': {
-        emoji: '🫑', cat: 'Bean Main', time: '35 min · serves 2–3',
+        emoji: '🫑', cat: 'Dinner', time: '35 min · serves 2–3',
         subtitle: 'A deeply flavoured red pepper and cashew sauce with butter beans, chimichurri and crispy sumac aubergine.',
         bgClass: 'cat-dinner',
         sections: [
@@ -855,7 +722,7 @@
         ]
       },
       'smashed-cucumber': {
-        emoji: '🥒', cat: 'Lighter Plate', time: '15 min',
+        emoji: '🥒', cat: 'Lunch', time: '15 min',
         subtitle: 'Cracked cucumber absorbs the satay dressing like nothing else. Ready in minutes, somehow always impressive on the table.',
         bgClass: 'cat-lunch',
         sections: [
@@ -871,7 +738,7 @@
         ]
       },
       'harissa-carrots': {
-        emoji: '🥕', cat: 'Lighter Plate', time: '40 min',
+        emoji: '🥕', cat: 'Lunch', time: '40 min',
         subtitle: 'Caramelised harissa carrots on a cloud of whipped tahini yoghurt. Finished with crushed almonds, crispy sage and chilli oil.',
         bgClass: 'cat-lunch',
         sections: [
@@ -891,7 +758,7 @@
         ]
       },
       'potato-fritters': {
-        emoji: '🧆', cat: 'Lighter Plate', time: '30 min',
+        emoji: '🧆', cat: 'Lunch', time: '30 min',
         subtitle: 'One big, satisfying fritter served with a vibrant coriander-tamarind chutney and a crunchy salad.',
         bgClass: 'cat-lunch',
         sections: [
@@ -905,7 +772,7 @@
             'Juice of 1 lime', '1 green chilli', '1 garlic clove',
             'Salt, a little water'
           ]},
-          { title: 'Method', type: 'text', text: 'Squeeze excess moisture from grated potato and onion in a clean cloth. Mix with herbs and flour, season well. Fry in batches in plenty of oil — press down flat — for 4–5 minutes per side until deeply golden.\n\nBlend all chutney ingredients until smooth.\n\nServe fritters with chutney, a fennel and cabbage slaw, and a mint, pea and cucumber salad.' }
+          { title: 'Method', type: 'text', text: 'Squeeze excess moisture from grated potato and onion in a clean cloth. Mix with herbs and flour, season well. Fry in batches in plenty of oil, pressing down flat, for 4–5 minutes per side until deeply golden.\n\nBlend all chutney ingredients until smooth.\n\nServe fritters with chutney, a fennel and cabbage slaw, and a mint, pea and cucumber salad.' }
         ]
       }
     };
@@ -1025,7 +892,7 @@
 
     function catClass(cat) {
       return { Breakfast:'cat-breakfast', Lunch:'cat-lunch', Dinner:'cat-dinner',
-               Snacks:'cat-dinner', Snack:'cat-dinner' }[cat] || 'cat-breakfast';
+               Snacks:'cat-breakfast', Snack:'cat-breakfast' }[(cat||'').trim()] || 'cat-breakfast';
     }
 
     async function loadCMSRecipes() {
@@ -1036,20 +903,13 @@
         const mdFiles = Array.isArray(files) ? files.filter(f => f.name.endsWith('.md')) : [];
         if (!mdFiles.length) return;
 
-        // Create a new section for CMS-added recipes
-        const main = document.querySelector('.recipes-main');
-        const section = document.createElement('div');
-        section.className = 'category-group';
-        section.setAttribute('data-category', 'cms');
-        section.innerHTML = `
-          <div class="category-label">🌿 From Ruby's Kitchen
-            <span style="font-size:0.85rem;font-family:'DM Sans';color:var(--text-light);font-weight:400;">
-              Fresh from the blog
-            </span>
-          </div>
-          <div class="recipes-grid" id="cms-grid"></div>`;
-        main.appendChild(section);
-        const grid = document.getElementById('cms-grid');
+        const catGridMap = {
+          breakfast: document.getElementById('breakfast-grid'),
+          lunch:     document.getElementById('lunch-grid'),
+          dinner:    document.getElementById('dinner-grid'),
+          snacks:    document.getElementById('snacks-grid'),
+          snack:     document.getElementById('snacks-grid')
+        };
 
         for (const file of mdFiles) {
           const r = await fetch(file.download_url);
@@ -1058,14 +918,15 @@
           if (!d || !d.title) continue;
 
           const slug = file.name.replace('.md', '');
+          const cat = (d.category || 'Breakfast').trim();
 
           // Register in recipes object so modal works
           recipes[slug] = {
-            emoji: d.emoji || '🍽️',
-            cat: d.category || 'Recipe',
+            emoji: (d.emoji || '🍽️').trim(),
+            cat: cat,
             time: d.time || '',
             subtitle: d.description || '',
-            bgClass: catClass(d.category),
+            bgClass: catClass(cat),
             sections: [
               { title: 'Ingredients', type: 'list',
                 items: (d.ingredients || '').split('\n').map(l => l.trim()).filter(Boolean) },
@@ -1074,19 +935,20 @@
           };
 
           // Build card
+          const emoji = (d.emoji || '🍽️').trim();
           const thumb = d.image
             ? `<img src="${d.image}" alt="${d.title}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;"/>`
-            : `<div class="card-thumb-emoji">${d.emoji || '🍽️'}</div>`;
+            : `<div class="card-thumb-emoji">${emoji}</div>`;
 
           const card = document.createElement('div');
-          card.className = `recipe-card ${catClass(d.category)}`;
-          const catMap = { Breakfast:'breakfast', Lunch:'lunch', Dinner:'dinner', Snacks:'snacks', Snack:'snacks' };
-          card.dataset.category = catMap[d.category] || (d.category || '').toLowerCase();
+          const catLower = cat.toLowerCase();
+          card.className = `recipe-card ${catClass(cat)}`;
+          card.dataset.category = catGridMap[catLower] ? catLower : 'breakfast';
           card.dataset.recipe = slug;
           card.innerHTML = `
             <div class="card-thumb"><div class="card-thumb-bg"></div>${thumb}</div>
             <div class="card-body">
-              <div class="card-cat-tag">${d.category || 'Recipe'}</div>
+              <div class="card-cat-tag">${cat}</div>
               <div class="card-title">${d.title}</div>
               <p class="card-desc">${d.description || ''}</p>
               <div class="card-meta">
@@ -1099,7 +961,10 @@
               </div>
             </div>`;
           card.addEventListener('click', () => openRecipe(slug));
-          grid.appendChild(card);
+
+          // Inject into the correct section grid
+          const targetGrid = catGridMap[catLower] || catGridMap['breakfast'];
+          if (targetGrid) targetGrid.appendChild(card);
         }
       } catch(e) {
         console.log('CMS recipes:', e);
